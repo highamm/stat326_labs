@@ -1,0 +1,5 @@
+# Bayesian Statistics {#sec-bayesian}
+
+## Lab 4.1: Bayesian with Non-Informative Priors
+
+## Lab 4.2: Bayesian with Informative Priors

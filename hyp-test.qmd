@@ -1,0 +1,4 @@
+# Hypothesis Testing {#sec-hyptest}
+
+## Lab 5.1: Permutation Tests
+

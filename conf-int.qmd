@@ -1,0 +1,7 @@
+# Confidence Intervals {#sec-conf-int}
+
+## Lab 3.1: Introduction to Interval Estimation
+
+## Lab 3.2: Conceptual Confidence Intervals
+
+## Lab 3.3: Bootstrap Confidence Intervals

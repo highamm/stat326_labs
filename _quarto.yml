@@ -1,0 +1,31 @@
+project:
+  type: book
+  output-dir: docs
+
+book:
+  title: "STAT 326 Labs"
+  reader-mode: true
+  page-footer:
+    left: |
+      Lab Ideas by Jessica Chapman. Code by Matt Higham. Developed for STAT 326 at St. Lawrence University.
+    right: |
+      This book was built with <a href="https://quarto.org/">Quarto</a>.
+  chapters:
+    - index.qmd
+    - samp-dist.qmd
+    - estimation.qmd
+    - conf-int.qmd
+    - bayesian.qmd
+    - hyp-test.qmd
+
+format:
+  html:
+    theme:
+      - cosmo
+      - ds234.scss
+    code-link: true
+    callout-appearance: simple
+    number-depth: 1
+
+editor: source
+
