@@ -1,3 +1,3 @@
-# STAT 326 Site Information {.unnumbered}
+# Site Information {.unnumbered}
 
 Welcome! This site contains code and exercises for the labs in STAT 326 (Mathematical Statistics), information for the mini projects in the course, and information about the final portfolio. While we will also do plenty of handwritten work to help understand concepts, the primary purpose of this site is to hold all of the computing/coding work in one place.

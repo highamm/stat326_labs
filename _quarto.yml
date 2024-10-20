@@ -3,7 +3,7 @@ project:
   output-dir: docs
 
 book:
-  title: "STAT 326 Labs"
+  title: "STAT 326 Labs and Projects"
   reader-mode: true
   page-footer:
     left: |
