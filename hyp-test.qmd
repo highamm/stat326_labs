@@ -2,3 +2,6 @@
 
 ## Lab 5.1: Permutation Tests
 
+## Mini Project 5: Advantages and Drawbacks of Using p-values
+
+See article from _The American Statistician_. To make room for the bayesian project, perhaps move this to the final portfolio and cut the TAS part of the final portfolio.

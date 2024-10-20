@@ -3,3 +3,6 @@
 ## Lab 2.1: Maximum Likelihood Estimation
 
 ## Lab 2.2: Consistency
+
+## Mini Project 2: A Meaningful Story
+

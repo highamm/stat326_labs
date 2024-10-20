@@ -3,3 +3,7 @@
 ## Lab 4.1: Bayesian with Non-Informative Priors
 
 ## Lab 4.2: Bayesian with Informative Priors
+
+## Mini Project 4: Bayesian Analysis
+
+(use animal abundance data with two priors: a non-informative gamma prior and an informative gamma prior based on abundance survey in the previous year).

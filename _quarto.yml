@@ -17,6 +17,7 @@ book:
     - conf-int.qmd
     - bayesian.qmd
     - hyp-test.qmd
+    - portfolio.qmd
 
 format:
   html:

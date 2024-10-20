@@ -5,3 +5,5 @@
 ## Lab 3.2: Conceptual Confidence Intervals
 
 ## Lab 3.3: Bootstrap Confidence Intervals
+
+## Mini Project 3: Simulation to Investigate Confidence Interval Conditions
