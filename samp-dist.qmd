@@ -1,5 +1,10 @@
 # Sampling Distributions {#sec-sampdist}
 
+```{r}
+#| echo: false
+source("_common.R")
+```
+
 The purpose of this section is to investigate sampling distributions through statistical simulation. Before we dive into details, you should load in the `tidyverse` library, which we will use to make some plots and obtain some statistical summaries of samples.
 
 ```{r}
