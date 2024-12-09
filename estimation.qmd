@@ -1,8 +1,220 @@
 # Estimation {#sec-estimation}
 
+ADD IN EXERCISES 
+
+ADD GOALS
+
 ## Lab 2.1: Maximum Likelihood Estimation
+
+In this subsection, we make a few plots of various likelihoods we have encountered so far. Note that the likelihood plot will change for different data, and, if you would like, you can put in different data vectors to see how the likelihood changes.
+
+### MLE Example: Binomial Likelihood
+
+The code below examines the likelihood of $p$ in a binomial setting with known $n$. The peak shown in the plot gives the value of $p$ that maximizes this likelihood.
+
+```{r}
+#| warning: false
+#| output: false
+library(tidyverse)
+
+## get binomial likelihood for each value of p
+## p is a vector of probabilities
+## n is a single value for the sample size
+## dat is a vector of data
+
+get_binom_lik <- function(p, n, data_vec) {
+  
+  ## for each value of p, map through the dbinom function for
+  ## each data point (and multiply the results at the end to obtain
+  ## the likelihood)
+  binom_lik <- map_dbl(p,
+                       ~ dbinom(x = data_vec, size = n, prob = .x) |>
+                         prod() ## like the capital Pi in formula
+  )
+  
+  ## the function returns a vector of likelihoods for each
+  ## candidate p (and will be a vector of the same length as p)
+  return(binom_lik)
+}
+```
+
+```{r}
+#| output: false
+p <- seq(0, 1, by = 0.001)
+n <- 20
+dat <- c(5, 4, 2, 1, 0, 1, 2)
+
+binom_liks <- get_binom_lik(p = p, n = n, data_vec = dat)
+
+lik_df <- tibble(p, binom_liks)
+ggplot(data = lik_df, aes(x = p, y = binom_liks)) +
+  geom_line() +
+  labs(y = "Likelihood") +
+  theme_minimal()
+```
+
+### MLE Example 
+
+In class, we derived the MLE for the parameter $\theta$ in the probability model:
+
+$$
+f(x \vert \theta) = \frac{2x}{\theta} e^{-\frac{x^2}{\theta}},
+$$
+
+Here, we graph that likelihood for a sample of $n = 4$ data points.
+
+```{r}
+#| output: false
+
+thetas <- seq(0, 30, length.out = 1000)  ## may need to adjust these limits
+dat <- c(3, 1, 2, 4)
+
+get_theta_lik <- function(theta, data_vec) {
+  ## since there is no "dbinom" equivalent for the unnamed probability model
+  ## we have to code f(x \vert \theta) "by hand":
+  theta_lik <- map_dbl(theta,
+                       ~ ((2 * data_vec / .x) * exp(-data_vec^2 / .x)) |>
+                         prod()
+  )
+  
+  return(theta_lik)
+}
+ 
+theta_liks <- get_theta_lik(theta = thetas, data_vec = dat)
+
+lik_df <- tibble(thetas, theta_liks)
+ggplot(data = lik_df, aes(x = thetas, y = theta_liks)) +
+  geom_line() +
+  labs(y = "Likelihood") +
+  theme_minimal()
+```
+
+
+
+### MLE Example: Poisson
+
+Finally, consider the likelihood of various values of $\lambda$, where the random sample of data is from a Poisson probability model.
+
+```{r}
+dat <- c(8, 0, 4, 9, 1)
+lambdas <- seq(0, 10, length.out = 1000) ## may need to adjust these limits
+
+
+get_poisson_lik <- function(lambda, data_vec) {
+  
+  poisson_lik <- map_dbl(lambda,
+                         ~ dpois(x = data_vec, lambda = .x) |>
+                           prod()
+  )
+  
+  return(poisson_lik)
+}
+
+poisson_liks <- get_poisson_lik(lambda = lambdas, data_vec = dat)
+lik_df <- tibble(lambdas, poisson_liks)
+ggplot(data = lik_df, aes(x = lambdas, y = poisson_liks)) +
+  geom_line() +
+  labs(y = "Likelihood") +
+  theme_minimal()
+```
 
 ## Lab 2.2: Consistency
 
+In this subsection, we illustrate a couple of consistent estimators.
+
+### Uniform Example
+
+```{r Uniform}
+#| output: false
+
+theta <- 10  ## specify an upper bound for our uniform model
+## recall that the lower bound is known and is equal to 0
+
+nsim <- 1000 ## specify range of possible sample sizes (how long we will run the simulation)
+
+## compute each estimator of theta using adjusted MLE, MLE, and MOM
+compute_unif_estimators <- function(theta, nsim) {
+  
+  unif_draws <- runif(n = nsim, min = 0, max = theta)
+
+  ## compute the method of moment estimator 
+  ## nsim different times (once using a sample of size 1, then
+  ## using a sample of size 2, ...., then using a sample of size nsim)
+  unif_mom <- map_dbl(1:nsim, ~ 2 * mean(unif_draws[1:.x]))
+  
+  ## same type of computation for MLE
+  unif_mle <- map_dbl(1:nsim, ~ max(unif_draws[1:.x]))
+  
+  ## same type of computation for adjusted MLE
+  unif_mle_adj <- map_dbl(1:nsim,
+                          ~ ((.x + 1) / .x) * max(unif_draws[1:.x]))
+
+  ## put all three results into a data frame, along with n
+  output_df <- tibble(n = 1:nsim, 
+         unif_mom, unif_mle, unif_mle_adj)
+  
+  return(output_df)
+}
+
+plot_df <- compute_unif_estimators(theta = theta, nsim = nsim)
+```
+
+```{r}
+#| output: false
+## do some DATA/STAT 234-type Work to make the plot
+
+plot_long <- plot_df |> pivot_longer(cols = starts_with("unif"),
+                                     names_to = "Estimator",
+                                     values_to = "theta_estimate")
+ggplot(data = plot_long, aes(x = n,
+                             y = theta_estimate,
+                             colour = Estimator)) +
+  geom_line() +
+  geom_hline(yintercept = theta, linetype = 2) +
+  scale_colour_viridis_d(end = 0.9) +
+  theme_minimal() +
+  labs(x = "n (Sample Size)",
+       caption = "Dotted Line Shows True Value of Theta")
+```
+
+### Binomial Example
+
+```{r Binomial}
+p <- 1 / 4 ## specify probability of success for the simulation
+
+nsim <- 1000 ## specify range of possible ns (how long we will run the simulation)
+
+compute_binom_estimator <- function(p, nsim) {
+  
+  ## draw nsim different of 0's and 1's
+  bernoulli_draws <- rbinom(n = nsim, size = 1, prob = p)
+
+  ## compute the estimator of p
+  ## nsim different times (once using a sample of 1 bernoulli, then
+  ## using a sample of 2 bernoullis, ....,
+  ##  then using a sample of nsim bernoullis)
+  
+  binom_mle <- map_dbl(1:nsim, ~ sum(bernoulli_draws[1:.x]) / .x)
+
+
+  ## put all three results into a data frame, along with n
+  output_df <- tibble(n = 1:nsim, binom_mle)
+  
+  return(output_df)
+}
+
+plot_df <- compute_binom_estimator(p = p, nsim = nsim)
+
+ggplot(data = plot_df, aes(x = n,
+                             y = binom_mle)) +
+  geom_line() +
+  geom_hline(yintercept = p, linetype = 2) +
+  theme_minimal() +
+  labs(x = "n (Sample Size)",
+       caption = "Dotted Line Shows True Value of p")
+```
+
 ## Mini Project 2: A Meaningful Story
+
+Put description of project here.
 

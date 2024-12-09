@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.4.555">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
-
 <title>STAT 326 Labs and Projects - 4&nbsp; Bayesian Statistics</title>
 <style>
 code{white-space: pre-wrap;}
@@ -20,8 +17,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
-
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
@@ -40,8 +70,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -67,17 +96,37 @@ ul.task-list li input[type="checkbox"] {
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script>
-
-
+}</script><script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 </head>
-
 <body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
@@ -88,13 +137,9 @@ ul.task-list li input[type="checkbox"] {
         <i class="bi bi-search"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">STAT 326 Labs and Projects</a> 
         <div class="sidebar-tools-main">
@@ -113,7 +158,7 @@ ul.task-list li input[type="checkbox"] {
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Site Information</span></a>
@@ -156,26 +201,20 @@ ul.task-list li input[type="checkbox"] {
   </div>
 </li>
     </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#lab-4.1-bayesian-with-non-informative-priors" id="toc-lab-4.1-bayesian-with-non-informative-priors" class="nav-link active" data-scroll-target="#lab-4.1-bayesian-with-non-informative-priors">Lab 4.1: Bayesian with Non-Informative Priors</a></li>
-  <li><a href="#lab-4.2-bayesian-with-informative-priors" id="toc-lab-4.2-bayesian-with-informative-priors" class="nav-link" data-scroll-target="#lab-4.2-bayesian-with-informative-priors">Lab 4.2: Bayesian with Informative Priors</a></li>
+<li><a href="#lab-4.1-introduction-to-bayesian-binomial-data" id="toc-lab-4.1-introduction-to-bayesian-binomial-data" class="nav-link active" data-scroll-target="#lab-4.1-introduction-to-bayesian-binomial-data">Lab 4.1: Introduction to Bayesian: Binomial Data</a></li>
+  <li><a href="#lab-4.2-more-bayesian-poisson-data" id="toc-lab-4.2-more-bayesian-poisson-data" class="nav-link" data-scroll-target="#lab-4.2-more-bayesian-poisson-data">Lab 4.2: More Bayesian: Poisson Data</a></li>
   <li><a href="#mini-project-4-bayesian-analysis" id="toc-mini-project-4-bayesian-analysis" class="nav-link" data-scroll-target="#mini-project-4-bayesian-analysis">Mini Project 4: Bayesian Analysis</a></li>
-  </ul>
-</nav>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title"><span id="sec-bayesian" class="quarto-section-identifier"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Bayesian Statistics</span></span></h1>
 </div>
 
@@ -190,24 +229,109 @@ ul.task-list li input[type="checkbox"] {
   
 
 
-</header>
+</header><p>ADD GOALS</p>
+<section id="lab-4.1-introduction-to-bayesian-binomial-data" class="level2"><h2 class="anchored" data-anchor-id="lab-4.1-introduction-to-bayesian-binomial-data">Lab 4.1: Introduction to Bayesian: Binomial Data</h2>
+<p>In this lab, we will analyze binomial data in a Bayesian framework with a couple of different prior distributions for <span class="math inline">\(p\)</span>. The first prior for <span class="math inline">\(p\)</span> will be a non-informative prior while the second prior for <span class="math inline">\(p\)</span> will be based on “expert” (your!) opinion prior to the analysis.</p>
+<p>To start, consider your own prowess at the popular game “flip cup” and your (self-assessed) probability of successfully flipping the cup so that it’s upside-down. Use the app at <a href="http://shiny.stlawu.edu:3838/sample-apps/stat325/distplot/" class="uri">http://shiny.stlawu.edu:3838/sample-apps/stat325/distplot/</a> to drag the sliders around until you settle on a reasonable informative prior distribution for the probability that you successfully flip a cup from right-side-up to upside-down (note that you should not use a non-informative prior here). In general:</p>
+<ul>
+<li>increasing <span class="math inline">\(\alpha\)</span> will shift the distribution to the right.</li>
+<li>increasing <span class="math inline">\(\beta\)</span> will shift the distribution to the left.</li>
+<li>increasing both will give a distribution with less variability.</li>
+</ul>
+<p>Write down the parameters you will use for your informative prior of you successfully flipping a cup.</p>
+<p>In comparison, we will also use a <code>Beta(1, 1)</code> = <code>Uniform(0, 1)</code> prior distribution for <span class="math inline">\(p\)</span>. This is a non-informative prior.</p>
+<p>After you have settled on your informative prior, use the code below to construct a plot of both the informative prior and the non-informative prior.</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">informative_alpha</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
+<span><span class="va">informative_beta</span> <span class="op">&lt;-</span> <span class="fl">4</span></span>
+<span></span>
+<span><span class="va">noninformative_alpha</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span><span class="va">noninformative_beta</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span></span>
+<span><span class="va">informative_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Beta.html">dbeta</a></span><span class="op">(</span><span class="va">ps</span>, <span class="va">informative_alpha</span>,</span>
+<span>                           <span class="va">informative_beta</span><span class="op">)</span></span>
+<span><span class="va">noninformative_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Beta.html">dbeta</a></span><span class="op">(</span><span class="va">ps</span>,</span>
+<span>                              <span class="va">noninformative_alpha</span>, <span class="va">noninformative_beta</span><span class="op">)</span></span>
+<span><span class="va">prior_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">ps</span>, <span class="va">informative_prior</span>, <span class="va">noninformative_prior</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span>, names_to <span class="op">=</span> <span class="st">"prior_type"</span>, values_to <span class="op">=</span> <span class="st">"density"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">prior_plot</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">ps</span>, y <span class="op">=</span> <span class="va">density</span>, colour <span class="op">=</span> <span class="va">prior_type</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_colour_viridis_d</a></span><span class="op">(</span>end <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"p"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="bayesian_files/figure-html/unnamed-chunk-1-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Exercise</strong>. With our informative prior and our non-informative prior, we will now collect some data to include in our bayesian analysis. After you collect data, derive the posterior distribution of <span class="math inline">\(p\)</span> using both the noninformative prior and the informative prior. Then, adjust the code above to produce a plot of your two posterior distributions.</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## put code to make your posterior distribution plot here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Exercise</strong>. For each posterior, compute the posterior mean.</p>
+<p><strong>Exercise</strong>. For each posterior, compute a 95% credible interval for <span class="math inline">\(p\)</span>.</p>
+<p><strong>Exercise</strong>. The informative prior that you used was very subjective, based on your own knowledge and thoughts of how well you can play flip cup. What do you think can be done to limit the subjectivity of this prior?</p>
+</section><section id="lab-4.2-more-bayesian-poisson-data" class="level2"><h2 class="anchored" data-anchor-id="lab-4.2-more-bayesian-poisson-data">Lab 4.2: More Bayesian: Poisson Data</h2>
+<p>Recall from probability that we discussed using a Poisson model to model the number of goals that the St.&nbsp;Lawrence women’s hockey team scores in a game. In that class, we assumed that we knew the value of <span class="math inline">\(\lambda\)</span> in that probability model and we computed a few quantities of interest under that assumption.</p>
+<p>Usually, however, <span class="math inline">\(\lambda\)</span> must be estimated (in a frequentist analysis) using data, or, in a Bayesian analysis, we can provide a probability model for <span class="math inline">\(\lambda\)</span> itself that is either non-informative or informed by expert opinion or prior data.</p>
+<p>Suppose that the women’s hockey coach says that he thinks their team scores about 3 goals per game, on average. When pressed for how “sure” they are of that answer and to give a reasonable range for what values that goal scoring rate is, they reply that they are not quite sure. But, they know that they are almost certain that the scoring rate is no less than 2 goals per game, on average.</p>
+<p>As discussed in class, the conjugate prior for Poisson data is the Gamma distribution, which can be used to model <span class="math inline">\(\lambda\)</span>. Using the coach’s information, come up with an informative prior for <span class="math inline">\(\lambda\)</span> with the Gamma distribution. Note that we will have some decisions to make in how to use the coach’s information to come up with an informative prior!</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## put work for informative prior here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>A relatively non-informative prior for <span class="math inline">\(\lambda\)</span> is a Gamma distribution with very small values for both <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(k\)</span>. Note that, for the gamma distribution, I am replacing <span class="math inline">\(\lambda\)</span> with <span class="math inline">\(k\)</span>, so that we are not working with two different <span class="math inline">\(\lambda\)</span>’s (since the Poisson also has a parameter called <span class="math inline">\(\lambda\)</span>). Using <span class="math inline">\(\alpha = 0.001\)</span> and <span class="math inline">\(k = 0.001\)</span>, construct a plot of a relatively non-informative prior for <span class="math inline">\(\lambda\)</span> using the code below.</p>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.001</span></span>
+<span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">0.001</span></span>
+<span><span class="va">lambda_grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, length.out <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="va">gamma_density</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html">dgamma</a></span><span class="op">(</span><span class="va">lambda_grid</span>, shape <span class="op">=</span> <span class="va">alpha</span>, rate <span class="op">=</span> <span class="va">k</span><span class="op">)</span></span>
+<span><span class="va">gamma_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">lambda_grid</span>, <span class="va">gamma_density</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">gamma_plot</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lambda_grid</span>, y <span class="op">=</span> <span class="va">gamma_density</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="bayesian_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Exercise</strong>. Based on the plot of the non-informative prior, it’s a little difficult to see <em>why</em> this prior is non-informative. However, using what we derived as the posterior distribution for <span class="math inline">\(\lambda\)</span>, construct an argument for why a prior of <span class="math inline">\(\alpha = 0.001\)</span> and <span class="math inline">\(k = 0.001\)</span> is a non-informative prior.</p>
+<p><strong>Exercise</strong>. Using the code above, construct a plot of the informative prior we derived earlier.</p>
+<p>Now suppose that we collect data from the women’s hockey team this season to update both our non-informative prior and our informative prior with data to obtain two posterior distributions for the goal rate.</p>
+<p>The code below pulls in data from the season:</p>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://rvest.tidyverse.org/">rvest</a></span><span class="op">)</span></span>
+<span><span class="va">url</span> <span class="op">&lt;-</span> <span class="st">"https://saintsathletics.com/sports/womens-ice-hockey/stats/2024-25"</span></span>
+<span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="http://xml2.r-lib.org/reference/read_xml.html">read_html</a></span><span class="op">(</span><span class="va">url</span><span class="op">)</span> <span class="op">|&gt;</span> </span>
+<span>  <span class="fu"><a href="https://rvest.tidyverse.org/reference/rename.html">html_nodes</a></span><span class="op">(</span><span class="st">"table"</span><span class="op">)</span></span>
+<span><span class="va">hockey_stats</span> <span class="op">&lt;-</span> <span class="va">tab</span><span class="op">[[</span><span class="fl">6</span><span class="op">]</span><span class="op">]</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rvest.tidyverse.org/reference/html_table.html">html_table</a></span><span class="op">(</span>header <span class="op">=</span> <span class="cn">FALSE</span><span class="op">)</span> </span>
+<span></span>
+<span><span class="va">newnames</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">hockey_stats</span><span class="op">[</span><span class="fl">1</span>, <span class="op">]</span>, <span class="va">hockey_stats</span><span class="op">[</span><span class="fl">2</span>, <span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">goals</span> <span class="op">&lt;-</span> <span class="va">hockey_stats</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rlang.r-lib.org/reference/set_names.html">set_names</a></span><span class="op">(</span><span class="va">newnames</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="op">-</span><span class="fl">1</span>, <span class="op">-</span><span class="fl">2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>`Shots G` <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="va">`Shots G`</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">`Shots G`</span> <span class="op">&lt;=</span> <span class="fl">20</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="co">## filter out the totals (hoping that the women</span></span>
+<span><span class="co">## never scored more than 20 goals in one game!!)</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">`Shots G`</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">goals</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Exercise</strong>. Using this data and the posterior that we computed in class, figure out the posterior distribution for the goal rate with the non-informative prior and with the informative prior.</p>
+<p><strong>Exercise</strong>. Construct a plot of each of the posterior distributions.</p>
+<p><strong>Exercise</strong>. The mean of the posterior distribution must always be between the mean of the prior distribution and the mean of the data, as the posterior is a “compromise” between the prior and the observed data. Verify that this is the case for this example.</p>
+<p><strong>Exercise</strong>. With each posterior, compute a 95% credible interval for <span class="math inline">\(\lambda\)</span>, the rate that the women’s hockey team scores goals.</p>
+<p><strong>Exercise</strong>. Think back to the data that we used for this example. What assumptions have we made to complete this analysis? Can you think of ways that we might relax these assumptions?</p>
+</section><section id="mini-project-4-bayesian-analysis" class="level2"><h2 class="anchored" data-anchor-id="mini-project-4-bayesian-analysis">Mini Project 4: Bayesian Analysis</h2>
+<p>(likely going to use animal abundance data with three priors: a non-informative gamma prior, an informative gamma prior based on abundance survey in the previous year, and an informative prior based on wildlife manager’s knowledge of the area).</p>
 
 
-<section id="lab-4.1-bayesian-with-non-informative-priors" class="level2">
-<h2 class="anchored" data-anchor-id="lab-4.1-bayesian-with-non-informative-priors">Lab 4.1: Bayesian with Non-Informative Priors</h2>
-</section>
-<section id="lab-4.2-bayesian-with-informative-priors" class="level2">
-<h2 class="anchored" data-anchor-id="lab-4.2-bayesian-with-informative-priors">Lab 4.2: Bayesian with Informative Priors</h2>
-</section>
-<section id="mini-project-4-bayesian-analysis" class="level2">
-<h2 class="anchored" data-anchor-id="mini-project-4-bayesian-analysis">Mini Project 4: Bayesian Analysis</h2>
-<p>(use animal abundance data with two priors: a non-informative gamma prior and an informative gamma prior based on abundance survey in the previous year).</p>
-
-
-</section>
-
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -615,9 +739,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./conf-int.html" class="pagination-link" aria-label="Confidence Intervals">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Confidence Intervals</span></span>
       </a>          
@@ -629,8 +751,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<footer class="footer">
-  <div class="nav-footer">
+<footer class="footer"><div class="nav-footer">
     <div class="nav-footer-left">
 <p>Lab Ideas by Jessica Chapman. Code by Matt Higham. Developed for STAT 326 at St.&nbsp;Lawrence University.</p>
 </div>   
@@ -642,8 +763,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>
   </div>
 </footer>
-
-
 
 
 </body></html>

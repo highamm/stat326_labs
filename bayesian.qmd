@@ -1,9 +1,199 @@
 # Bayesian Statistics {#sec-bayesian}
 
-## Lab 4.1: Bayesian with Non-Informative Priors
+ADD GOALS
 
-## Lab 4.2: Bayesian with Informative Priors
+## Lab 4.1: Introduction to Bayesian: Binomial Data
+
+In this lab, we will analyze binomial data in a Bayesian framework with a couple of different prior distributions for $p$. The first prior for $p$ will be a non-informative prior while the second prior for $p$ will be based on "expert" (your!) opinion prior to the analysis.
+
+To start, consider your own prowess at the popular game "flip cup" and your (self-assessed) probability of successfully flipping the cup so that it's upside-down. Use the app at <http://shiny.stlawu.edu:3838/sample-apps/stat325/distplot/> to drag the sliders around until you settle on a reasonable informative prior distribution for the probability that you successfully flip a cup from right-side-up to upside-down (note that you should not use a non-informative prior here). In general:
+
+* increasing $\alpha$ will shift the distribution to the right.
+* increasing $\beta$ will shift the distribution to the left.
+* increasing both will give a distribution with less variability.
+
+Write down the parameters you will use for your informative prior of you successfully flipping a cup.
+
+In comparison, we will also use a `Beta(1, 1)` = `Uniform(0, 1)` prior distribution for $p$. This is a non-informative prior.
+
+After you have settled on your informative prior, use the code below to construct a plot of both the informative prior and the non-informative prior.
+
+```{r}
+#| warning: false
+library(tidyverse)
+ps <- seq(0, 1, length.out = 1000)
+
+informative_alpha <- 2
+informative_beta <- 4
+
+noninformative_alpha <- 1
+noninformative_beta <- 1
+
+informative_prior <- dbeta(ps, informative_alpha,
+                           informative_beta)
+noninformative_prior <- dbeta(ps,
+                              noninformative_alpha, noninformative_beta)
+prior_plot <- tibble(ps, informative_prior, noninformative_prior) |>
+  pivot_longer(2:3, names_to = "prior_type", values_to = "density")
+
+ggplot(data = prior_plot, aes(x = ps, y = density, colour = prior_type)) +
+  geom_line() +
+  scale_colour_viridis_d(end = 0.9) +
+  theme_minimal() +
+  labs(x = "p")
+```
+
+__Exercise__. With our informative prior and our non-informative prior, we will now collect some data to include in our bayesian analysis. After you collect data, derive the posterior distribution of $p$ using both the noninformative prior and the informative prior. Then, adjust the code above to produce a plot of your two posterior distributions.
+
+```{r}
+## put code to make your posterior distribution plot here
+```
+
+__Exercise__. For each posterior, compute the posterior mean.
+
+__Exercise__. For each posterior, compute a 95% credible interval for $p$.
+
+__Exercise__. The informative prior that you used was very subjective, based on your own knowledge and thoughts of how well you can play flip cup. What do you think can be done to limit the subjectivity of this prior?
+
+```{r}
+#| echo: false
+#| eval: false
+# need to find an alpha and beta that simultaneously have alpha/(alpha+beta) = 1/6
+# and variance = 0.001
+
+mean = 1/6   # set a target for the mean = alpha/(alpha+beta) of our beta distribution
+
+df = alphas = seq(0.1,50,by=0.05)
+betas = alphas*(1/mean - 1)
+
+vars = (alphas*betas) / ( (alphas+betas)^2  * (alphas+betas+1)  )# find the variance for each combo of alpha and beta
+targetvar = 0.001
+
+index = which.min( abs(vars - targetvar)  )  # compare the probs to our target; find closest one
+
+alphas[index]
+betas[index]
+vars[index]
+
+
+#plot prior
+curve(dbeta(x,alphas[index],betas[index]),from=0,to=1)
+
+```
+
+## Lab 4.2: More Bayesian: Poisson Data
+
+Recall from probability that we discussed using a Poisson model to model the number of goals that the St. Lawrence women's hockey team scores in a game. In that class, we assumed that we knew the value of $\lambda$ in that probability model and we computed a few quantities of interest under that assumption. 
+
+Usually, however, $\lambda$ must be estimated (in a frequentist analysis) using data, or, in a Bayesian analysis, we can provide a probability model for $\lambda$ itself that is either non-informative or informed by expert opinion or prior data.
+
+Suppose that the women's hockey coach says that he thinks their team scores about 3 goals per game, on average. When pressed for how "sure" they are of that answer and to give a reasonable range for what values that goal scoring rate is, they reply that they are not quite sure. But, they know that they are almost certain that the scoring rate is no less than 2 goals per game, on average. 
+
+As discussed in class, the conjugate prior for Poisson data is the Gamma distribution, which can be used to model $\lambda$. Using the coach's information, come up with an informative prior for $\lambda$ with the Gamma distribution. Note that we will have some decisions to make in how to use the coach's information to come up with an informative prior!
+
+```{r}
+## put work for informative prior here
+```
+
+A relatively non-informative prior for $\lambda$ is a Gamma distribution with very small values for both $\alpha$ and $k$. Note that, for the gamma distribution, I am replacing $\lambda$ with $k$, so that we are not working with two different $\lambda$'s (since the Poisson also has a parameter called $\lambda$). Using $\alpha = 0.001$ and $k = 0.001$, construct a plot of a relatively non-informative prior for $\lambda$ using the code below.
+
+```{r}
+alpha <- 0.001
+k <- 0.001
+lambda_grid <- seq(0, 5, length.out = 1000)
+gamma_density <- dgamma(lambda_grid, shape = alpha, rate = k)
+gamma_plot <- tibble(lambda_grid, gamma_density)
+ggplot(data = gamma_plot, aes(x = lambda_grid, y = gamma_density)) +
+  geom_line() +
+  theme_minimal()
+```
+
+__Exercise__. Based on the plot of the non-informative prior, it's a little difficult to see _why_ this prior is non-informative. However, using what we derived as the posterior distribution for $\lambda$, construct an argument for why a prior of $\alpha = 0.001$ and $k = 0.001$ is a non-informative prior.
+
+__Exercise__. Using the code above, construct a plot of the informative prior we derived earlier.
+
+Now suppose that we collect data from the women's hockey team this season to update both our non-informative prior and our informative prior with data to obtain two posterior distributions for the goal rate.
+
+The code below pulls in data from the season:
+
+```{r}
+#| eval: false
+library(rvest)
+url <- "https://saintsathletics.com/sports/womens-ice-hockey/stats/2024-25"
+tab <- read_html(url) |> 
+  html_nodes("table")
+hockey_stats <- tab[[6]] |> html_table(header = FALSE) 
+
+newnames <- paste(hockey_stats[1, ], hockey_stats[2, ])
+goals <- hockey_stats |> set_names(newnames) |>
+  slice(-1, -2) |>
+  mutate(`Shots G` = as.numeric(`Shots G`)) |>
+  filter(`Shots G` <= 20) |> ## filter out the totals (hoping that the women
+## never scored more than 20 goals in one game!!)
+  pull(`Shots G`) |> as.numeric()
+goals
+```
+
+__Exercise__. Using this data and the posterior that we computed in class, figure out the posterior distribution for the goal rate with the non-informative prior and with the informative prior.
+
+__Exercise__. Construct a plot of each of the posterior distributions.
+
+__Exercise__. The mean of the posterior distribution must always be between the mean of the prior distribution and the mean of the data, as the posterior is a "compromise" between the prior and the observed data. Verify that this is the case for this example.
+
+__Exercise__. With each posterior, compute a 95% credible interval for $\lambda$, the rate that the women's hockey team scores goals.
+
+__Exercise__. Think back to the data that we used for this example. What assumptions have we made to complete this analysis? Can you think of ways that we might relax these assumptions?
+
+
+```{r}
+#| echo: false
+#| eval: false
+alpha = 0.01
+lambda = 0.01
+curve(dgamma(x,alpha,lambda),from=0,to=10)
+alpha/lambda   # prior mean
+alpha/lambda^2 # prior variance
+
+# need to find an alpha and lambda that simultaneously have the desired mean and target probability
+
+mean =    # set a target for the mean = alpha/lambda of our gamma distribution
+
+alphas = seq(0.01,50,by=0.01)
+lambdas = alphas/mean   # find the lambda that when combined with a specific alpha yields the desired mean
+
+
+prob = pgamma(2, alphas, lambdas)  # find the desired probability for each combo of alpha and lambda
+targetprob =                 # our (subjective!) definition of "pretty sure"
+
+index = which.min( abs(prob - targetprob)  )  # compare the probs to our target; find closest one
+
+alphas[index]
+lambdas[index]
+
+
+#plot prior
+curve(dgamma(x,alphas[index],lambdas[index]),from=0,to=10)
+
+```
+
+```{r}
+#| eval: false
+#| echo: false
+library(rvest)
+url <- "https://saintsathletics.com/sports/womens-ice-hockey/stats/2023-24"
+tab <- read_html(url) |> 
+  html_nodes("table")
+hockey_stats <- tab[[6]] |> html_table(header = FALSE) 
+
+newnames <- paste(hockey_stats[1, ], hockey_stats[2, ])
+goals <- hockey_stats |> set_names(newnames) |>
+  slice(-1, -2) |>
+  slice(-40, -41) |> ## drop totals
+  pull(`Shots G`) |> as.numeric()
+goals |> mean()
+goals |> var()
+```
 
 ## Mini Project 4: Bayesian Analysis
 
-(use animal abundance data with two priors: a non-informative gamma prior and an informative gamma prior based on abundance survey in the previous year).
+(likely going to use animal abundance data with three priors: a non-informative gamma prior, an informative gamma prior based on abundance survey in the previous year, and an informative prior based on wildlife manager's knowledge of the area).

@@ -1,9 +1,500 @@
 # Confidence Intervals {#sec-conf-int}
 
-## Lab 3.1: Introduction to Interval Estimation
+ADD GOALS
+
+## Lab 3.1: Introduction to Plotting and Data Summarisation
+
+```{r}
+#| warning: false
+#| output: false
+#| echo: false
+library(tidyverse)
+library(resampledata)  ## this package contains datasets from the textbook
+
+## convert a couple of textbook data sets into tibbles for nicer printing
+spruce_df <- Spruce |> as_tibble()  
+girls2004_df <- Girls2004 |> as_tibble() 
+```
+
+### Plotting
+
+If we are not using the Central Limit Theorem to obtain the (approximate) sampling distribution of the sample mean, we must plot the data to determine if it could have plausibly come from a Normal population (looking for rough symmetric and absence of outliers). While we have lots of options here (including histograms and normal quantile plots), I like a boxplot, especially in two sample situations. 
+
+For this illustration, we'll use the `Beerwings` dataset from the textbook to show how to make plots of a single quantitative variable.
+
+```{r}
+#| warning: false
+#| output: false
+library(tidyverse)
+library(resampledata)
+
+## convert Beerwings data frame to a tibble for nicer printing
+beerwings_df <- Beerwings |> as_tibble() 
+beerwings_df
+```
+
+Let's first consider the data as a single sample and explore the distributions of both `Beer` consumption and `Hotwing` consumption:
+
+```{r}
+#| output: false
+ggplot(data = beerwings_df, aes(x = Beer)) +
+  geom_histogram(bins = 8, colour = "black", fill = "mediumseagreen") +
+  theme_minimal()
+
+ggplot(data = beerwings_df, aes(x = Beer)) +
+  geom_boxplot(fill = "mediumseagreen") +
+  theme_minimal()
+
+ggplot(data = beerwings_df, aes(sample = Beer)) +
+  stat_qq() +
+  stat_qq_line() +
+  theme_minimal()
+```
+
+```{r}
+#| output: false
+ggplot(data = beerwings_df, aes(x = Hotwings)) +
+  geom_histogram(bins = 8, colour = "black", fill = "mediumseagreen") +
+  theme_minimal()
+
+ggplot(data = beerwings_df, aes(x = Hotwings)) +
+  geom_boxplot(fill = "mediumseagreen") +
+  theme_minimal()
+
+ggplot(data = beerwings_df, aes(sample = Hotwings)) +
+  stat_qq() +
+  stat_qq_line() +
+  theme_minimal()
+```
+
+
+Now, let's compare the distribution of hotwings for each sex in the data set with a set of side-by-side boxplots:
+
+```{r}
+ggplot(data = beerwings_df, aes(x = Gender, y = Hotwings)) +
+  geom_boxplot(fill = "steelblue") +
+  theme_minimal()
+```
+
+
+### Data Summarisation and Creation 
+
+Now, let's examine how we can look at some summary statistics of the `Hotwings` variable in the `beerwings_df` data. For one sample, we can just use the `summarise()` function with whatever summary metrics we want to compute:
+
+```{r}
+#| output: false
+beerwings_df |>
+  summarise(xbar = mean(Hotwings),
+            sd = sd(Hotwings),
+            n = n())
+```  
+
+If we want to compare summary statistics for each level of a categorical variable, we can first `group_by()` that variable:
+
+```{r}
+#| output: false
+# Two samples
+beerwings_df |>
+  group_by(Gender) |>
+  summarise(xbar = mean(Hotwings),
+            sd = sd(Hotwings),
+            n = n())
+```
+
+
+Finally, though this is not a data summary function, we can use `filter()` if we want to keep only certain rows in the data set. For example, if we want to get rid of any people who did not consume any `Beer`, we can use:
+
+```{r}
+#| output: false
+beerwings_onlybeer = beerwings_df |> filter(Beer > 0)
+```
+
+
+### Creating a Data Set with `tibble()`
+
+Suppose we need to enter your own data into R. As long as the sample size is relatively small (small enough that you can type things in manually without it being too much of a pain), we can create a data frame object using the `tibble()` function. For example, on the Stat 113 First Day survey, we ask students how long (in hours) it takes them to travel from home to SLU. Here are 6 responses: `6, 3.5, 0.4, 2.5, 12, 6`.
+
+We can make a data frame with those values:
+
+```{r}
+stat113_df <- tibble(Travel = c(6, 3.5, 0.4, 2.5, 12, 6))
+stat113_df
+```
+
+In the code, `stat113_df` is the name of the data frame while `Travel` is the name of the variable within that data frame.
+
+Instead of entering in raw data, we can also simulate data and put that simulated data into a data frame. For example, let's convince ourselves that small samples from Normal populations don't always look "Normal" by simulating a small sample of normally distributed data:
+
+```{r}
+fakedata <- tibble(Normals = rnorm(n = 14, 15, 4))
+
+ggplot(data = fakedata, aes(x = Normals)) + 
+  geom_boxplot(fill = "coral") +
+  theme_minimal()
+
+ggplot(data = fakedata, aes(x = Normals)) + 
+  geom_histogram(fill = "coral", colour = "coral4", bins = 10) +
+  theme_minimal()
+```
+
+Rerun the code above a few times. What do you notice about the boxplots and histograms that you are generating?
 
 ## Lab 3.2: Conceptual Confidence Intervals
 
+The primary purpose of this lab is to explore what the concept of "confidence" really means. To do so, we will construct confidence intervals first for a population mean ($\mu$) using the "one-sample t" confidence interval formula .
+
+### One Sample t (CI for $\mu$)
+
+If we were to repeatedly generate random samples from a population and use those samples to construct (1 - $\alpha$)% confidence intervals, the _coverage rate_ is defined as the fraction of those intervals that actually contain (capture) the parameter.
+
+In the code below, we explore the average width and the coverage rate of confidence intervals for $\mu$ using the "standard" one-sample t formula.
+
+```{r}
+#| output: false
+generate_onesamp_cis <- function(n, mu, sigma, alpha) {
+  
+  ## generate a single sample (one of nsim data sets)
+  x <- rnorm(n, mu, sigma)
+  
+  ## compute the bounds of the ci
+  point_est <- mean(x)
+  lb <- point_est - qt(1 - alpha/2, df = n - 1) * sd(x) / sqrt(n)
+  ub <- point_est + qt(1 - alpha/2, df = n - 1) * sd(x) / sqrt(n)
+  
+  ## put everything into a tibble
+  out_df <- tibble(point_est, lb, ub)
+  
+  return(out_df)
+}
+```
+
+```{r}
+#| output: false
+## define parameters to use in our function
+n <- 5   # sample size
+mu <- 10     # true mean
+sigma <- 5    # true standard deviation
+alpha <- 0.05  # used to construct 1-alpha CI (how much area should be in the tails)
+
+## generate one sample and one ci
+generate_onesamp_cis(n = n, mu = mu, sigma = sigma, alpha = alpha)
+```
+
+But, if we want to explore the coverage rate and average interval width, we need to simulate __many__ confidence intervals. Below, we `map()` through our function `nsim` times and bind the results together into a data frame at the end:
+
+```{r}
+nsim <- 1000  # the number of simulated CIs to create
+
+many_ci_df <- map(1:nsim,
+                  \(i) generate_onesamp_cis(n = n, mu = mu,
+                                            sigma = sigma,
+                                            alpha = alpha)) |>
+  bind_rows()
+many_ci_df
+```
+
+Finally, since we are interested in average interval width and coverage rate, we can create variables for the width of each confidence interval and for whether or not each interval "covers" the true mean `mu`:
+
+```{r}
+many_ci_df <- many_ci_df |> mutate(ci_width = ub - lb,
+                                   ci_cover_ind = if_else(mu > lb & mu < ub,
+                                                          true = 1, 
+                                                          false = 0))
+```
+
+And we can then `summarise()` to get the average width and the coverage rate:
+
+```{r}
+many_ci_df |> summarise(avg_width = mean(ci_width),
+                        coverage_rate = mean(ci_cover_ind))
+```
+
+__Exercise__.
+
+Note that if you wanted to compare the performance of the one-sample t formula using Normal data and non-Normal data, it is important that you generate data from those populations in such a way that the populations have the same means and standard deviations (otherwise the comparisons would not be fair - especially any comparisons of average width!). Here are some guidelines about how you might do that.
+
+An Exponential Population: We know for an Exponential random variable $Y$ that $E(Y) = 1 / \lambda$ and $Var(Y) = 1 / \lambda^2 = (1 / \lambda)^2$. We notice here, that for Exponential random variables, the variance is the mean squared (which implies that the standard deviation equals the mean). Thus, if you wanted to compare the performance of the one-sample t formula for Normal and Exponential data, you would need to focus exclusively
+on situations where $mu = sigma$ and you could identify which value of $lambda$ is necessary to achieve your desired mean.
+
+Chi-square would be another distribution where there is a pretty easy relationship between mean and standard deviation (and therefore choose the `df` for Chi-Square). Gamma is also reasonble, but does require a little bit of algebra to identify the $\alpha$ and $\lambda$ needed to get the desired mean and standard deviation.
+
+### Two Sample t 
+
+Next, we suppose that we have two populations and that we are interested in constructing a confidence interval for the difference in population means, $\mu_1 - mu_2$. To do so, we will not assume that the underyling variances of each population are equal and will instead use The Welch-Satterthwaite approximation to degrees of freedom for the $t^*$ value to create the confidence interval.
+
+```{r}
+#| output: false
+n1 <- 15         # size of first sample
+mu1 <- 20        # mean of first population
+sigma1 <- 5      # standard deviation of first population
+
+n2 <- 15         # size of second sample
+mu2 <- 15        # mean of second population
+sigma2 <- 5      # standard deviation of second population
+
+x <- rnorm(n1, mu1, sigma1)       # generate sample 1 from Population 1
+y <- rnorm(n2, mu2, sigma2)       # generate sample 2 from Population 2
+
+varest1 <- var(x)
+varest2 <- var(y)
+
+A <- varest1 / n1
+B <- varest2 / n2
+
+numerator <- (A + B) ^2
+denominator <- A^2 / (n1 - 1) + B^2 / (n2 - 1)
+
+welchdf <- numerator / denominator
+welchdf
+```
+
+### Generating Sample Proportions
+
+Finally, if we are interested in constructing a confidence interval for a population proportion instead of a population mean (so, our variable of interest is categorical with two levels), then we can use the following code to generate a sample proportion from a population with a true proportion of success $p$ and a certain sample size $n$:
+
+```{r}
+#| output: false
+n <- 10   # sample size
+p <- 0.5  # population proportion
+  
+x <- rbinom(1, n, p) # randomly generate number of successes for the sample
+
+## number of successes divided by sample size
+phat <- x / n
+phat
+```
+
 ## Lab 3.3: Bootstrap Confidence Intervals
 
-## Mini Project 3: Simulation to Investigate Confidence Interval Conditions
+The purpose of this lab is to construct bootstrap confidence intervals for a population mean, a population proportion, and for a difference in population means. To start, we construct a bootstrap confidence interval for a population mean.
+
+### Bootstrap CI for a Population Mean
+
+Below, the number of hours of exercise per week for a random sample of Stat 113 students are provided.
+
+```{r}
+library(tidyverse)
+stat113_ex <- tibble(Exercise = c(12, 3, 4, 10, 8, 17, 15, 5, 8, 10, 8,
+                                  25, 1, 15, 2, 14, 10, 8, 6, 14, 5, 6,
+                                  12, 3))
+
+# for demonstrating danger of bootstrapping with small sample sizes
+#stat113_ex = tibble(Exercise = c(25, 1, 2, 4, 0, 3, 0))
+```
+
+Before constructing any confidence interval, we shoud create a plot of the data and obtain the sample mean:
+
+```{r}
+ggplot(data = stat113_ex, aes(x = Exercise)) +
+  geom_histogram(colour = "black", fill = "white", bins = 10) +
+  theme_minimal()
+
+mean(stat113_ex$Exercise) # sample mean
+```
+
+Next, we create the bootstrap distribution of sample means and make a histogram of that distribution. For this example, we generate 1000 bootstrap samples. The function below outputs one bootstrap mean from a single bootstrap sample:
+
+```{r}
+#| output: false
+generate_one_bootmean <- function() {
+  ## put exercise variable into a vector
+  exercise_vec <- stat113_ex |> pull(Exercise)
+  
+  ## sample the exercise data with replacement
+  boot_samp <- sample(exercise_vec, size = length(exercise_vec),
+                      replace = TRUE)
+  
+  boot_mean <- mean(boot_samp)
+  
+  return(boot_mean)
+}
+
+generate_one_bootmean()
+```
+
+We can then map over the function to obtain `B` bootstrap means:
+
+```{r}
+B <- 2000
+bootmean_vec <- map_dbl(1:B, \(i) generate_one_bootmean())
+```
+
+With our 2000 bootstrap means, we can construct a plot of the bootstrap distribution. This distribution _should_ be somewhat centered at the sample mean.
+
+```{r}
+bootmean_df <- tibble(bootmean_vec)
+ggplot(data = bootmean_df, aes(x = bootmean_vec)) +
+  geom_histogram(colour = "black", fill = "mediumseagreen", bins = 14) +
+  geom_vline(xintercept = mean(stat113_ex$Exercise),
+             colour = "grey", linewidth = 2) +
+  theme_minimal()
+```
+
+We can also compute some quantities of interest that we discussed in class:
+
+```{r}
+#| output: false
+## mean of bootstrap distribution (should be close to our statistic)
+mean(bootmean_vec)
+
+## Bootstrap SE
+sd(bootmean_vec)
+
+# bootstrap estimate of bias
+bias <- mean(bootmean_vec) - mean(stat113_ex$Exercise)
+bias
+
+# what percent of the BS variation is due to bias?
+abs(bias) / sd(bootmean_vec)
+
+## Percentile Bootstrap confidence intervals
+# 90% CI
+quantile(bootmean_vec, c(0.05, 0.95))
+# 95% CI
+quantile(bootmean_vec, c(0.025, 0.975))
+```
+
+### Bootstrap CI for a Population Proportion
+
+In a random sample of 588 adults, 16.67% reported that key lime pie is their favorite kind of pie (only 16.67%....key lime is the GOAT of pies). Construct a 95% Bootstrap percentile confidence interval for the proportion of all adults that have key lime as their favorite pie.
+
+```{r}
+## create a data frame where a 1 corresponds to a person who
+## chose key lime pie while a 0 corresponds to a person who
+## chose anything else other than key lime pie
+
+n <- 588
+p_hat <- 0.1667
+pie_df <- tibble(key_lime_fav = c(rep(1, round(n * p_hat)),
+                                  rep(0, n - round(n * p_hat))))
+
+## sample proportion (double check)
+mean(pie_df$key_lime_fav)
+```
+
+First, we write a function to obtain a single bootstrap proportion from a single bootstrap sample:
+
+```{r}
+generate_one_bootprop <- function() {
+  ## put exercise variable into a vector
+  pie_vec <- pie_df |> pull(key_lime_fav)
+  
+  ## sample the exercise data with replacement
+  boot_samp <- sample(pie_vec, size = length(pie_vec),
+                      replace = TRUE)
+  
+  boot_prop <- mean(boot_samp)
+  
+  return(boot_prop)
+}
+
+generate_one_bootprop()
+```
+
+
+We can then map over the function to obtain `B` bootstrap proportions and put these bootstrap proportions into a data frame:
+
+```{r}
+B <- 5000
+bootprop_vec <- map_dbl(1:B, \(i) generate_one_bootprop())
+
+bootprop_df <- tibble(bootprop_vec)
+```
+
+__Exercise__. Construct a histogram of the bootstrap sample proportions, adding in a vertical line for the sample proportion.
+
+__Exercise__. Compute quantities of interest to help construct a percentile confidence interval for the true proportion. You should compute: the center of the bootstrap distribution, the bootstrap standard error, the bootstrap estimate of bias, the percent of the boostrap variation that is due to bias, a 90% percentile-based confidence interval for the true proportion, and a 95% percentile-based confidence interval for the true proportion.
+
+__Exercise__. Interpret the 90% confidence interval in context of the problem.
+
+
+### Bootstrap CI's with Two (Independent) Samples
+
+Finally, we construct a bootstrap confidence interval using two independent random samples. We are interested in two different quantities here: the difference in population means and the ratio of population means. To do so, we use the flight data, which has information on flight delays from a sample of United Airlines flights (UA) and a sample of Amaerican Airlines flights (AA). We are interested in if either of these airlines has a higher average delay than the other.
+
+First, we obtain some summary statistics and make a plot of the data:
+
+```{r}
+library(resampledata)
+delay_df <- FlightDelays |> as_tibble()
+## set.seed(13617)  # 50100 for bias illustration
+
+delay_df |> group_by(Carrier) |>
+  summarise(n = n(),
+            xbar = mean(Delay),
+            sd = sd(Delay))
+
+ggplot(delay_df,
+       aes(x = Carrier, y = Delay)) + 
+  geom_boxplot(fill = "steelblue")
+```
+
+Our sample statistic for the difference in means and for the ratio of means can be calculated with:
+
+```{r}
+delays_aa <- delay_df |> filter(Carrier == "AA")
+delays_ua <- delay_df |> filter(Carrier == "UA")
+
+diffmeans <- mean(delays_aa$Delay) - mean(delays_ua$Delay) # our sample statistic (diff. in means)
+ratiomeans <- mean(delays_aa$Delay) / mean(delays_ua$Delay) # our sample statistic (ratio of means)
+```
+
+The code below creates a function that generates either the boostrap difference in means or the bootstrap ratio of means from a single bootstrap sample:
+
+```{r}
+#| output: false
+#| eval: false
+generate_one_boot <- function(statistic = "diff") {
+  ## statistic can also be "ratio"
+  
+  ## put exercise variable into a vector
+  aa_vec <- delays_aa |> pull(Delay)
+  ua_vec <- delays_ua |> pull(Delay)
+  
+  ## sample the exercise data with replacement
+  boot_samp <- sample(pie_vec, size = length(pie_vec),
+                      replace = TRUE)
+  
+  boot_prop <- mean(boot_samp)
+  
+  ## FILL IN MISSING PIECES
+
+  ## fill in piece to obtain one bootstrap sample mean for aa flights
+
+  ## fill in piece to obtain one bootstrap sample mean for ua flights
+  
+  if (statistic == "diff") {
+    
+    ## fill in piece to compute the difference in sample means
+    
+    return(boot_diff)
+    
+  } else if (statistic == "ratio") {
+    
+    ## fill in piece to compute the ratio of sample means
+    
+    return(boot_ratio)
+  }
+  
+}
+```
+
+__Exercise__. Using this function, we can obtain the bootstrap distribution of differences and the bootstrap distribution of ratios. Use the previous code to construct the histograms of these two bootstrap distributions, overlaying the sample statistics for each onto their appropriate bootstrap distributions.
+
+I've provided code to generate the bootstrap distribution of differences in means but you will need to adjust this to also create the bootstrap distribution for the ratio.
+
+```{r}
+#| eval: false
+B <- 5000
+bootdiff_vec <- map_dbl(1:B, \(i) generate_one_boot(statistic = "diff"))
+
+bootdiff_df <- tibble(bootdiff_vec)
+```
+
+__Exercise__. Compute relevant quantities of interest to help create a 90% percentile-based bootstrap confidence interval for the true mean difference in delay times and the true ratio of delay times.
+
+__Exercise__. Interpret your two bootstrap confidence intervals in context of the problem.
+
+
+## Mini Project 3: Simulation to Investigate Confidence Intervals
+

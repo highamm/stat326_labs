@@ -1,12 +1,9 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
-
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.4.555">
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-
-
 <title>STAT 326 Labs and Projects - 3&nbsp; Confidence Intervals</title>
 <style>
 code{white-space: pre-wrap;}
@@ -20,8 +17,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
-
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
 <script src="site_libs/quarto-nav/headroom.min.js"></script>
@@ -40,8 +70,7 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
-<script id="quarto-search-options" type="application/json">{
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
   "collapse-after": 3,
@@ -67,17 +96,37 @@ ul.task-list li input[type="checkbox"] {
     "search-submit-button-title": "Submit",
     "search-label": "Search"
   }
-}</script>
-
-
+}</script><script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script><script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 </head>
-
 <body class="nav-sidebar floating">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
@@ -88,13 +137,9 @@ ul.task-list li input[type="checkbox"] {
         <i class="bi bi-search"></i>
       </button>
     </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
       <a href="./">STAT 326 Labs and Projects</a> 
         <div class="sidebar-tools-main">
@@ -113,7 +158,7 @@ ul.task-list li input[type="checkbox"] {
         </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
+<li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./index.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text">Site Information</span></a>
@@ -156,27 +201,42 @@ ul.task-list li input[type="checkbox"] {
   </div>
 </li>
     </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+</div>
+</nav><div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">Table of contents</h2>
+        <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#lab-3.1-introduction-to-interval-estimation" id="toc-lab-3.1-introduction-to-interval-estimation" class="nav-link active" data-scroll-target="#lab-3.1-introduction-to-interval-estimation">Lab 3.1: Introduction to Interval Estimation</a></li>
-  <li><a href="#lab-3.2-conceptual-confidence-intervals" id="toc-lab-3.2-conceptual-confidence-intervals" class="nav-link" data-scroll-target="#lab-3.2-conceptual-confidence-intervals">Lab 3.2: Conceptual Confidence Intervals</a></li>
-  <li><a href="#lab-3.3-bootstrap-confidence-intervals" id="toc-lab-3.3-bootstrap-confidence-intervals" class="nav-link" data-scroll-target="#lab-3.3-bootstrap-confidence-intervals">Lab 3.3: Bootstrap Confidence Intervals</a></li>
-  <li><a href="#mini-project-3-simulation-to-investigate-confidence-interval-conditions" id="toc-mini-project-3-simulation-to-investigate-confidence-interval-conditions" class="nav-link" data-scroll-target="#mini-project-3-simulation-to-investigate-confidence-interval-conditions">Mini Project 3: Simulation to Investigate Confidence Interval Conditions</a></li>
+<li>
+<a href="#lab-3.1-introduction-to-plotting-and-data-summarisation" id="toc-lab-3.1-introduction-to-plotting-and-data-summarisation" class="nav-link active" data-scroll-target="#lab-3.1-introduction-to-plotting-and-data-summarisation">Lab 3.1: Introduction to Plotting and Data Summarisation</a>
+  <ul class="collapse">
+<li><a href="#plotting" id="toc-plotting" class="nav-link" data-scroll-target="#plotting">Plotting</a></li>
+  <li><a href="#data-summarisation-and-creation" id="toc-data-summarisation-and-creation" class="nav-link" data-scroll-target="#data-summarisation-and-creation">Data Summarisation and Creation</a></li>
+  <li><a href="#creating-a-data-set-with-tibble" id="toc-creating-a-data-set-with-tibble" class="nav-link" data-scroll-target="#creating-a-data-set-with-tibble">Creating a Data Set with <code>tibble()</code></a></li>
   </ul>
-</nav>
+</li>
+  <li>
+<a href="#lab-3.2-conceptual-confidence-intervals" id="toc-lab-3.2-conceptual-confidence-intervals" class="nav-link" data-scroll-target="#lab-3.2-conceptual-confidence-intervals">Lab 3.2: Conceptual Confidence Intervals</a>
+  <ul class="collapse">
+<li><a href="#one-sample-t-ci-for-mu" id="toc-one-sample-t-ci-for-mu" class="nav-link" data-scroll-target="#one-sample-t-ci-for-mu">One Sample t (CI for <span class="math inline">\(\mu\)</span>)</a></li>
+  <li><a href="#two-sample-t" id="toc-two-sample-t" class="nav-link" data-scroll-target="#two-sample-t">Two Sample t</a></li>
+  <li><a href="#generating-sample-proportions" id="toc-generating-sample-proportions" class="nav-link" data-scroll-target="#generating-sample-proportions">Generating Sample Proportions</a></li>
+  </ul>
+</li>
+  <li>
+<a href="#lab-3.3-bootstrap-confidence-intervals" id="toc-lab-3.3-bootstrap-confidence-intervals" class="nav-link" data-scroll-target="#lab-3.3-bootstrap-confidence-intervals">Lab 3.3: Bootstrap Confidence Intervals</a>
+  <ul class="collapse">
+<li><a href="#bootstrap-ci-for-a-population-mean" id="toc-bootstrap-ci-for-a-population-mean" class="nav-link" data-scroll-target="#bootstrap-ci-for-a-population-mean">Bootstrap CI for a Population Mean</a></li>
+  <li><a href="#bootstrap-ci-for-a-population-proportion" id="toc-bootstrap-ci-for-a-population-proportion" class="nav-link" data-scroll-target="#bootstrap-ci-for-a-population-proportion">Bootstrap CI for a Population Proportion</a></li>
+  <li><a href="#bootstrap-cis-with-two-independent-samples" id="toc-bootstrap-cis-with-two-independent-samples" class="nav-link" data-scroll-target="#bootstrap-cis-with-two-independent-samples">Bootstrap CI’s with Two (Independent) Samples</a></li>
+  </ul>
+</li>
+  <li><a href="#mini-project-3-simulation-to-investigate-confidence-intervals" id="toc-mini-project-3-simulation-to-investigate-confidence-intervals" class="nav-link" data-scroll-target="#mini-project-3-simulation-to-investigate-confidence-intervals">Mini Project 3: Simulation to Investigate Confidence Intervals</a></li>
+  </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
 <h1 class="title"><span id="sec-conf-int" class="quarto-section-identifier"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Confidence Intervals</span></span></h1>
 </div>
 
@@ -191,26 +251,462 @@ ul.task-list li input[type="checkbox"] {
   
 
 
-</header>
+</header><p>ADD GOALS</p>
+<section id="lab-3.1-introduction-to-plotting-and-data-summarisation" class="level2"><h2 class="anchored" data-anchor-id="lab-3.1-introduction-to-plotting-and-data-summarisation">Lab 3.1: Introduction to Plotting and Data Summarisation</h2>
+<section id="plotting" class="level3"><h3 class="anchored" data-anchor-id="plotting">Plotting</h3>
+<p>If we are not using the Central Limit Theorem to obtain the (approximate) sampling distribution of the sample mean, we must plot the data to determine if it could have plausibly come from a Normal population (looking for rough symmetric and absence of outliers). While we have lots of options here (including histograms and normal quantile plots), I like a boxplot, especially in two sample situations.</p>
+<p>For this illustration, we’ll use the <code>Beerwings</code> dataset from the textbook to show how to make plots of a single quantitative variable.</p>
+<div class="cell">
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rudeboybert/resampledata">resampledata</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## convert Beerwings data frame to a tibble for nicer printing</span></span>
+<span><span class="va">beerwings_df</span> <span class="op">&lt;-</span> <span class="va">Beerwings</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> </span>
+<span><span class="va">beerwings_df</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Let’s first consider the data as a single sample and explore the distributions of both <code>Beer</code> consumption and <code>Hotwing</code> consumption:</p>
+<div class="cell">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">beerwings_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Beer</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">8</span>, colour <span class="op">=</span> <span class="st">"black"</span>, fill <span class="op">=</span> <span class="st">"mediumseagreen"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">beerwings_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Beer</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"mediumseagreen"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">beerwings_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="va">Beer</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html">stat_qq</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html">stat_qq_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">beerwings_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Hotwings</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>bins <span class="op">=</span> <span class="fl">8</span>, colour <span class="op">=</span> <span class="st">"black"</span>, fill <span class="op">=</span> <span class="st">"mediumseagreen"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">beerwings_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Hotwings</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"mediumseagreen"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">beerwings_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>sample <span class="op">=</span> <span class="va">Hotwings</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html">stat_qq</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_qq.html">stat_qq_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Now, let’s compare the distribution of hotwings for each sex in the data set with a set of side-by-side boxplots:</p>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">beerwings_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Gender</span>, y <span class="op">=</span> <span class="va">Hotwings</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="conf-int_files/figure-html/unnamed-chunk-5-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section><section id="data-summarisation-and-creation" class="level3"><h3 class="anchored" data-anchor-id="data-summarisation-and-creation">Data Summarisation and Creation</h3>
+<p>Now, let’s examine how we can look at some summary statistics of the <code>Hotwings</code> variable in the <code>beerwings_df</code> data. For one sample, we can just use the <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code> function with whatever summary metrics we want to compute:</p>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">beerwings_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>xbar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Hotwings</span><span class="op">)</span>,</span>
+<span>            sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">Hotwings</span><span class="op">)</span>,</span>
+<span>            n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>If we want to compare summary statistics for each level of a categorical variable, we can first <code><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by()</a></code> that variable:</p>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co"># Two samples</span></span>
+<span><span class="va">beerwings_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Gender</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>xbar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Hotwings</span><span class="op">)</span>,</span>
+<span>            sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">Hotwings</span><span class="op">)</span>,</span>
+<span>            n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Finally, though this is not a data summary function, we can use <code><a href="https://dplyr.tidyverse.org/reference/filter.html">filter()</a></code> if we want to keep only certain rows in the data set. For example, if we want to get rid of any people who did not consume any <code>Beer</code>, we can use:</p>
+<div class="cell">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">beerwings_onlybeer</span> <span class="op">=</span> <span class="va">beerwings_df</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Beer</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="creating-a-data-set-with-tibble" class="level3"><h3 class="anchored" data-anchor-id="creating-a-data-set-with-tibble">Creating a Data Set with <code>tibble()</code>
+</h3>
+<p>Suppose we need to enter your own data into R. As long as the sample size is relatively small (small enough that you can type things in manually without it being too much of a pain), we can create a data frame object using the <code><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble()</a></code> function. For example, on the Stat 113 First Day survey, we ask students how long (in hours) it takes them to travel from home to SLU. Here are 6 responses: <code>6, 3.5, 0.4, 2.5, 12, 6</code>.</p>
+<p>We can make a data frame with those values:</p>
+<div class="cell">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">stat113_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>Travel <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">6</span>, <span class="fl">3.5</span>, <span class="fl">0.4</span>, <span class="fl">2.5</span>, <span class="fl">12</span>, <span class="fl">6</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">stat113_df</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 1
+  Travel
+   &lt;dbl&gt;
+1    6  
+2    3.5
+3    0.4
+4    2.5
+5   12  
+6    6  </code></pre>
+</div>
+</div>
+<p>In the code, <code>stat113_df</code> is the name of the data frame while <code>Travel</code> is the name of the variable within that data frame.</p>
+<p>Instead of entering in raw data, we can also simulate data and put that simulated data into a data frame. For example, let’s convince ourselves that small samples from Normal populations don’t always look “Normal” by simulating a small sample of normally distributed data:</p>
+<div class="cell">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">fakedata</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>Normals <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">14</span>, <span class="fl">15</span>, <span class="fl">4</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fakedata</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Normals</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"coral"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="conf-int_files/figure-html/unnamed-chunk-10-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">fakedata</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Normals</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"coral"</span>, colour <span class="op">=</span> <span class="st">"coral4"</span>, bins <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="conf-int_files/figure-html/unnamed-chunk-10-2.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Rerun the code above a few times. What do you notice about the boxplots and histograms that you are generating?</p>
+</section></section><section id="lab-3.2-conceptual-confidence-intervals" class="level2"><h2 class="anchored" data-anchor-id="lab-3.2-conceptual-confidence-intervals">Lab 3.2: Conceptual Confidence Intervals</h2>
+<p>The primary purpose of this lab is to explore what the concept of “confidence” really means. To do so, we will construct confidence intervals first for a population mean (<span class="math inline">\(\mu\)</span>) using the “one-sample t” confidence interval formula .</p>
+<section id="one-sample-t-ci-for-mu" class="level3"><h3 class="anchored" data-anchor-id="one-sample-t-ci-for-mu">One Sample t (CI for <span class="math inline">\(\mu\)</span>)</h3>
+<p>If we were to repeatedly generate random samples from a population and use those samples to construct (1 - <span class="math inline">\(\alpha\)</span>)% confidence intervals, the <em>coverage rate</em> is defined as the fraction of those intervals that actually contain (capture) the parameter.</p>
+<p>In the code below, we explore the average width and the coverage rate of confidence intervals for <span class="math inline">\(\mu\)</span> using the “standard” one-sample t formula.</p>
+<div class="cell">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">generate_onesamp_cis</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">n</span>, <span class="va">mu</span>, <span class="va">sigma</span>, <span class="va">alpha</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="co">## generate a single sample (one of nsim data sets)</span></span>
+<span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">mu</span>, <span class="va">sigma</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">## compute the bounds of the ci</span></span>
+<span>  <span class="va">point_est</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span>  <span class="va">lb</span> <span class="op">&lt;-</span> <span class="va">point_est</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/stats/TDist.html">qt</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">alpha</span><span class="op">/</span><span class="fl">2</span>, df <span class="op">=</span> <span class="va">n</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span>  <span class="va">ub</span> <span class="op">&lt;-</span> <span class="va">point_est</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/stats/TDist.html">qt</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">-</span> <span class="va">alpha</span><span class="op">/</span><span class="fl">2</span>, df <span class="op">=</span> <span class="va">n</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">## put everything into a tibble</span></span>
+<span>  <span class="va">out_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">point_est</span>, <span class="va">lb</span>, <span class="va">ub</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out_df</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## define parameters to use in our function</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">5</span>   <span class="co"># sample size</span></span>
+<span><span class="va">mu</span> <span class="op">&lt;-</span> <span class="fl">10</span>     <span class="co"># true mean</span></span>
+<span><span class="va">sigma</span> <span class="op">&lt;-</span> <span class="fl">5</span>    <span class="co"># true standard deviation</span></span>
+<span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">0.05</span>  <span class="co"># used to construct 1-alpha CI (how much area should be in the tails)</span></span>
+<span></span>
+<span><span class="co">## generate one sample and one ci</span></span>
+<span><span class="fu">generate_onesamp_cis</span><span class="op">(</span>n <span class="op">=</span> <span class="va">n</span>, mu <span class="op">=</span> <span class="va">mu</span>, sigma <span class="op">=</span> <span class="va">sigma</span>, alpha <span class="op">=</span> <span class="va">alpha</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>But, if we want to explore the coverage rate and average interval width, we need to simulate <strong>many</strong> confidence intervals. Below, we <code><a href="https://purrr.tidyverse.org/reference/map.html">map()</a></code> through our function <code>nsim</code> times and bind the results together into a data frame at the end:</p>
+<div class="cell">
+<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">nsim</span> <span class="op">&lt;-</span> <span class="fl">1000</span>  <span class="co"># the number of simulated CIs to create</span></span>
+<span></span>
+<span><span class="va">many_ci_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">nsim</span>,</span>
+<span>                  \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu">generate_onesamp_cis</span><span class="op">(</span>n <span class="op">=</span> <span class="va">n</span>, mu <span class="op">=</span> <span class="va">mu</span>,</span>
+<span>                                            sigma <span class="op">=</span> <span class="va">sigma</span>,</span>
+<span>                                            alpha <span class="op">=</span> <span class="va">alpha</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="va">many_ci_df</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1,000 × 3
+   point_est    lb    ub
+       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+ 1     11.1  5.51   16.7
+ 2     10.5  6.14   14.8
+ 3      9.31 1.30   17.3
+ 4      9.12 1.35   16.9
+ 5      9.60 3.51   15.7
+ 6      8.57 0.191  16.9
+ 7      8.82 1.73   15.9
+ 8     11.1  7.02   15.2
+ 9     13.1  8.05   18.1
+10     12.0  2.31   21.7
+# ℹ 990 more rows</code></pre>
+</div>
+</div>
+<p>Finally, since we are interested in average interval width and coverage rate, we can create variables for the width of each confidence interval and for whether or not each interval “covers” the true mean <code>mu</code>:</p>
+<div class="cell">
+<div class="sourceCode" id="cb20"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">many_ci_df</span> <span class="op">&lt;-</span> <span class="va">many_ci_df</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>ci_width <span class="op">=</span> <span class="va">ub</span> <span class="op">-</span> <span class="va">lb</span>,</span>
+<span>                                   ci_cover_ind <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">mu</span> <span class="op">&gt;</span> <span class="va">lb</span> <span class="op">&amp;</span> <span class="va">mu</span> <span class="op">&lt;</span> <span class="va">ub</span>,</span>
+<span>                                                          true <span class="op">=</span> <span class="fl">1</span>, </span>
+<span>                                                          false <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And we can then <code><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise()</a></code> to get the average width and the coverage rate:</p>
+<div class="cell">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">many_ci_df</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>avg_width <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">ci_width</span><span class="op">)</span>,</span>
+<span>                        coverage_rate <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">ci_cover_ind</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 2
+  avg_width coverage_rate
+      &lt;dbl&gt;         &lt;dbl&gt;
+1      11.7         0.949</code></pre>
+</div>
+</div>
+<p><strong>Exercise</strong>.</p>
+<p>Note that if you wanted to compare the performance of the one-sample t formula using Normal data and non-Normal data, it is important that you generate data from those populations in such a way that the populations have the same means and standard deviations (otherwise the comparisons would not be fair - especially any comparisons of average width!). Here are some guidelines about how you might do that.</p>
+<p>An Exponential Population: We know for an Exponential random variable <span class="math inline">\(Y\)</span> that <span class="math inline">\(E(Y) = 1 / \lambda\)</span> and <span class="math inline">\(Var(Y) = 1 / \lambda^2 = (1 / \lambda)^2\)</span>. We notice here, that for Exponential random variables, the variance is the mean squared (which implies that the standard deviation equals the mean). Thus, if you wanted to compare the performance of the one-sample t formula for Normal and Exponential data, you would need to focus exclusively on situations where <span class="math inline">\(mu = sigma\)</span> and you could identify which value of <span class="math inline">\(lambda\)</span> is necessary to achieve your desired mean.</p>
+<p>Chi-square would be another distribution where there is a pretty easy relationship between mean and standard deviation (and therefore choose the <code>df</code> for Chi-Square). Gamma is also reasonble, but does require a little bit of algebra to identify the <span class="math inline">\(\alpha\)</span> and <span class="math inline">\(\lambda\)</span> needed to get the desired mean and standard deviation.</p>
+</section><section id="two-sample-t" class="level3"><h3 class="anchored" data-anchor-id="two-sample-t">Two Sample t</h3>
+<p>Next, we suppose that we have two populations and that we are interested in constructing a confidence interval for the difference in population means, <span class="math inline">\(\mu_1 - mu_2\)</span>. To do so, we will not assume that the underyling variances of each population are equal and will instead use The Welch-Satterthwaite approximation to degrees of freedom for the <span class="math inline">\(t^*\)</span> value to create the confidence interval.</p>
+<div class="cell">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n1</span> <span class="op">&lt;-</span> <span class="fl">15</span>         <span class="co"># size of first sample</span></span>
+<span><span class="va">mu1</span> <span class="op">&lt;-</span> <span class="fl">20</span>        <span class="co"># mean of first population</span></span>
+<span><span class="va">sigma1</span> <span class="op">&lt;-</span> <span class="fl">5</span>      <span class="co"># standard deviation of first population</span></span>
+<span></span>
+<span><span class="va">n2</span> <span class="op">&lt;-</span> <span class="fl">15</span>         <span class="co"># size of second sample</span></span>
+<span><span class="va">mu2</span> <span class="op">&lt;-</span> <span class="fl">15</span>        <span class="co"># mean of second population</span></span>
+<span><span class="va">sigma2</span> <span class="op">&lt;-</span> <span class="fl">5</span>      <span class="co"># standard deviation of second population</span></span>
+<span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n1</span>, <span class="va">mu1</span>, <span class="va">sigma1</span><span class="op">)</span>       <span class="co"># generate sample 1 from Population 1</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n2</span>, <span class="va">mu2</span>, <span class="va">sigma2</span><span class="op">)</span>       <span class="co"># generate sample 2 from Population 2</span></span>
+<span></span>
+<span><span class="va">varest1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span></span>
+<span><span class="va">varest2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">var</a></span><span class="op">(</span><span class="va">y</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">A</span> <span class="op">&lt;-</span> <span class="va">varest1</span> <span class="op">/</span> <span class="va">n1</span></span>
+<span><span class="va">B</span> <span class="op">&lt;-</span> <span class="va">varest2</span> <span class="op">/</span> <span class="va">n2</span></span>
+<span></span>
+<span><span class="va">numerator</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="va">A</span> <span class="op">+</span> <span class="va">B</span><span class="op">)</span> <span class="op">^</span><span class="fl">2</span></span>
+<span><span class="va">denominator</span> <span class="op">&lt;-</span> <span class="va">A</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="op">(</span><span class="va">n1</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span> <span class="va">B</span><span class="op">^</span><span class="fl">2</span> <span class="op">/</span> <span class="op">(</span><span class="va">n2</span> <span class="op">-</span> <span class="fl">1</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">welchdf</span> <span class="op">&lt;-</span> <span class="va">numerator</span> <span class="op">/</span> <span class="va">denominator</span></span>
+<span><span class="va">welchdf</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="generating-sample-proportions" class="level3"><h3 class="anchored" data-anchor-id="generating-sample-proportions">Generating Sample Proportions</h3>
+<p>Finally, if we are interested in constructing a confidence interval for a population proportion instead of a population mean (so, our variable of interest is categorical with two levels), then we can use the following code to generate a sample proportion from a population with a true proportion of success <span class="math inline">\(p\)</span> and a certain sample size <span class="math inline">\(n\)</span>:</p>
+<div class="cell">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span>   <span class="co"># sample size</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fl">0.5</span>  <span class="co"># population proportion</span></span>
+<span>  </span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">rbinom</a></span><span class="op">(</span><span class="fl">1</span>, <span class="va">n</span>, <span class="va">p</span><span class="op">)</span> <span class="co"># randomly generate number of successes for the sample</span></span>
+<span></span>
+<span><span class="co">## number of successes divided by sample size</span></span>
+<span><span class="va">phat</span> <span class="op">&lt;-</span> <span class="va">x</span> <span class="op">/</span> <span class="va">n</span></span>
+<span><span class="va">phat</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section></section><section id="lab-3.3-bootstrap-confidence-intervals" class="level2"><h2 class="anchored" data-anchor-id="lab-3.3-bootstrap-confidence-intervals">Lab 3.3: Bootstrap Confidence Intervals</h2>
+<p>The purpose of this lab is to construct bootstrap confidence intervals for a population mean, a population proportion, and for a difference in population means. To start, we construct a bootstrap confidence interval for a population mean.</p>
+<section id="bootstrap-ci-for-a-population-mean" class="level3"><h3 class="anchored" data-anchor-id="bootstrap-ci-for-a-population-mean">Bootstrap CI for a Population Mean</h3>
+<p>Below, the number of hours of exercise per week for a random sample of Stat 113 students are provided.</p>
+<div class="cell">
+<div class="sourceCode" id="cb25"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="va">stat113_ex</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>Exercise <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">12</span>, <span class="fl">3</span>, <span class="fl">4</span>, <span class="fl">10</span>, <span class="fl">8</span>, <span class="fl">17</span>, <span class="fl">15</span>, <span class="fl">5</span>, <span class="fl">8</span>, <span class="fl">10</span>, <span class="fl">8</span>,</span>
+<span>                                  <span class="fl">25</span>, <span class="fl">1</span>, <span class="fl">15</span>, <span class="fl">2</span>, <span class="fl">14</span>, <span class="fl">10</span>, <span class="fl">8</span>, <span class="fl">6</span>, <span class="fl">14</span>, <span class="fl">5</span>, <span class="fl">6</span>,</span>
+<span>                                  <span class="fl">12</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># for demonstrating danger of bootstrapping with small sample sizes</span></span>
+<span><span class="co">#stat113_ex = tibble(Exercise = c(25, 1, 2, 4, 0, 3, 0))</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>Before constructing any confidence interval, we shoud create a plot of the data and obtain the sample mean:</p>
+<div class="cell">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">stat113_ex</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Exercise</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"black"</span>, fill <span class="op">=</span> <span class="st">"white"</span>, bins <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="conf-int_files/figure-html/unnamed-chunk-19-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">stat113_ex</span><span class="op">$</span><span class="va">Exercise</span><span class="op">)</span> <span class="co"># sample mean</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9.208333</code></pre>
+</div>
+</div>
+<p>Next, we create the bootstrap distribution of sample means and make a histogram of that distribution. For this example, we generate 1000 bootstrap samples. The function below outputs one bootstrap mean from a single bootstrap sample:</p>
+<div class="cell">
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">generate_one_bootmean</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co">## put exercise variable into a vector</span></span>
+<span>  <span class="va">exercise_vec</span> <span class="op">&lt;-</span> <span class="va">stat113_ex</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">Exercise</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">## sample the exercise data with replacement</span></span>
+<span>  <span class="va">boot_samp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">exercise_vec</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">exercise_vec</span><span class="op">)</span>,</span>
+<span>                      replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">boot_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">boot_samp</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">boot_mean</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu">generate_one_bootmean</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We can then map over the function to obtain <code>B</code> bootstrap means:</p>
+<div class="cell">
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">B</span> <span class="op">&lt;-</span> <span class="fl">2000</span></span>
+<span><span class="va">bootmean_vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">B</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu">generate_one_bootmean</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>With our 2000 bootstrap means, we can construct a plot of the bootstrap distribution. This distribution <em>should</em> be somewhat centered at the sample mean.</p>
+<div class="cell">
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">bootmean_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">bootmean_vec</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bootmean_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bootmean_vec</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"black"</span>, fill <span class="op">=</span> <span class="st">"mediumseagreen"</span>, bins <span class="op">=</span> <span class="fl">14</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">stat113_ex</span><span class="op">$</span><span class="va">Exercise</span><span class="op">)</span>,</span>
+<span>             colour <span class="op">=</span> <span class="st">"grey"</span>, linewidth <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="conf-int_files/figure-html/unnamed-chunk-22-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>We can also compute some quantities of interest that we discussed in class:</p>
+<div class="cell">
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## mean of bootstrap distribution (should be close to our statistic)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">bootmean_vec</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Bootstrap SE</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">bootmean_vec</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># bootstrap estimate of bias</span></span>
+<span><span class="va">bias</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">bootmean_vec</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">stat113_ex</span><span class="op">$</span><span class="va">Exercise</span><span class="op">)</span></span>
+<span><span class="va">bias</span></span>
+<span></span>
+<span><span class="co"># what percent of the BS variation is due to bias?</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">bias</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">bootmean_vec</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## Percentile Bootstrap confidence intervals</span></span>
+<span><span class="co"># 90% CI</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">bootmean_vec</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.05</span>, <span class="fl">0.95</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co"># 95% CI</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="va">bootmean_vec</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.025</span>, <span class="fl">0.975</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section><section id="bootstrap-ci-for-a-population-proportion" class="level3"><h3 class="anchored" data-anchor-id="bootstrap-ci-for-a-population-proportion">Bootstrap CI for a Population Proportion</h3>
+<p>In a random sample of 588 adults, 16.67% reported that key lime pie is their favorite kind of pie (only 16.67%….key lime is the GOAT of pies). Construct a 95% Bootstrap percentile confidence interval for the proportion of all adults that have key lime as their favorite pie.</p>
+<div class="cell">
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## create a data frame where a 1 corresponds to a person who</span></span>
+<span><span class="co">## chose key lime pie while a 0 corresponds to a person who</span></span>
+<span><span class="co">## chose anything else other than key lime pie</span></span>
+<span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">588</span></span>
+<span><span class="va">p_hat</span> <span class="op">&lt;-</span> <span class="fl">0.1667</span></span>
+<span><span class="va">pie_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>key_lime_fav <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">n</span> <span class="op">*</span> <span class="va">p_hat</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>                                  <span class="fu"><a href="https://rdrr.io/r/base/rep.html">rep</a></span><span class="op">(</span><span class="fl">0</span>, <span class="va">n</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">round</a></span><span class="op">(</span><span class="va">n</span> <span class="op">*</span> <span class="va">p_hat</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## sample proportion (double check)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">pie_df</span><span class="op">$</span><span class="va">key_lime_fav</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1666667</code></pre>
+</div>
+</div>
+<p>First, we write a function to obtain a single bootstrap proportion from a single bootstrap sample:</p>
+<div class="cell">
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">generate_one_bootprop</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co">## put exercise variable into a vector</span></span>
+<span>  <span class="va">pie_vec</span> <span class="op">&lt;-</span> <span class="va">pie_df</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">key_lime_fav</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">## sample the exercise data with replacement</span></span>
+<span>  <span class="va">boot_samp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">pie_vec</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">pie_vec</span><span class="op">)</span>,</span>
+<span>                      replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">boot_prop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">boot_samp</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">boot_prop</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu">generate_one_bootprop</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.1734694</code></pre>
+</div>
+</div>
+<p>We can then map over the function to obtain <code>B</code> bootstrap proportions and put these bootstrap proportions into a data frame:</p>
+<div class="cell">
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">B</span> <span class="op">&lt;-</span> <span class="fl">5000</span></span>
+<span><span class="va">bootprop_vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">B</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu">generate_one_bootprop</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bootprop_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">bootprop_vec</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Exercise</strong>. Construct a histogram of the bootstrap sample proportions, adding in a vertical line for the sample proportion.</p>
+<p><strong>Exercise</strong>. Compute quantities of interest to help construct a percentile confidence interval for the true proportion. You should compute: the center of the bootstrap distribution, the bootstrap standard error, the bootstrap estimate of bias, the percent of the boostrap variation that is due to bias, a 90% percentile-based confidence interval for the true proportion, and a 95% percentile-based confidence interval for the true proportion.</p>
+<p><strong>Exercise</strong>. Interpret the 90% confidence interval in context of the problem.</p>
+</section><section id="bootstrap-cis-with-two-independent-samples" class="level3"><h3 class="anchored" data-anchor-id="bootstrap-cis-with-two-independent-samples">Bootstrap CI’s with Two (Independent) Samples</h3>
+<p>Finally, we construct a bootstrap confidence interval using two independent random samples. We are interested in two different quantities here: the difference in population means and the ratio of population means. To do so, we use the flight data, which has information on flight delays from a sample of United Airlines flights (UA) and a sample of Amaerican Airlines flights (AA). We are interested in if either of these airlines has a higher average delay than the other.</p>
+<p>First, we obtain some summary statistics and make a plot of the data:</p>
+<div class="cell">
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/rudeboybert/resampledata">resampledata</a></span><span class="op">)</span></span>
+<span><span class="va">delay_df</span> <span class="op">&lt;-</span> <span class="va">FlightDelays</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">## set.seed(13617)  # 50100 for bias illustration</span></span>
+<span></span>
+<span><span class="va">delay_df</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/group_by.html">group_by</a></span><span class="op">(</span><span class="va">Carrier</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/context.html">n</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>            xbar <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">Delay</span><span class="op">)</span>,</span>
+<span>            sd <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/sd.html">sd</a></span><span class="op">(</span><span class="va">Delay</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 2 × 4
+  Carrier     n  xbar    sd
+  &lt;fct&gt;   &lt;int&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 AA       2906  10.1  40.1
+2 UA       1123  16.0  45.1</code></pre>
+</div>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">delay_df</span>,</span>
+<span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Carrier</span>, y <span class="op">=</span> <span class="va">Delay</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="conf-int_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p>Our sample statistic for the difference in means and for the ratio of means can be calculated with:</p>
+<div class="cell">
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">delays_aa</span> <span class="op">&lt;-</span> <span class="va">delay_df</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Carrier</span> <span class="op">==</span> <span class="st">"AA"</span><span class="op">)</span></span>
+<span><span class="va">delays_ua</span> <span class="op">&lt;-</span> <span class="va">delay_df</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">Carrier</span> <span class="op">==</span> <span class="st">"UA"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">diffmeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">delays_aa</span><span class="op">$</span><span class="va">Delay</span><span class="op">)</span> <span class="op">-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">delays_ua</span><span class="op">$</span><span class="va">Delay</span><span class="op">)</span> <span class="co"># our sample statistic (diff. in means)</span></span>
+<span><span class="va">ratiomeans</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">delays_aa</span><span class="op">$</span><span class="va">Delay</span><span class="op">)</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">delays_ua</span><span class="op">$</span><span class="va">Delay</span><span class="op">)</span> <span class="co"># our sample statistic (ratio of means)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>The code below creates a function that generates either the boostrap difference in means or the bootstrap ratio of means from a single bootstrap sample:</p>
+<div class="cell">
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">generate_one_boot</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">statistic</span> <span class="op">=</span> <span class="st">"diff"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co">## statistic can also be "ratio"</span></span>
+<span>  </span>
+<span>  <span class="co">## put exercise variable into a vector</span></span>
+<span>  <span class="va">aa_vec</span> <span class="op">&lt;-</span> <span class="va">delays_aa</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">Delay</span><span class="op">)</span></span>
+<span>  <span class="va">ua_vec</span> <span class="op">&lt;-</span> <span class="va">delays_ua</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">Delay</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">## sample the exercise data with replacement</span></span>
+<span>  <span class="va">boot_samp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">pie_vec</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">pie_vec</span><span class="op">)</span>,</span>
+<span>                      replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">boot_prop</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">boot_samp</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">## FILL IN MISSING PIECES</span></span>
+<span></span>
+<span>  <span class="co">## fill in piece to obtain one bootstrap sample mean for aa flights</span></span>
+<span></span>
+<span>  <span class="co">## fill in piece to obtain one bootstrap sample mean for ua flights</span></span>
+<span>  </span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">statistic</span> <span class="op">==</span> <span class="st">"diff"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    </span>
+<span>    <span class="co">## fill in piece to compute the difference in sample means</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">boot_diff</span><span class="op">)</span></span>
+<span>    </span>
+<span>  <span class="op">}</span> <span class="kw">else</span> <span class="kw">if</span> <span class="op">(</span><span class="va">statistic</span> <span class="op">==</span> <span class="st">"ratio"</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    </span>
+<span>    <span class="co">## fill in piece to compute the ratio of sample means</span></span>
+<span>    </span>
+<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">boot_ratio</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span>  </span>
+<span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Exercise</strong>. Using this function, we can obtain the bootstrap distribution of differences and the bootstrap distribution of ratios. Use the previous code to construct the histograms of these two bootstrap distributions, overlaying the sample statistics for each onto their appropriate bootstrap distributions.</p>
+<p>I’ve provided code to generate the bootstrap distribution of differences in means but you will need to adjust this to also create the bootstrap distribution for the ratio.</p>
+<div class="cell">
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">B</span> <span class="op">&lt;-</span> <span class="fl">5000</span></span>
+<span><span class="va">bootdiff_vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">B</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu">generate_one_boot</span><span class="op">(</span>statistic <span class="op">=</span> <span class="st">"diff"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">bootdiff_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">bootdiff_vec</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Exercise</strong>. Compute relevant quantities of interest to help create a 90% percentile-based bootstrap confidence interval for the true mean difference in delay times and the true ratio of delay times.</p>
+<p><strong>Exercise</strong>. Interpret your two bootstrap confidence intervals in context of the problem.</p>
+</section></section><section id="mini-project-3-simulation-to-investigate-confidence-intervals" class="level2"><h2 class="anchored" data-anchor-id="mini-project-3-simulation-to-investigate-confidence-intervals">Mini Project 3: Simulation to Investigate Confidence Intervals</h2>
 
 
-<section id="lab-3.1-introduction-to-interval-estimation" class="level2">
-<h2 class="anchored" data-anchor-id="lab-3.1-introduction-to-interval-estimation">Lab 3.1: Introduction to Interval Estimation</h2>
-</section>
-<section id="lab-3.2-conceptual-confidence-intervals" class="level2">
-<h2 class="anchored" data-anchor-id="lab-3.2-conceptual-confidence-intervals">Lab 3.2: Conceptual Confidence Intervals</h2>
-</section>
-<section id="lab-3.3-bootstrap-confidence-intervals" class="level2">
-<h2 class="anchored" data-anchor-id="lab-3.3-bootstrap-confidence-intervals">Lab 3.3: Bootstrap Confidence Intervals</h2>
-</section>
-<section id="mini-project-3-simulation-to-investigate-confidence-interval-conditions" class="level2">
-<h2 class="anchored" data-anchor-id="mini-project-3-simulation-to-investigate-confidence-interval-conditions">Mini Project 3: Simulation to Investigate Confidence Interval Conditions</h2>
-
-
-</section>
-
-</main> <!-- /main -->
-<script id="quarto-html-after-body" type="application/javascript">
+</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");
@@ -618,9 +1114,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     }
   }
 });
-</script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
+</script><nav class="page-navigation"><div class="nav-page nav-page-previous">
       <a href="./estimation.html" class="pagination-link" aria-label="Estimation">
         <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Estimation</span></span>
       </a>          
@@ -632,8 +1126,7 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
-<footer class="footer">
-  <div class="nav-footer">
+<footer class="footer"><div class="nav-footer">
     <div class="nav-footer-left">
 <p>Lab Ideas by Jessica Chapman. Code by Matt Higham. Developed for STAT 326 at St.&nbsp;Lawrence University.</p>
 </div>   
@@ -645,8 +1138,6 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </div>
   </div>
 </footer>
-
-
 
 
 </body></html>
