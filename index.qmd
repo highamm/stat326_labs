@@ -220,19 +220,20 @@ PROBABLY MOVE ONE OF THESE THINGS BACK ONE WEEK AFTER SEEING JESSICA'S SCHEDULE
 | ---- | ------ | ------------------------------- | --------------- |
 | 0 | 1/15 | NA | 1a, 1b |
 | 1 | 1/20 | NA | 1c, 1d |
-| 2 | 1/27 | Mini-Project 1 (Simulation) | 2a  |
-| 3 | 2/3 | Assessment 1 | 2b |
+| 2 | 1/27 | Mini-Project 1 (Simulation)  | 2a  |
+| 3 | 2/3 | Assessment 1  | 2b |
 | 4 | 2/10\* | Mini-Project 2 (Meaningful Story) | 2c  |
-| 5 | 2/17 |  Assessment 2 |
-| 6 | 2/24 |  Mini-Project 3 (Confidence Intervals) | 3b |
-| 7 | 3/3 |  Assessment 3  | 3c |
-| 8 | 3/10 | Mini-Project 4 (Bayesian) | 4a |
+| 5 | 2/17 |  Assessment 2  |
+| 6 | 2/24 |  NA | 3b |
+| 7 | 3/3 |  Mini-Project 3 (Confidence Intervals)    | 3c |
+| 8 | 3/10 | Assessment 3 | 4a |
+| NA | 3/17 | Spring Break | NA |
 | 9 | 3/24 | NA | 4b, 4c |
-| 10 | 3/31 | Assessment 4   | 4c |
-| 11 | 4/7 |  Mini-Project 5 (p-values), Covariance | 4d   |
-| 12 | 4/14 | Assessment 5 | 5a, 5b, 5c  |
-| 13 | 4/21 | Portfolio Check-in | 5d  |
-| 14 | 4/28 | Assessment 6 | 6a |
+| 10 | 3/31 | Mini-Project 4 (Bayesian)     | 4c |
+| 11 | 4/7 |  Assessment 4  | 4d   |
+| 12 | 4/14 | Mini-Project 5 (p-values) | 5a, 5b, 5c  |
+| 13 | 4/21 | Assessment 5 | 5d  |
+| 14 | 4/28 | Portfolio Checkpoint | 6a |
 
 ## Tentative Calendar of Due Dates
 

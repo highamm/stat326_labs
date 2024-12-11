@@ -232,7 +232,13 @@ window.Quarto = {
   <li><a href="#bootstrap-cis-with-two-independent-samples" id="toc-bootstrap-cis-with-two-independent-samples" class="nav-link" data-scroll-target="#bootstrap-cis-with-two-independent-samples">Bootstrap CI’s with Two (Independent) Samples</a></li>
   </ul>
 </li>
-  <li><a href="#mini-project-3-simulation-to-investigate-confidence-intervals" id="toc-mini-project-3-simulation-to-investigate-confidence-intervals" class="nav-link" data-scroll-target="#mini-project-3-simulation-to-investigate-confidence-intervals">Mini Project 3: Simulation to Investigate Confidence Intervals</a></li>
+  <li>
+<a href="#mini-project-3-simulation-to-investigate-confidence-intervals" id="toc-mini-project-3-simulation-to-investigate-confidence-intervals" class="nav-link" data-scroll-target="#mini-project-3-simulation-to-investigate-confidence-intervals">Mini Project 3: Simulation to Investigate Confidence Intervals</a>
+  <ul class="collapse">
+<li><a href="#project-description" id="toc-project-description" class="nav-link" data-scroll-target="#project-description">Project Description</a></li>
+  <li><a href="#small-bad-example" id="toc-small-bad-example" class="nav-link" data-scroll-target="#small-bad-example">Small (Bad) Example</a></li>
+  </ul>
+</li>
   </ul></nav>
     </div>
 <!-- main -->
@@ -410,18 +416,18 @@ window.Quarto = {
 <span><span class="va">many_ci_df</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1,000 × 3
-   point_est    lb    ub
-       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
- 1     11.1  5.51   16.7
- 2     10.5  6.14   14.8
- 3      9.31 1.30   17.3
- 4      9.12 1.35   16.9
- 5      9.60 3.51   15.7
- 6      8.57 0.191  16.9
- 7      8.82 1.73   15.9
- 8     11.1  7.02   15.2
- 9     13.1  8.05   18.1
-10     12.0  2.31   21.7
+   point_est       lb    ub
+       &lt;dbl&gt;    &lt;dbl&gt; &lt;dbl&gt;
+ 1      9.69  4.34    15.0 
+ 2      8.88  0.00168 17.8 
+ 3      4.85  0.0440   9.65
+ 4     11.9   8.18    15.7 
+ 5      9.38  3.93    14.8 
+ 6     12.5   6.26    18.7 
+ 7     11.9   9.49    14.4 
+ 8     11.3   6.02    16.5 
+ 9      8.16 -1.25    17.6 
+10      5.06 -2.58    12.7 
 # ℹ 990 more rows</code></pre>
 </div>
 </div>
@@ -440,7 +446,7 @@ window.Quarto = {
 <pre><code># A tibble: 1 × 2
   avg_width coverage_rate
       &lt;dbl&gt;         &lt;dbl&gt;
-1      11.7         0.949</code></pre>
+1      11.7         0.957</code></pre>
 </div>
 </div>
 <p><strong>Exercise</strong>.</p>
@@ -607,7 +613,7 @@ window.Quarto = {
 <span></span>
 <span><span class="fu">generate_one_bootprop</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1734694</code></pre>
+<pre><code>[1] 0.164966</code></pre>
 </div>
 </div>
 <p>We can then map over the function to obtain <code>B</code> bootstrap proportions and put these bootstrap proportions into a data frame:</p>
@@ -641,7 +647,8 @@ window.Quarto = {
 </div>
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">delay_df</span>,</span>
 <span>       <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">Carrier</span>, y <span class="op">=</span> <span class="va">Delay</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> </span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span>fill <span class="op">=</span> <span class="st">"steelblue"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
 <figure class="figure"><p><img src="conf-int_files/figure-html/unnamed-chunk-27-1.png" class="img-fluid figure-img" width="672"></p>
@@ -704,9 +711,114 @@ window.Quarto = {
 <p><strong>Exercise</strong>. Compute relevant quantities of interest to help create a 90% percentile-based bootstrap confidence interval for the true mean difference in delay times and the true ratio of delay times.</p>
 <p><strong>Exercise</strong>. Interpret your two bootstrap confidence intervals in context of the problem.</p>
 </section></section><section id="mini-project-3-simulation-to-investigate-confidence-intervals" class="level2"><h2 class="anchored" data-anchor-id="mini-project-3-simulation-to-investigate-confidence-intervals">Mini Project 3: Simulation to Investigate Confidence Intervals</h2>
+<section id="project-description" class="level3"><h3 class="anchored" data-anchor-id="project-description">Project Description</h3>
+<p><strong>AI Usage</strong>: You may not use generative AI for this project in any way.</p>
+<p><strong>Collaboration</strong>: For this project, you may work with a self-contained group of 3. Keep in mind that you may not work with the same person on more than one mini-project (so, if you worked with a student on the first mini-project as a partner or in a small group, you may not work with that person on this project). Finally, if working with a partner or in a group of 3, you may submit the same code and the same table of results, but your write-up (both the short summary of your methods and your findings summary) must be written individually.</p>
+<p><strong>Statement of Integrity</strong>: At the top of your submission, copy and paste the following statement and type your name, certifying that you have followed all AI and collaboration rules for this mini-project.</p>
+<p>“I have followed all rules for collaboration for this project, and I have not used generative AI on this project.”</p>
+<p><br></p>
+<p>For this Mini-Project, you will design a simulation study to explore confidence. Some possible study design ideas appear below. I have also included a small “bad” example.</p>
+<p>In your simulation study, you will need to choose one or more confidence interval formulas (e.g., a one-sample t test, or comparing the different versions of the two-sample t confidence interval formula). Then, you will need to decide the conditions under which you want to evaluate your methods (e.g., different samples sizes, or when conditions are met or not, and/or possibly exploring how severely the conditions are not met). In your design, you should consider at least six different cases/scenarios to explore (note in my “bad” example, I explored 9 cases – all of the possible combinations of <span class="math inline">\(n\)</span> and <span class="math inline">\(\sigma\)</span>).</p>
+<p><strong>Possible Study Designs</strong></p>
+<!-- - One-Sample t with different sample sizes and data from different populations (Normal versus non-Normal) -->
+<ul>
+<li>Compare the different Two-Sample t formulas (including STAT 113 df versus Welch df, or Welch formula versus Pooled variance, or all three) under different conditions (sample sizes and population variances).</li>
+<li>Compare the different one proportion formulas under different conditions (sample sizes and population proportions, and/or conditions met or not).</li>
+<li>Compare the different two proportion formulas under different conditions (sample sizes and population proportions, and/or conditions met or not).</li>
+</ul>
+<p><strong>What to Submit</strong>: You should submit a typed write-up of your simulation results. There are a few possible formats you might use to submit this mini-project:</p>
+<ul>
+<li>a rendered .qmd file (either to .html, .pdf, or .docx) that includes your write-up, results, and code.</li>
+<li>a Word file that contains your results and write-up and a separate .qmd file that has all of your code. Note that, for this option, your code should still be organized and easy to follow.</li>
+</ul>
+<p>In your submission, you should include:</p>
+<ul>
+<li>a short summary of the methods you are comparing (including the assumptions necessary for those methods) and under what conditions.</li>
+<li>a table that summarises the coverage rates and average widths for the cases you considered.</li>
+<li>two paragraphs summarising your findings.</li>
+</ul></section><section id="small-bad-example" class="level3"><h3 class="anchored" data-anchor-id="small-bad-example">Small (Bad) Example</h3>
+<p>Below I give a small “bad” example for a one-sample t confidence interval simulation (a setting that you cannot choose for this project anyway!).</p>
+<p>I plan to compare the performance of the one-sample t confidence interval for different sample sizes (<span class="math inline">\(n = 5, 25, 100\)</span>) and different population standard deviations (<span class="math inline">\(\sigma= 2, 10, 20\)</span>). Note that one-sample t methods assume that either data come from a Normal population or we have a large sample size. For this simulation, all data will be randomly generated from a Normal population with mean <span class="math inline">\(\mu = 10\)</span>. And, for each setting, I simulated 5000 iterations to compute the coverage rate and average width. A summary of my simulated coverage rates for these combinations appears below.</p>
+<table class="table-striped table-hover caption-top table">
+<caption>Table of Results</caption>
+<colgroup>
+<col style="width: 8%">
+<col style="width: 27%">
+<col style="width: 22%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: center;"></th>
+<th style="text-align: center;"></th>
+<th style="text-align: center;"><span class="math inline">\(n = 5\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(n = 25\)</span></th>
+<th style="text-align: center;"><span class="math inline">\(n = 100\)</span></th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(\sigma = 2\)</span></td>
+<td style="text-align: center;">Coverage Rate</td>
+<td style="text-align: center;">0.947</td>
+<td style="text-align: center;">0.952</td>
+<td style="text-align: center;">0.965</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(\sigma = 2\)</span></td>
+<td style="text-align: center;">Average Width</td>
+<td style="text-align: center;">4.59</td>
+<td style="text-align: center;">1.64</td>
+<td style="text-align: center;">0.79</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(\sigma = 10\)</span></td>
+<td style="text-align: center;">Coverage Rate</td>
+<td style="text-align: center;">0.949</td>
+<td style="text-align: center;">0.935</td>
+<td style="text-align: center;">0.95</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(\sigma = 10\)</span></td>
+<td style="text-align: center;">Average Width</td>
+<td style="text-align: center;">23.26</td>
+<td style="text-align: center;">8.19</td>
+<td style="text-align: center;">3.93</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+<td style="text-align: center;"></td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;"><span class="math inline">\(\sigma = 20\)</span></td>
+<td style="text-align: center;">Coverage Rate</td>
+<td style="text-align: center;">0.939</td>
+<td style="text-align: center;">0.953</td>
+<td style="text-align: center;">0.951</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;"><span class="math inline">\(\sigma = 20\)</span></td>
+<td style="text-align: center;">Average Width</td>
+<td style="text-align: center;">46.68</td>
+<td style="text-align: center;">16.29</td>
+<td style="text-align: center;">7.91</td>
+</tr>
+</tbody>
+</table>
+<p>I have learned that, for each combination of sample size and population standard deviation, the coverage rate is right around what was expected (95%). The average width is larger when either <span class="math inline">\(n\)</span> is small or the population variance is large. The average width decreases when either sample size increases or the population standard deviation decreases.</p>
+<p>Note that the reason I’ve labeled this example as “bad” is that I haven’t done anything that could possibly affect the coverage rate; I only modified factors that would influence the width of the confidence intervals (specifically factors that would affect the standard error of the confidence interval and nothing else). More interesting simulation designs would explore what happens when you use a formula when you are not supposed to (e.g., conditions fail or you use a rule for degrees of freedom that I’ve said not to use or use a formula that I’ve said you should not use).</p>
 
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
 window.document.addEventListener("DOMContentLoaded", function (event) {
   const toggleBodyColorMode = (bsSheetEl) => {
     const mode = bsSheetEl.getAttribute("data-mode");

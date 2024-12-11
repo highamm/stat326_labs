@@ -216,5 +216,21 @@ ggplot(data = plot_df, aes(x = n,
 
 ## Mini Project 2: A Meaningful Story
 
-Put description of project here.
+__AI Usage__: You may not use generative AI for this project in any way.
+
+__Collaboration__: For this project, you may not work with other people in the class. Your story must be your own.
+
+__Statement of Integrity__: Your submission should be typed. At the top of your submission, copy and paste the following statement and type your name, certifying that you have followed all AI and collaboration rules for this mini-project.
+
+"All work presented is my own, and I have followed all rules for collaboration. I have not used generative AI on this project."
+
+For this mini-project, you will write a "meaningful story." A "meaningful story" is one continuous piece of writing / creative work that uses key words from a list and in which the sentences "make sense and hang together." That is, the ideas in the story must illustrate that you understand key concepts from Stat 326 in a way that allows you to write "meaningfully" about them. You may not simply write ten sequential sentences that merely define the terms; the sentences must demonstrate relationships between the terms. It is your job to use the terms in a way that demonstrates that you understand the statistical concepts involved and why we care about these terms in the big picture of statistical theory.
+
+In addition, you need to frame your writing within a real-life or imaginary context or scenario. Be creative!! Write about sports or music or manufacturing cell phones or skiing trips or the zombie apocalypse. Meaningful stories could even be literary works, such as play scripts, stories, song lyrics, poetry, etc. Use your imagination when constructing your "story" and conveying the material (content MUST be appropriate).
+
+__Estimation Prompt__: Each of these terms must be incorporated into your meaningful story. Estimator, Parameter, Estimate (as a noun), Random Variable, Random Sample, Bias, Variance, Consistent, Likelihood.
+
+__Also__: in your "meaningful story," you must refer to at least one of our common probability distributions by name.
+
+
 

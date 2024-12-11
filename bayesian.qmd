@@ -196,4 +196,49 @@ goals |> var()
 
 ## Mini Project 4: Bayesian Analysis
 
-(likely going to use animal abundance data with three priors: a non-informative gamma prior, an informative gamma prior based on abundance survey in the previous year, and an informative prior based on wildlife manager's knowledge of the area).
+### Project Introduction
+
+__AI Usage__: You may not use generative AI for this project in any way.
+
+__Collaboration__: For this project, you may work with a self-contained group of 3. Keep in mind that you may not work with the same person on more than one mini-project (so, if you worked with a student on the first or third mini-project as a partner or in a small group, you may not work with that person on this project). Finally, if working with a partner or in a group of 3, you may submit the same code and the same results/visuals, but your write-ups must be written individually.
+
+__Statement of Integrity__: At the top of your submission, copy and paste the following statement and type your name, certifying that you have followed all AI and collaboration rules for this mini-project.
+
+"I have followed all rules for collaboration for this project, and I have not used generative AI on this project."
+
+<br>
+
+Rafael Nadal is arguably the greatest men's clay-court tennis player ever to play the game. In this mini-project, you analyze the probability that Nadal wins a point on his own serve against his primary rival, Novak Djokovic, at the French Open (the most prestigious clay court tournament in the world).
+
+### Priors
+
+Before we look at some data, we will consider a few possible prior distributions for the probability that Nadal wins a point on his own serve against Djokovic:
+
+- non-informative prior for this probability.
+- an informative prior based on a clay-court match the two played in the previous year. In that match, Nadal won 46 out of 66 points on his own serve. The standard error of this estimate is 0.05657. 
+- an informative prior based on a sports announcer, who claims that they think Nadal wins about 75% of the points on his serve against Djokovic. They are also "almost sure" that Nadal wins no less than 70% of his points on serve against Djokovic.
+
+Construct a single graph that shows all three of these priors. Note that, for both of the informative priors, there is some subjectivity with how you are going to use the information given to construct an appropriate prior for $p$, the probability that Nadal wins a point on serve against Djokovic.
+
+### Data
+
+Now, we want to use the 2020 French Open data to update our prior for the probability that Nadal wins a point on serve. In that tournament, the two players played in the final. In that final, Nadal served 84 points and won 56 of those points.
+
+Update each of your three priors with this data and make a plot of the three different posterior distributions of $p$.
+
+Additionally, for each of the three posteriors, report the posterior mean and 90% credible intervals for $p$.
+
+### Report
+
+For this mini-project, you should submit a report that includes the following:
+
+- an introduction to the question of interest that you are answering for this project as well as an overview of how you will be answering this question.
+- typed work justifying the decisions you made to create the two informative priors. What did you assume when you made those priors?
+- the graph of the three priors and the graph of the three posteriors, along with any work needed to obtain the posteriors, the posterior means, and the 90% credible intervals
+- a comparison of the three posteriors. 
+    - They should be a bit different from each other: why? 
+    - If you had to choose one to use, which one would you choose here and why? 
+    - The variance of each posterior should be different. Why do you think one posterior has a lower variance than the other two?
+- a brief conclusion of what you found in this mini-project.
+
+

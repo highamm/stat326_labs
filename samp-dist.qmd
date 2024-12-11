@@ -381,6 +381,103 @@ means_df |>
 
 ## Mini Project 1: Sampling Distribution of the Sample Minimum and Maximum
 
+__AI Usage__: You may not use generative AI for this project in any way.
+
+__Collaboration__: For this project, you may work with a self-contained group of 3. Keep in mind that you may not work with the same person on more than one mini-project (so, if you worked with a student on the first mini-project as a partner or in a small group, you may not work with that person on this project). Finally, if working with a partner or in a group of 3, you may submit the same code and the same table of results, but your write-up (both the short summary of your methods and your findings summary) must be written individually.
+
+__Statement of Integrity__: At the top of your submission, copy and paste the following statement and type your name, certifying that you have followed all AI and collaboration rules for this mini-project.
+
+"I have followed all rules for collaboration for this project, and I have not used generative AI on this project."
+
+<br>
+
 On our second day of class, we conducted a simulation to investigate the sampling distribution of the sample minimum ($Y_{min}$) when taking samples of $n = 5$ observations from a Normal($\mu = 10, \sigma^2 = 4$) population. For your recap of that day, you investigated the sampling distribution of the sample maximum ($Y_{max}$) from the same population (using the same sample size).
 
 Many of you noticed that, in this situation, SE($Y_{min} \approx$ SE($Y_{max}$), and many of you provided great explanations of why you thought that was true. The purpose of this mini-project assignment is for you to investigate this phenomenon to see if it is a result that holds more generally.
+
+__Instructions__: Use the class code as a guide to carry out simulations of the sampling distributions of the sample minimum ($Y_{min}$) and the sample maximum ($Y_{max}$) when taking samples of size $n = 5$ from different populations (specified below). Fill in the summary table in this document and use it answer the questions that follow.
+
+__Submission__: Upload your typed up solutions to the questions that appear below, graphs (population graphs, histograms of your simulated distributions of the sample minimum, and histograms of your simulated distributions of the sample maximum), and tables showing your results, and your Quarto file to Canvas.
+
+Below are some things that you can use to help make your graphs and table in Quarto, should you desire to use that to render a document to submit.
+
+```{r}
+#| warning: false
+
+## create population graphs
+
+norm_df <- tibble(x = seq(3, 17, length.out = 1000),
+                  dens = dnorm(x, mean = 10, sd = 2),
+                  pop = "normal(10, 4)")
+unif_df <- tibble(x = seq(7, 13, length.out = 1000),
+                  dens = dunif(x, 7, 13),
+                  pop = "uniform(7, 13)")
+exp_df <- tibble(x = seq(0, 10, length.out = 1000),
+                 dens = dexp(x, 0.5),
+                 pop = "exp(0.5)")
+beta_df <- tibble(x = seq(0, 1, length.out = 1000),
+                  dens = dbeta(x, 8, 2),
+                  pop = "beta(8, 2)")
+
+pop_plot <- bind_rows(norm_df, unif_df, exp_df, beta_df) |>
+  mutate(pop = fct_relevel(pop, c("normal(10, 4)", "uniform(7, 13)",
+                                  "exp(0.5)", "beta(8, 2)")))
+
+ggplot(data = pop_plot, aes(x = x, y = dens)) +
+  geom_line() +
+  theme_minimal() +
+  facet_wrap(~ pop, nrow = 1, scales = "free") +
+  labs(title = "Population Distributions for Each Simulation Setting")
+```
+
+If creating your report in Quarto, you can use a similar strategy as above to show your 4 histograms of the simulated distribution of the sample minimum and to again show your 4 histograms of the simulated distribution of the sample maximum.
+
+In addition to your graphs, you should also complete the following table:
+
+|  |  $\text{N}(\mu = 10, \sigma^2 = 4)$  | $\text{Unif}(\theta_1 = 7, \theta_2 = 13)$ | $\text{Exp}(\lambda = 0.5)$ | $\text{Beta}(\alpha = 8, \beta = 2)$ |
+|:----:|:-----------------:|:-------------:|:------------:|:------------:|
+| $\text{E}(Y_{min})$    |       |        |       |              |
+| $\text{E}(Y_{max})$    |       |        |       |              |
+|                        |       |        |       |              |
+| $\text{SE}(Y_{min})$   |       |        |       |              |
+| $\text{SE}(Y_{max})$   |       |        |       |              |
+: Table of Results {.striped .hover}
+
+Below is the Quarto text used to generate the table above:
+
+```
+|  |  $\text{N}(\mu = 10, \sigma^2 = 4)$  | $\text{Unif}(\theta_1 = 7, \theta_2 = 13)$ | $\text{Exp}(\lambda = 0.5)$ | $\text{Beta}(\alpha = 8, \beta = 2)$ |
+|:----:|:-----------------:|:-------------:|:------------:|:------------:|
+| $\text{E}(Y_{min})$    |       |        |       |              |
+| $\text{E}(Y_{max})$    |       |        |       |              |
+|                        |       |        |       |              |
+| $\text{SE}(Y_{min})$   |       |        |       |              |
+| $\text{SE}(Y_{max})$   |       |        |       |              |
+: Table of Results {.striped .hover}
+```
+
+Finally, in addition to your code, graphs, and table, you should answer the following questions:
+
+1. Briefly discuss/describe situations when each of the above population models (Normal, Uniform, Exponential, and Beta) should be used (that is, what type of data could they model). 
+
+2. Briefly summarise how $\text{SE}(Y_{min})$ and $\text{SE}(Y_{max})$ compare for each of the above population models. Can you propose a general rule or result for how $\text{SE}(Y_{min})$ and $\text{SE}(Y_{max})$ compare for a given population? 
+
+3. Choose either the third (Exponential) or fourth (Beta) population model from the table above. For that population model, find the pdf of $Y_{min}$⁡  and $Y_{max}$, and, for each of those random variables, sketch the pdfs and find the expected value and standard error. What do you notice about how your answers compare to the simulated answers? Some code is given below to help you plot the pdfs in `R`:
+
+```{r}
+#| output: false
+n <- 5
+## CHANGE 0 and 3 to represent where you want your graph to start and end
+## on the x-axis
+x <- seq(0, 3, length.out = 1000)
+## CHANGE to be the pdf you calculated. Note that, as of now, 
+## this is not a proper density (it does not integrate to 1).
+density <- n * exp(-(1/2) * x)
+
+
+## put into tibble and plot
+samp_min_df <- tibble(x, density)
+ggplot(data = samp_min_df, aes(x = x, y = density)) +
+  geom_line() +
+  theme_minimal()
+```

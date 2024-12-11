@@ -2,6 +2,220 @@
 
 ## Lab 5.1: Permutation Tests
 
+### Example 1: Flight Data
+
+Consider again the flight delay data. Here, we will consider whether or not there is statistical evidence that the mean delay of United Airlines is different than the mean delay of American Airlines. 
+
+Recal that, for a permutation test, we do not need to assume that the underlying populations follow a normal distribution. However, if we are interested in testing a difference in means, we do need to assume that the populations have the same variance and the same shape (but perhaps may have a different center).
+
+First, we obtain some summary statistics and make a plot of the data:
+
+```{r}
+#| warning: false
+library(tidyverse)
+library(resampledata)
+delay_df <- FlightDelays |> as_tibble() |>
+  select(Carrier, Delay, everything())
+## set.seed(13617)  # 50100 for bias illustration
+
+delay_df |> group_by(Carrier) |>
+  summarise(n = n(),
+            xbar = mean(Delay),
+            sd = sd(Delay))
+
+ggplot(delay_df,
+       aes(x = Carrier, y = Delay)) + 
+  geom_boxplot(fill = "steelblue") +
+  theme_minimal()
+```
+
+We next store the difference in sample means as a value called `teststat` and each of the sample sizes as `n_a` and `n_u`:
+
+```{r}
+teststat <- delay_df |> group_by(Carrier) |>
+  summarise(mean_delay = mean(Delay)) |>
+  pull(mean_delay) |>
+  diff()
+## teststat is united delay mean minus american airlines mean
+```
+
+Under the null hypothesis, the distribution of delays is identical for american and united airlines. To reshuffle that delay values randomly across both airlines we can use the code below:
+
+```{r}
+delay_df |>
+  mutate(delay_perm = sample(Delay, size = nrow(delay_df), replace = FALSE)) |>
+  relocate(delay_perm)
+```
+
+Rerun the previous code chunk a few times to see a different permutations of the `Delay` variable.
+
+With one permutation, we want to recalculate the difference in means:
+
+```{r}
+delay_df |>
+  mutate(delay_perm = sample(Delay, size = nrow(delay_df), replace = FALSE)) |>
+  relocate(delay_perm) |>
+  group_by(Carrier) |>
+  summarise(mean_delay_perm = mean(delay_perm)) |>
+  pull(mean_delay_perm) |>
+  diff()
+```
+
+Rerun the code chunk above a few times to get a few different mean differences under different permutations. The big idea is that a large number of these mean differences will form the null distribution for the difference in sample means (if there really is no difference in the underlying population distributions).
+
+So, let's wrap that above code in a function, and then iterate over that function a large number of times to obtain our null distribution:
+
+```{r}
+get_delay_perm_diff <- function() {
+  delay_df |>
+    mutate(delay_perm = sample(Delay, size = nrow(delay_df), replace = FALSE)) |>
+    relocate(delay_perm) |>
+    group_by(Carrier) |>
+    summarise(mean_delay_perm = mean(delay_perm)) |>
+    pull(mean_delay_perm) |>
+    diff()
+}
+
+n_perm <- 5000
+diff_means <- map_dbl(1:n_perm, \(i) get_delay_perm_diff())
+null_df <- tibble(diff_means)
+
+ggplot(data = null_df, aes(x = diff_means)) +
+  geom_histogram(colour = "black", fill = "white", bins = 15) +
+  theme_minimal()
+```
+
+__Exercise__. Write a 1-2 sentence interpretation of what this null distribution means in context of the problem.
+
+Now, let's add where our test statistic from our data is on the graph:
+
+```{r}
+ggplot(data = null_df, aes(x = diff_means)) +
+  geom_histogram(colour = "black", fill = "white", bins = 15) +
+  geom_vline(xintercept = teststat, colour = "red") +
+  theme_minimal()
+```
+
+__Exercise__. Before explicitly calculating a p-value, assess visually whether a p-value for this hypothesis test will be relatively large or relatively small.
+
+Now, let's explicitly compute a conservative p-value for the test:
+
+```{r}
+(sum(diff_means > abs(teststat)) + sum(diff_means < -abs(teststat)) + 1) / (n_perm + 1)
+```
+
+__Exercise__. What is the alternative hypothesis that the p-value is testing?
+
+__Exercise__. What is the purpose of the `+ 1` in the code above?
+
+__Exercise__. Why are there two different summations in the code above to get the p-value?
+
+__Exercise__. Write a conclusion in context of the problem for this hypothesis test.
+
+### Example 2: Spruce
+
+(might change this so that the resulting p-value is not so small).
+
+In the Black Spruce Case Study in Section 1.9, seedlings were planted in plots that were either subject to competition (from other plants) or not. Use the data set `Spruce` to conduct a test to see if there is evidence that the mean growth (`Ht.change`) differs for the two treatments (`C = Competition` or `NC = No Competition`).
+
+```{r}
+## print as a tibble
+spruce_df <- Spruce |> as_tibble()
+```
+
+__Data Exploration__:
+
+```{r}
+ggplot(data = spruce_df, aes(x = Competition, y = Ht.change, fill = Competition)) +
+  geom_boxplot(outlier.shape = 8) +
+  theme_minimal() +
+  scale_fill_viridis_d(begin = 0.4, end = 0.9) +
+  guides(fill = "none")
+
+spruce_df |> group_by(Competition) |>
+  summarise(mean = mean(Ht.change),
+            n = n())
+```
+
+__Test Statistic__:
+
+```{r}
+# From our summary statistics
+teststat <- spruce_df |> group_by(Competition) |>
+  summarise(mean = mean(Ht.change),
+            n = n()) |>
+  pull(mean) |>
+  diff()
+## NC minus C
+teststat
+```
+
+__Create Null Distribution__:
+
+```{r}
+get_spruce_perm_diff <- function() {
+  spruce_df |>
+    mutate(height_perm = sample(Ht.change,
+                                size = nrow(spruce_df), replace = FALSE)) |>
+    relocate(height_perm) |>
+    group_by(Competition) |>
+    summarise(mean_height_perm = mean(height_perm)) |>
+    pull(mean_height_perm) |>
+    diff()
+}
+get_spruce_perm_diff()
+
+n_perm <- 5000
+diff_means <- map_dbl(1:n_perm, \(i) get_spruce_perm_diff())
+null_df <- tibble(diff_means)
+
+ggplot(data = null_df, aes(x = diff_means)) +
+  geom_histogram(colour = "black", fill = "white", bins = 15) +
+  ## add test stat to null dist
+  geom_vline(xintercept = teststat, colour = "red") +
+  theme_minimal()
+```
+
+__Calculate a p-value__:
+
+```{r}
+(sum(diff_means > abs(teststat)) + sum(diff_means < -abs(teststat)) + 1) / (n_perm + 1)
+```
+
+__Exercise__. Write a conclusion in context of the problem for this hypothesis test.
+
 ## Mini Project 5: Advantages and Drawbacks of Using p-values
 
-See article from _The American Statistician_. To make room for the bayesian project, perhaps move this to the final portfolio and cut the TAS part of the final portfolio.
+__AI Usage__: You may not use generative AI for this project in any way.
+
+__Collaboration__: For this project, you may not work with other students in the class.
+
+__Statement of Integrity__: At the top of your submission, copy and paste the following statement and type your name, certifying that you have followed all AI and collaboration rules for this mini-project.
+
+"All work presented is my own, and I have followed all rules for collaboration. I have not used generative AI on this project."
+
+<br>
+
+For this final mini-project, you will read an editorial published in _The American Statistician_ and respond to the questions below. You will find a pdf of the editorial on Canvas.
+
+First, read through the first six sections of the editorial titled _Moving to a World Beyond 'p<0.05'_ by Wasserstein, Schirm, and Lazar published in _The American Statistician_ in 2019 as the introduction to a special issue about p-values. I strongly encourage you to read the first six sections at least twice before you attempt to respond to the questions that appear below. This mini-project will be graded, primarily, on how thoughtfully you respond to these questions.
+
+__Submission__: Upload your typed responses to these questions to the assignment in Canvas by the deadline. 
+
+__Questions__:
+
+1. _Towards the end of Section 1_, the authors say "As 'statistical significance' is used less, statistical thinking will be used more." Elaborate on what you think the authors mean. Give some examples of what you think embodies "statistical thinking."
+
+2. _Section 2, third paragraph_: The authors state "A label of statistical significance adds nothing to what is already conveyed by the value of $p$; in fact, this dichotomization of p-values makes matters worse." Elaborate on what you think the authors means.
+
+3. _Section 2, end of first column_: The authors state "For the integrity of scientific publishing and research dissemination, therefore, whether a p-value passes any arbitrary threshold should not be considered at all when deciding which results to present or highlight." Do you agree or disagree? How should it be decided which results to present/highlight in scientific publishing?
+
+4. _Section 3, end of page 2_: The authors state "The statistical community has not yet converged on a simple paradigm for the use of statistical inference in scientific research – and in fact it may never do so. A one-size-fits-all approach to statistical inference is an inappropriate expectation." Do you agree or disagree? Explain.
+
+5. _Section 3.2_: The authors note that they are envisioning "a sort of 'statistical thoughtfulness'." What do you think "statistical thoughtfulness" means? What are some ways to demonstrate "statistical thoughtfulness" in an analysis?
+
+6. _Section 3.2.4_: A few of the authors of papers in this special issue argue that some of the terminology used in statistics, such as "significance" and "confidence" can be misleading, and they propose the use of "compatibility" instead. What you do you think they believe the problem is? Do you agree or disagree (that there is a problem and that changing the name will help)?
+
+7. Find a quote or point that really strikes you (i.e., made you think). What is the quote (and tell me where to find it), and why does it stand out to you?
+
+

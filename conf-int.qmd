@@ -426,7 +426,8 @@ delay_df |> group_by(Carrier) |>
 
 ggplot(delay_df,
        aes(x = Carrier, y = Delay)) + 
-  geom_boxplot(fill = "steelblue")
+  geom_boxplot(fill = "steelblue") +
+  theme_minimal()
 ```
 
 Our sample statistic for the difference in means and for the ratio of means can be calculated with:
@@ -498,3 +499,60 @@ __Exercise__. Interpret your two bootstrap confidence intervals in context of th
 
 ## Mini Project 3: Simulation to Investigate Confidence Intervals
 
+### Project Description
+
+__AI Usage__: You may not use generative AI for this project in any way.
+
+__Collaboration__: For this project, you may work with a self-contained group of 3. Keep in mind that you may not work with the same person on more than one mini-project (so, if you worked with a student on the first mini-project as a partner or in a small group, you may not work with that person on this project). Finally, if working with a partner or in a group of 3, you may submit the same code and the same table of results, but your write-up (both the short summary of your methods and your findings summary) must be written individually.
+
+__Statement of Integrity__: At the top of your submission, copy and paste the following statement and type your name, certifying that you have followed all AI and collaboration rules for this mini-project.
+
+"I have followed all rules for collaboration for this project, and I have not used generative AI on this project."
+
+<br>
+
+For this Mini-Project, you will design a simulation study to explore confidence. Some possible study design ideas appear below. I have also included a small "bad" example.
+
+In your simulation study, you will need to choose one or more confidence interval formulas (e.g., a one-sample t test, or comparing the different versions of the two-sample t confidence interval formula). Then, you will need to decide the conditions under which you want to evaluate your methods (e.g., different samples sizes, or when conditions are met or not, and/or possibly exploring how severely the conditions are not met). In your design, you should consider at least six different cases/scenarios to explore (note in my "bad" example, I explored 9 cases – all of the possible combinations of $n$ and $\sigma$).
+
+__Possible Study Designs__
+
+<!-- - One-Sample t with different sample sizes and data from different populations (Normal versus non-Normal) -->
+- Compare the different Two-Sample t formulas (including STAT 113 df versus Welch df, or Welch formula versus Pooled variance, or all three) under different conditions (sample sizes and population variances).
+- Compare the different one proportion formulas under different conditions (sample sizes and population proportions, and/or conditions met or not).
+- Compare the different two proportion formulas under different conditions (sample sizes and population proportions, and/or conditions met or not).
+
+__What to Submit__: You should submit a typed write-up of your simulation results. There are a few possible formats you might use to submit this mini-project: 
+
+- a rendered .qmd file (either to .html, .pdf, or .docx) that includes your write-up, results, and code.
+- a Word file that contains your results and write-up and a separate .qmd file that has all of your code. Note that, for this option, your code should still be organized and easy to follow.
+
+In your submission, you should include:
+
+- a short summary of the methods you are comparing (including the assumptions necessary for those methods) and under what conditions.
+- a table that summarises the coverage rates and average widths for the cases you considered.
+- two paragraphs summarising your findings.
+
+
+### Small (Bad) Example
+
+Below I give a small "bad" example for a one-sample t confidence interval simulation (a setting that you cannot choose for this project anyway!).
+
+I plan to compare the performance of the one-sample t confidence interval for different sample sizes ($n = 5, 25, 100$) and different population standard deviations ($\sigma= 2, 10, 20$). Note that one-sample t methods assume that either data come from a Normal population or we have a large sample size. For this simulation, all data will be randomly generated from a Normal population with mean $\mu = 10$. And, for each setting, I simulated 5000 iterations to compute the coverage rate and average width. A summary of my simulated coverage rates for these combinations appears below.
+
+|  |         | $n = 5$ | $n = 25$ | $n = 100$ |
+|:----:|:-----------------:|:-------------:|:------------:|:------------:|
+| $\sigma = 2$   | Coverage Rate       |     0.947   |     0.952  |    0.965          |
+| $\sigma = 2$    | Average Width        |    4.59   |     1.64  |     0.79         |
+|    |                     |               |              |              |
+| $\sigma = 10$   | Coverage Rate       |     0.949   |     0.935  |    0.95          |
+| $\sigma = 10$    | Average Width        |    23.26   |     8.19  |     3.93         |
+|    |                     |               |              |              |
+| $\sigma = 20$   | Coverage Rate       |     0.939   |     0.953  |    0.951          |
+| $\sigma = 20$    | Average Width        |    46.68   |     16.29  |     7.91         |
+
+: Table of Results {.striped .hover}
+
+I have learned that, for each combination of sample size and population standard deviation, the coverage rate is right around what was expected (95%). The average width is larger when either $n$ is small or the population variance is large. The average width decreases when either sample size increases or the population standard deviation decreases.
+
+Note that the reason I’ve labeled this example as "bad" is that I haven’t done anything that could possibly affect the coverage rate; I only modified factors that would influence the width of the confidence intervals (specifically factors that would affect the standard error of the confidence interval and nothing else). More interesting simulation designs would explore what happens when you use a formula when you are not supposed to (e.g., conditions fail or you use a rule for degrees of freedom that I’ve said not to use or use a formula that I’ve said you should not use).
