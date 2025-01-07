@@ -234,7 +234,13 @@ window.Quarto = {
   
 
 
-</header><section id="lab-5.1-permutation-tests" class="level2"><h2 class="anchored" data-anchor-id="lab-5.1-permutation-tests">Lab 5.1: Permutation Tests</h2>
+</header><p><strong>Goals</strong>:</p>
+<ul>
+<li>
+</li><li>
+</li><li>
+</li></ul>
+<section id="lab-5.1-permutation-tests" class="level2"><h2 class="anchored" data-anchor-id="lab-5.1-permutation-tests">Lab 5.1: Permutation Tests</h2>
 <section id="example-1-flight-data" class="level3"><h3 class="anchored" data-anchor-id="example-1-flight-data">Example 1: Flight Data</h3>
 <p>Consider again the flight delay data. Here, we will consider whether or not there is statistical evidence that the mean delay of United Airlines is different than the mean delay of American Airlines.</p>
 <p>Recal that, for a permutation test, we do not need to assume that the underlying populations follow a normal distribution. However, if we are interested in testing a difference in means, we do need to assume that the populations have the same variance and the same shape (but perhaps may have a different center).</p>
@@ -285,16 +291,16 @@ window.Quarto = {
 <pre><code># A tibble: 4,029 × 11
    delay_perm Carrier Delay    ID FlightNo Destination DepartTime Day   Month
         &lt;int&gt; &lt;fct&gt;   &lt;int&gt; &lt;int&gt;    &lt;int&gt; &lt;fct&gt;       &lt;fct&gt;      &lt;fct&gt; &lt;fct&gt;
- 1         40 UA         -1     1      403 DEN         4-8am      Fri   May  
- 2          0 UA        102     2      405 DEN         8-Noon     Fri   May  
- 3         -6 UA          4     3      409 DEN         4-8pm      Fri   May  
- 4         -3 UA         -2     4      511 ORD         8-Noon     Fri   May  
- 5         -1 UA         -3     5      667 ORD         4-8am      Fri   May  
- 6          2 UA          0     6      669 ORD         4-8am      Fri   May  
- 7         -2 UA         -5     7      673 ORD         8-Noon     Fri   May  
- 8          0 UA          0     8      677 ORD         8-Noon     Fri   May  
- 9         -6 UA         10     9      679 ORD         Noon-4pm   Fri   May  
-10         -5 UA         60    10      681 ORD         Noon-4pm   Fri   May  
+ 1         -5 UA         -1     1      403 DEN         4-8am      Fri   May  
+ 2          3 UA        102     2      405 DEN         8-Noon     Fri   May  
+ 3         93 UA          4     3      409 DEN         4-8pm      Fri   May  
+ 4         -9 UA         -2     4      511 ORD         8-Noon     Fri   May  
+ 5         82 UA         -3     5      667 ORD         4-8am      Fri   May  
+ 6         -8 UA          0     6      669 ORD         4-8am      Fri   May  
+ 7         24 UA         -5     7      673 ORD         8-Noon     Fri   May  
+ 8          4 UA          0     8      677 ORD         8-Noon     Fri   May  
+ 9         30 UA         10     9      679 ORD         Noon-4pm   Fri   May  
+10         -4 UA         60    10      681 ORD         Noon-4pm   Fri   May  
 # ℹ 4,019 more rows
 # ℹ 2 more variables: FlightLength &lt;int&gt;, Delayed30 &lt;fct&gt;</code></pre>
 </div>
@@ -310,7 +316,7 @@ window.Quarto = {
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">mean_delay_perm</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -0.279834</code></pre>
+<pre><code>[1] 0.1596791</code></pre>
 </div>
 </div>
 <p>Rerun the code chunk above a few times to get a few different mean differences under different permutations. The big idea is that a large number of these mean differences will form the null distribution for the difference in sample means (if there really is no difference in the underlying population distributions).</p>
@@ -425,7 +431,7 @@ window.Quarto = {
 <span><span class="op">}</span></span>
 <span><span class="fu">get_spruce_perm_diff</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 4.65</code></pre>
+<pre><code>[1] 4.3</code></pre>
 </div>
 <div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n_perm</span> <span class="op">&lt;-</span> <span class="fl">5000</span></span>
 <span><span class="va">diff_means</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_perm</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu">get_spruce_perm_diff</span><span class="op">(</span><span class="op">)</span><span class="op">)</span></span>

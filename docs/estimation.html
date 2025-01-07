@@ -212,15 +212,16 @@ window.Quarto = {
 <a href="#lab-2.1-maximum-likelihood-estimation" id="toc-lab-2.1-maximum-likelihood-estimation" class="nav-link active" data-scroll-target="#lab-2.1-maximum-likelihood-estimation">Lab 2.1: Maximum Likelihood Estimation</a>
   <ul class="collapse">
 <li><a href="#mle-example-binomial-likelihood" id="toc-mle-example-binomial-likelihood" class="nav-link" data-scroll-target="#mle-example-binomial-likelihood">MLE Example: Binomial Likelihood</a></li>
-  <li><a href="#mle-example" id="toc-mle-example" class="nav-link" data-scroll-target="#mle-example">MLE Example</a></li>
+  <li><a href="#mle-example-rayleigh-distribution" id="toc-mle-example-rayleigh-distribution" class="nav-link" data-scroll-target="#mle-example-rayleigh-distribution">MLE Example: Rayleigh Distribution</a></li>
   <li><a href="#mle-example-poisson" id="toc-mle-example-poisson" class="nav-link" data-scroll-target="#mle-example-poisson">MLE Example: Poisson</a></li>
+  <li><a href="#mse-graph" id="toc-mse-graph" class="nav-link" data-scroll-target="#mse-graph">MSE Graph</a></li>
   </ul>
 </li>
   <li>
 <a href="#lab-2.2-consistency" id="toc-lab-2.2-consistency" class="nav-link" data-scroll-target="#lab-2.2-consistency">Lab 2.2: Consistency</a>
   <ul class="collapse">
-<li><a href="#uniform-example" id="toc-uniform-example" class="nav-link" data-scroll-target="#uniform-example">Uniform Example</a></li>
-  <li><a href="#binomial-example" id="toc-binomial-example" class="nav-link" data-scroll-target="#binomial-example">Binomial Example</a></li>
+<li><a href="#binomial-example" id="toc-binomial-example" class="nav-link" data-scroll-target="#binomial-example">Binomial Example</a></li>
+  <li><a href="#uniform-example" id="toc-uniform-example" class="nav-link" data-scroll-target="#uniform-example">Uniform Example</a></li>
   </ul>
 </li>
   <li><a href="#mini-project-2-a-meaningful-story" id="toc-mini-project-2-a-meaningful-story" class="nav-link" data-scroll-target="#mini-project-2-a-meaningful-story">Mini Project 2: A Meaningful Story</a></li>
@@ -242,8 +243,11 @@ window.Quarto = {
   
 
 
-</header><p>ADD IN EXERCISES</p>
-<p>ADD GOALS</p>
+</header><p><strong>Goals</strong>:</p>
+<ol type="1">
+<li><p>Explore how a likelihood function for a parameter changes for different data.</p></li>
+<li><p>Convince yourself that maximizing the likelihood and maximizing the log-likelihood will give you the same estimate of <span class="math inline">\(\theta\)</span>.</p></li>
+</ol>
 <section id="lab-2.1-maximum-likelihood-estimation" class="level2"><h2 class="anchored" data-anchor-id="lab-2.1-maximum-likelihood-estimation">Lab 2.1: Maximum Likelihood Estimation</h2>
 <p>In this subsection, we make a few plots of various likelihoods we have encountered so far. Note that the likelihood plot will change for different data, and, if you would like, you can put in different data vectors to see how the likelihood changes.</p>
 <section id="mle-example-binomial-likelihood" class="level3"><h3 class="anchored" data-anchor-id="mle-example-binomial-likelihood">MLE Example: Binomial Likelihood</h3>
@@ -284,15 +288,52 @@ window.Quarto = {
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Likelihood"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-</section><section id="mle-example" class="level3"><h3 class="anchored" data-anchor-id="mle-example">MLE Example</h3>
+<p>Secondly, let’s graph the likelihood and the log-likelihood to try and convince ourselves that maximizing the log-likelihood is an equivalent approach to maximizing the likelihood:</p>
+<div class="cell">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">get_binom_log_lik</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">p</span>, <span class="va">n</span>, <span class="va">data_vec</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="co">## for each value of p, map through the dbinom function for</span></span>
+<span>  <span class="co">## each data point (and multiply the results at the end to obtain</span></span>
+<span>  <span class="co">## the likelihood)</span></span>
+<span>  <span class="va">binom_log_lik</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="va">p</span>,</span>
+<span>                       <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/Binomial.html">dbinom</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">data_vec</span>, size <span class="op">=</span> <span class="va">n</span>, prob <span class="op">=</span> <span class="va">.x</span>,</span>
+<span>                                log <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>                         <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="op">)</span> <span class="co">## like the summation in formula</span></span>
+<span>  <span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">## the function returns a vector of likelihoods for each</span></span>
+<span>  <span class="co">## candidate p (and will be a vector of the same length as p)</span></span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">binom_log_lik</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">0.5</span>, by <span class="op">=</span> <span class="fl">0.001</span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">5</span>, <span class="fl">4</span>, <span class="fl">2</span>, <span class="fl">1</span>, <span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">binom_liks</span> <span class="op">&lt;-</span> <span class="fu">get_binom_lik</span><span class="op">(</span>p <span class="op">=</span> <span class="va">p</span>, n <span class="op">=</span> <span class="va">n</span>, data_vec <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span><span class="va">binom_log_liks</span> <span class="op">&lt;-</span> <span class="fu">get_binom_log_lik</span><span class="op">(</span>p <span class="op">=</span> <span class="va">p</span>, n <span class="op">=</span> <span class="va">n</span>, data_vec <span class="op">=</span> <span class="va">dat</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">lik_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">p</span>, <span class="va">binom_liks</span>, <span class="va">binom_log_liks</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">3</span>, names_to <span class="op">=</span> <span class="st">"lik_type"</span>, values_to <span class="op">=</span> <span class="st">"L"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">lik_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">p</span>, y <span class="op">=</span> <span class="va">L</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="va">lik_type</span>, scales <span class="op">=</span> <span class="st">"free_y"</span>, nrow <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>y <span class="op">=</span> <span class="st">"Likelihood"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Exercise</strong>. Both the likelihood and the log likelihood plots given above are plots of the likelihood of <span class="math inline">\(p\)</span> given our observed data <span class="math inline">\(5, 4, 2, 1, 0, 1, 2\)</span>. Suppose that, instead of the data given above, we actually observed the following data: <span class="math inline">\(10, 9, 7, 6, 5, 6, 7\)</span>. How do you think the likelihood and log-likelihood plots would change given this new data? Draw a sketch of a possible likelihood and log-likelihood given this new observed data over the current plot.</p>
+<p><strong>Exercise</strong>. Use your knowledge from calculus as well as the plots given to explain why we can find the MLE by taking the derivative of the likelihood and setting the resulting equation equal to 0.</p>
+<p><strong>Exercise</strong>. We mentioned in class that instead of taking the derivative of the likelihood, it’s easier to take the derivative of the log-likelihood. Explain why employing this strategy still yields the MLE using the plots above.</p>
+</section><section id="mle-example-rayleigh-distribution" class="level3"><h3 class="anchored" data-anchor-id="mle-example-rayleigh-distribution">MLE Example: Rayleigh Distribution</h3>
 <p>In class, we derived the MLE for the parameter <span class="math inline">\(\theta\)</span> in the probability model:</p>
 <p><span class="math display">\[
 f(x \vert \theta) = \frac{2x}{\theta} e^{-\frac{x^2}{\theta}},
 \]</span></p>
-<p>Here, we graph that likelihood for a sample of <span class="math inline">\(n = 4\)</span> data points.</p>
+<p>Here, we graph that likelihood for a sample of <span class="math inline">\(n = 10\)</span> data points.</p>
 <div class="cell">
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">thetas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">30</span>, length.out <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span>  <span class="co">## may need to adjust these limits</span></span>
-<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">3</span>, <span class="fl">1</span>, <span class="fl">2</span>, <span class="fl">4</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">thetas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">30</span>, length.out <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span>  <span class="co">## may need to adjust these limits</span></span>
+<span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.9</span>, <span class="fl">1.5</span>, <span class="fl">2</span>, <span class="fl">4.2</span>, <span class="fl">1.2</span>, <span class="fl">5.2</span>, <span class="fl">6.7</span>, <span class="fl">2.1</span>, <span class="fl">1.5</span>, <span class="fl">2.3</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">get_theta_lik</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">theta</span>, <span class="va">data_vec</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="co">## since there is no "dbinom" equivalent for the unnamed probability model</span></span>
@@ -316,7 +357,7 @@ f(x \vert \theta) = \frac{2x}{\theta} e^{-\frac{x^2}{\theta}},
 </section><section id="mle-example-poisson" class="level3"><h3 class="anchored" data-anchor-id="mle-example-poisson">MLE Example: Poisson</h3>
 <p>Finally, consider the likelihood of various values of <span class="math inline">\(\lambda\)</span>, where the random sample of data is from a Poisson probability model.</p>
 <div class="cell">
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">0</span>, <span class="fl">4</span>, <span class="fl">9</span>, <span class="fl">1</span><span class="op">)</span></span>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">8</span>, <span class="fl">0</span>, <span class="fl">4</span>, <span class="fl">9</span>, <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="va">lambdas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">10</span>, length.out <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span> <span class="co">## may need to adjust these limits</span></span>
 <span></span>
 <span></span>
@@ -338,65 +379,47 @@ f(x \vert \theta) = \frac{2x}{\theta} e^{-\frac{x^2}{\theta}},
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output-display">
 <div>
-<figure class="figure"><p><img src="estimation_files/figure-html/unnamed-chunk-4-1.png" class="img-fluid figure-img" width="672"></p>
+<figure class="figure"><p><img src="estimation_files/figure-html/unnamed-chunk-6-1.png" class="img-fluid figure-img" width="672"></p>
 </figure>
 </div>
 </div>
 </div>
+<p><strong>Exercise</strong>. Many of the most common likelihood functions are unimodal with a single peak (so, there is a single MLE). Draw a sketch of a likelihood function such that using our strategy of finding the MLE (taking the derivative and setting equal to 0) would <strong>fail</strong>.</p>
+<p><strong>Exercise</strong>. Many of the most common likelihood functions are unimodal with a single peak (so, there is a single MLE). Draw another sketch of a likelihood function such that using our strategy of finding the MLE (taking the derivative and setting equal to 0) would <strong>fail</strong>.</p>
+</section><section id="mse-graph" class="level3"><h3 class="anchored" data-anchor-id="mse-graph">MSE Graph</h3>
+<p>Here, we again the example where <span class="math inline">\(X_1, X_2, \ldots, X_n\)</span> are independent and identically distributed random variables with a <span class="math inline">\(\text{Unif}(0, \theta)\)</span> distribution. We now have three estimators: <span class="math inline">\(\hat{\theta}_{MOM}\)</span>, <span class="math inline">\(\hat{\theta}_{MLE}\)</span>, and <span class="math inline">\(\hat{\theta}^*\)</span>. We have already derived both the MLE, the MOM estimator, and adjusted the MLE to make a new, unbiased estimator based on the MLE. We also calculated the MSE of each of our three candidate estimators.</p>
+<p>Now, we make a plot of the MSE for <span class="math inline">\(1 \leq n \leq 20\)</span>.</p>
+<!-- theta star is  xmax (n + 1) / n  -->
+<!-- maybe move this plot to a lab-->
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">1</span><span class="op">:</span><span class="fl">20</span></span>
+<span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span><span class="va">mse_mom</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="fl">3</span> <span class="op">*</span> <span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="va">theta</span><span class="op">^</span><span class="fl">2</span></span>
+<span><span class="va">mse_mle</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">2</span> <span class="op">/</span> <span class="op">(</span><span class="op">(</span><span class="va">n</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">*</span> <span class="op">(</span><span class="va">n</span> <span class="op">+</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="va">theta</span><span class="op">^</span><span class="fl">2</span></span>
+<span><span class="va">mse_mle_unb</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fl">1</span> <span class="op">/</span> <span class="op">(</span><span class="op">(</span><span class="va">n</span> <span class="op">*</span> <span class="op">(</span><span class="va">n</span> <span class="op">+</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">*</span> <span class="va">theta</span><span class="op">^</span><span class="fl">2</span></span>
+<span></span>
+<span><span class="va">mse_plot</span> <span class="op">&lt;-</span> <span class="fu">tibble</span><span class="fu">::</span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">n</span>, <span class="va">mse_mom</span>, <span class="va">mse_mle</span>, <span class="va">mse_mle_unb</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">4</span>, names_to <span class="op">=</span> <span class="st">"estimator"</span>, values_to <span class="op">=</span> <span class="st">"mse"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">mse_plot</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">n</span>, y <span class="op">=</span> <span class="va">mse</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">estimator</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_colour_viridis_d</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div>
+<figure class="figure"><p><img src="estimation_files/figure-html/unnamed-chunk-7-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+<p><strong>Exercise</strong>. How do these results match your theoretical calculations? Which of the three estimators seems most preferable?</p>
+<p><strong>Exercise</strong>. Consider two generic estimators for a parameter <span class="math inline">\(\theta\)</span>, and denote these estimators <span class="math inline">\(\hat{\theta}_1\)</span> and <span class="math inline">\(\hat{\theta}_2\)</span>. Draw a plot similar to the plot given above (<span class="math inline">\(n\)</span> on x-axis, MSE on y-axis) that shows that <span class="math inline">\(\hat{\theta}_1\)</span> is preferable at some sample sizes but <span class="math inline">\(\hat{\theta}_2\)</span> is preferable for other sample sizes.</p>
 </section></section><section id="lab-2.2-consistency" class="level2"><h2 class="anchored" data-anchor-id="lab-2.2-consistency">Lab 2.2: Consistency</h2>
 <p>In this subsection, we illustrate a couple of consistent estimators.</p>
-<section id="uniform-example" class="level3"><h3 class="anchored" data-anchor-id="uniform-example">Uniform Example</h3>
+<section id="binomial-example" class="level3"><h3 class="anchored" data-anchor-id="binomial-example">Binomial Example</h3>
 <div class="cell">
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">10</span>  <span class="co">## specify an upper bound for our uniform model</span></span>
-<span><span class="co">## recall that the lower bound is known and is equal to 0</span></span>
-<span></span>
-<span><span class="va">nsim</span> <span class="op">&lt;-</span> <span class="fl">1000</span> <span class="co">## specify range of possible sample sizes (how long we will run the simulation)</span></span>
-<span></span>
-<span><span class="co">## compute each estimator of theta using adjusted MLE, MLE, and MOM</span></span>
-<span><span class="va">compute_unif_estimators</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">theta</span>, <span class="va">nsim</span><span class="op">)</span> <span class="op">{</span></span>
-<span>  </span>
-<span>  <span class="va">unif_draws</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">nsim</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="va">theta</span><span class="op">)</span></span>
-<span></span>
-<span>  <span class="co">## compute the method of moment estimator </span></span>
-<span>  <span class="co">## nsim different times (once using a sample of size 1, then</span></span>
-<span>  <span class="co">## using a sample of size 2, ...., then using a sample of size nsim)</span></span>
-<span>  <span class="va">unif_mom</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">nsim</span>, <span class="op">~</span> <span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">unif_draws</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">.x</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="co">## same type of computation for MLE</span></span>
-<span>  <span class="va">unif_mle</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">nsim</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">unif_draws</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">.x</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="co">## same type of computation for adjusted MLE</span></span>
-<span>  <span class="va">unif_mle_adj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">nsim</span>,</span>
-<span>                          <span class="op">~</span> <span class="op">(</span><span class="op">(</span><span class="va">.x</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="va">.x</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">unif_draws</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">.x</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
-<span>  <span class="co">## put all three results into a data frame, along with n</span></span>
-<span>  <span class="va">output_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsim</span>, </span>
-<span>         <span class="va">unif_mom</span>, <span class="va">unif_mle</span>, <span class="va">unif_mle_adj</span><span class="op">)</span></span>
-<span>  </span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">output_df</span><span class="op">)</span></span>
-<span><span class="op">}</span></span>
-<span></span>
-<span><span class="va">plot_df</span> <span class="op">&lt;-</span> <span class="fu">compute_unif_estimators</span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta</span>, nsim <span class="op">=</span> <span class="va">nsim</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-<div class="cell">
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## do some DATA/STAT 234-type Work to make the plot</span></span>
-<span></span>
-<span><span class="va">plot_long</span> <span class="op">&lt;-</span> <span class="va">plot_df</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"unif"</span><span class="op">)</span>,</span>
-<span>                                     names_to <span class="op">=</span> <span class="st">"Estimator"</span>,</span>
-<span>                                     values_to <span class="op">=</span> <span class="st">"theta_estimate"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">plot_long</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">n</span>,</span>
-<span>                             y <span class="op">=</span> <span class="va">theta_estimate</span>,</span>
-<span>                             colour <span class="op">=</span> <span class="va">Estimator</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="va">theta</span>, linetype <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_colour_viridis_d</a></span><span class="op">(</span>end <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"n (Sample Size)"</span>,</span>
-<span>       caption <span class="op">=</span> <span class="st">"Dotted Line Shows True Value of Theta"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-</div>
-</section><section id="binomial-example" class="level3"><h3 class="anchored" data-anchor-id="binomial-example">Binomial Example</h3>
-<div class="cell">
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">4</span> <span class="co">## specify probability of success for the simulation</span></span>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="va">p</span> <span class="op">&lt;-</span> <span class="fl">1</span> <span class="op">/</span> <span class="fl">4</span> <span class="co">## specify probability of success for the simulation</span></span>
 <span></span>
 <span><span class="va">nsim</span> <span class="op">&lt;-</span> <span class="fl">1000</span> <span class="co">## specify range of possible ns (how long we will run the simulation)</span></span>
 <span></span>
@@ -435,6 +458,59 @@ f(x \vert \theta) = \frac{2x}{\theta} e^{-\frac{x^2}{\theta}},
 </div>
 </div>
 </div>
+<p><strong>Exercise</strong>. On the plot above, sketch in an estimator that does not exhibit evidence of consistency because the estimator does not seem to be asymptotically unbiased.</p>
+<p><strong>Exercise</strong>. In the provided lab code, change <code>nsim</code> to be equal to <code>50</code>. Does the MLE look like it converges to the true value of <span class="math inline">\(p\)</span>? Explain why the resulting plot is not enough to confirm whether or not the estimator is consistent for <span class="math inline">\(p\)</span>.</p>
+</section><section id="uniform-example" class="level3"><h3 class="anchored" data-anchor-id="uniform-example">Uniform Example</h3>
+<div class="cell">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">theta</span> <span class="op">&lt;-</span> <span class="fl">10</span>  <span class="co">## specify an upper bound for our uniform model</span></span>
+<span><span class="co">## recall that the lower bound is known and is equal to 0</span></span>
+<span></span>
+<span><span class="va">nsim</span> <span class="op">&lt;-</span> <span class="fl">1000</span> <span class="co">## specify range of possible sample sizes (how long we will run the simulation)</span></span>
+<span></span>
+<span><span class="co">## compute each estimator of theta using adjusted MLE, MLE, and MOM</span></span>
+<span><span class="va">compute_unif_estimators</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">theta</span>, <span class="va">nsim</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  </span>
+<span>  <span class="va">unif_draws</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html">runif</a></span><span class="op">(</span>n <span class="op">=</span> <span class="va">nsim</span>, min <span class="op">=</span> <span class="fl">0</span>, max <span class="op">=</span> <span class="va">theta</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co">## compute the method of moment estimator </span></span>
+<span>  <span class="co">## nsim different times (once using a sample of size 1, then</span></span>
+<span>  <span class="co">## using a sample of size 2, ...., then using a sample of size nsim)</span></span>
+<span>  <span class="va">unif_mom</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">nsim</span>, <span class="op">~</span> <span class="fl">2</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">unif_draws</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">.x</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">## same type of computation for MLE</span></span>
+<span>  <span class="va">unif_mle</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">nsim</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">unif_draws</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">.x</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="co">## same type of computation for adjusted MLE</span></span>
+<span>  <span class="va">unif_mle_adj</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">nsim</span>,</span>
+<span>                          <span class="op">~</span> <span class="op">(</span><span class="op">(</span><span class="va">.x</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="va">.x</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">max</a></span><span class="op">(</span><span class="va">unif_draws</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">.x</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co">## put all three results into a data frame, along with n</span></span>
+<span>  <span class="va">output_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span>n <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="va">nsim</span>, </span>
+<span>         <span class="va">unif_mom</span>, <span class="va">unif_mle</span>, <span class="va">unif_mle_adj</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">output_df</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="va">plot_df</span> <span class="op">&lt;-</span> <span class="fu">compute_unif_estimators</span><span class="op">(</span>theta <span class="op">=</span> <span class="va">theta</span>, nsim <span class="op">=</span> <span class="va">nsim</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## do some DATA/STAT 234-type Work to make the plot</span></span>
+<span></span>
+<span><span class="va">plot_long</span> <span class="op">&lt;-</span> <span class="va">plot_df</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span>cols <span class="op">=</span> <span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"unif"</span><span class="op">)</span>,</span>
+<span>                                     names_to <span class="op">=</span> <span class="st">"Estimator"</span>,</span>
+<span>                                     values_to <span class="op">=</span> <span class="st">"theta_estimate"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">plot_long</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">n</span>,</span>
+<span>                             y <span class="op">=</span> <span class="va">theta_estimate</span>,</span>
+<span>                             colour <span class="op">=</span> <span class="va">Estimator</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_hline</a></span><span class="op">(</span>yintercept <span class="op">=</span> <span class="va">theta</span>, linetype <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_colour_viridis_d</a></span><span class="op">(</span>end <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"n (Sample Size)"</span>,</span>
+<span>       caption <span class="op">=</span> <span class="st">"Dotted Line Shows True Value of Theta"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Exercise</strong>. On the plot above, sketch in an estimator that does not exhibit evidence of consistency because the estimator’s asymptotic variance does not seem to go to 0.</p>
+<p><br></p>
 </section></section><section id="mini-project-2-a-meaningful-story" class="level2"><h2 class="anchored" data-anchor-id="mini-project-2-a-meaningful-story">Mini Project 2: A Meaningful Story</h2>
 <p><strong>AI Usage</strong>: You may not use generative AI for this project in any way.</p>
 <p><strong>Collaboration</strong>: For this project, you may not work with other people in the class. Your story must be your own.</p>

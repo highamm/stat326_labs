@@ -1,12 +1,16 @@
 # Bayesian Statistics {#sec-bayesian}
 
-ADD GOALS
+**Goals**:
+
+* fit a Bayesian model to binomial data with both an informative and a non-informative prior.
+* fit a Bayesian model to count data with both an informative and a non-informative prior.
+* interpret the Bayes estimate and credible intervals from each analysis.
 
 ## Lab 4.1: Introduction to Bayesian: Binomial Data
 
 In this lab, we will analyze binomial data in a Bayesian framework with a couple of different prior distributions for $p$. The first prior for $p$ will be a non-informative prior while the second prior for $p$ will be based on "expert" (your!) opinion prior to the analysis.
 
-To start, consider your own prowess at the popular game "flip cup" and your (self-assessed) probability of successfully flipping the cup so that it's upside-down. Use the app at <http://shiny.stlawu.edu:3838/sample-apps/stat325/distplot/> to drag the sliders around until you settle on a reasonable informative prior distribution for the probability that you successfully flip a cup from right-side-up to upside-down (note that you should not use a non-informative prior here). In general:
+To start, consider your own prowess at the popular game "flip cup" and your (self-assessed) probability of successfully flipping the cup so that it's upside-down on a single trial. Use the app at <http://shiny.stlawu.edu:3838/sample-apps/stat325/distplot/> to drag the sliders around until you settle on a reasonable informative prior distribution for the probability that you successfully flip a cup from right-side-up to upside-down (note that you should not use a non-informative prior here). In general:
 
 * increasing $\alpha$ will shift the distribution to the right.
 * increasing $\beta$ will shift the distribution to the left.
@@ -23,8 +27,8 @@ After you have settled on your informative prior, use the code below to construc
 library(tidyverse)
 ps <- seq(0, 1, length.out = 1000)
 
-informative_alpha <- 2
-informative_beta <- 4
+informative_alpha <- 2 ## CHANGE THIS TO YOUR ALPHA
+informative_beta <- 4  ## CHANGE THIS TO YOUR BETA
 
 noninformative_alpha <- 1
 noninformative_beta <- 1
@@ -33,6 +37,7 @@ informative_prior <- dbeta(ps, informative_alpha,
                            informative_beta)
 noninformative_prior <- dbeta(ps,
                               noninformative_alpha, noninformative_beta)
+
 prior_plot <- tibble(ps, informative_prior, noninformative_prior) |>
   pivot_longer(2:3, names_to = "prior_type", values_to = "density")
 
@@ -43,45 +48,59 @@ ggplot(data = prior_plot, aes(x = ps, y = density, colour = prior_type)) +
   labs(x = "p")
 ```
 
-__Exercise__. With our informative prior and our non-informative prior, we will now collect some data to include in our bayesian analysis. After you collect data, derive the posterior distribution of $p$ using both the noninformative prior and the informative prior. Then, adjust the code above to produce a plot of your two posterior distributions.
+__Exercise__. With our informative prior and our non-informative prior, we will now collect some data to include in our Bayesian analysis. After you collect data, derive the posterior distribution of $p$ using both the non-informative prior and the informative prior. Then, adjust the code above to produce a plot of your two posterior distributions.
 
 ```{r}
 ## put code to make your posterior distribution plot here
 ```
 
-__Exercise__. For each posterior, compute the posterior mean.
+__Exercise__. For each posterior, compute the posterior mean (the Bayes estimate).
 
 __Exercise__. For each posterior, compute a 95% credible interval for $p$.
 
-__Exercise__. The informative prior that you used was very subjective, based on your own knowledge and thoughts of how well you can play flip cup. What do you think can be done to limit the subjectivity of this prior?
+__Exercise__. Interpret one of the 95% credible intervals in context of the problem.
+
+__Exercise__. Consider the results from the analysis with your informative prior. Is the mean of the informative prior higher or lower than the mean of the posterior distribution? Why do you think that is?
+
+__Exercise__. The informative prior that you used was very subjective, based on your own knowledge and thoughts of how well you think you can play flip cup. What do you think can be done to limit the subjectivity of this prior?
+
+__Exercise__. Suppose that, instead of choosing an informative prior via the app, you instead have a target mean for $p$ of 0.40 and a target standard deviation for $p$ of 0.05. Your goal is to find parameters of the Beta distribution that satisfy (approximately) these constraints and use those parameters in the prior. Can you modify the code below to figure out good parameters for this prior?
+
+```{r}
+#| echo: true
+#| eval: false
+
+target_mean <- ____
+
+alphas <-  seq(0.1, 60, length.out = 500)
+betas <- 
+
+param_df <- tibble(alphas, betas)
+param_df <- param_df |> mutate(vars = 
+                    ____)
+
+
+target_var <- ____
+
+param_df <- param_df |> mutate(dist_to_target = abs(vars - target_var))
+param_df
+
+param_df |> filter(dist_to_target == min(dist_to_target))
+```
 
 ```{r}
 #| echo: false
-#| eval: false
-# need to find an alpha and beta that simultaneously have alpha/(alpha+beta) = 1/6
-# and variance = 0.001
-
-mean = 1/6   # set a target for the mean = alpha/(alpha+beta) of our beta distribution
-
-df = alphas = seq(0.1,50,by=0.05)
-betas = alphas*(1/mean - 1)
-
-vars = (alphas*betas) / ( (alphas+betas)^2  * (alphas+betas+1)  )# find the variance for each combo of alpha and beta
-targetvar = 0.001
-
-index = which.min( abs(vars - targetvar)  )  # compare the probs to our target; find closest one
-
-alphas[index]
-betas[index]
-vars[index]
-
-
-#plot prior
-curve(dbeta(x,alphas[index],betas[index]),from=0,to=1)
-
+#| output: false
+## alphas * (1 / target_mean - 1)
+## (alphas * betas) / ((alphas + betas) ^ 2  * (alphas + betas + 1))
 ```
 
 ## Lab 4.2: More Bayesian: Poisson Data
+
+```{r}
+#| warning: false
+library(tidyverse)
+```
 
 Recall from probability that we discussed using a Poisson model to model the number of goals that the St. Lawrence women's hockey team scores in a game. In that class, we assumed that we knew the value of $\lambda$ in that probability model and we computed a few quantities of interest under that assumption. 
 
@@ -89,11 +108,9 @@ Usually, however, $\lambda$ must be estimated (in a frequentist analysis) using 
 
 Suppose that the women's hockey coach says that he thinks their team scores about 3 goals per game, on average. When pressed for how "sure" they are of that answer and to give a reasonable range for what values that goal scoring rate is, they reply that they are not quite sure. But, they know that they are almost certain that the scoring rate is no less than 2 goals per game, on average. 
 
-As discussed in class, the conjugate prior for Poisson data is the Gamma distribution, which can be used to model $\lambda$. Using the coach's information, come up with an informative prior for $\lambda$ with the Gamma distribution. Note that we will have some decisions to make in how to use the coach's information to come up with an informative prior!
+As discussed in class, the conjugate prior for Poisson data is the Gamma distribution, which can be used to model $\lambda$.  
 
-```{r}
-## put work for informative prior here
-```
+__Exercise__. Using the coach's information, come up with an informative prior for $\lambda$ with the Gamma distribution. Note that we will have some decisions to make in how to use the coach's information to come up with an informative prior!
 
 A relatively non-informative prior for $\lambda$ is a Gamma distribution with very small values for both $\alpha$ and $k$. Note that, for the gamma distribution, I am replacing $\lambda$ with $k$, so that we are not working with two different $\lambda$'s (since the Poisson also has a parameter called $\lambda$). Using $\alpha = 0.001$ and $k = 0.001$, construct a plot of a relatively non-informative prior for $\lambda$ using the code below.
 
@@ -138,9 +155,11 @@ __Exercise__. Using this data and the posterior that we computed in class, figur
 
 __Exercise__. Construct a plot of each of the posterior distributions.
 
-__Exercise__. The mean of the posterior distribution must always be between the mean of the prior distribution and the mean of the data, as the posterior is a "compromise" between the prior and the observed data. Verify that this is the case for this example.
+__Exercise__. What are the mean of the prior distribution, the mean of the data, and the mean of the posterior distribution. Which of these numbers must be in between the other two? Conceptually, why does that make sense?
 
 __Exercise__. With each posterior, compute a 95% credible interval for $\lambda$, the rate that the women's hockey team scores goals.
+
+__Exercise__. Interpret one of the credible intervals in context of the problem.
 
 __Exercise__. Think back to the data that we used for this example. What assumptions have we made to complete this analysis? Can you think of ways that we might relax these assumptions?
 
@@ -218,7 +237,7 @@ Before we look at some data, we will consider a few possible prior distributions
 - an informative prior based on a clay-court match the two played in the previous year. In that match, Nadal won 46 out of 66 points on his own serve. The standard error of this estimate is 0.05657. 
 - an informative prior based on a sports announcer, who claims that they think Nadal wins about 75% of the points on his serve against Djokovic. They are also "almost sure" that Nadal wins no less than 70% of his points on serve against Djokovic.
 
-Construct a single graph that shows all three of these priors. Note that, for both of the informative priors, there is some subjectivity with how you are going to use the information given to construct an appropriate prior for $p$, the probability that Nadal wins a point on serve against Djokovic.
+Construct a single graph that shows all three of these priors. Note that, for both of the informative priors, there is some subjectivity with how you are going to use the information given to construct an appropriate prior for $p$, the probability that Nadal wins a point on serve against Djokovic. In other words, for the two informative priors, there is not necessarily a "correct" answer for how to approach creating them. Instead, you will be assessed on your logic and reason in coming up with the two informative priors.
 
 ### Data
 

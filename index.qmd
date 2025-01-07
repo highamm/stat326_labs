@@ -18,107 +18,94 @@ The syllabus for the entire course is also given here.
     + Print out and bring to class.
     + Folder or 3-ring binder to keep notes in.
 * Laptop
+* Textbook (free at <https://ebookcentral.proquest.com/lib/stlawu/detail.action?docID=7103761> with institutional log-in).
     
 ***
 ***
 
 # Course Information
 
-Welcome to STAT 326! ADD MORE HERE
+Welcome to STAT 326. The purpose of this course is to strengthen statistical reasoning skills, applying the foundational tools learned in MATH/STAT 325 to more statistical contexts.
 
 ## General Course Outcomes
 
-ADD COURSE OUTCOMES
+1. Given a probability model, derive a point estimator for parameter(s) in that model using data.
+
+2. Describe properties of what might make an estimator "good."
+
+3. Given a probability model, derive an interval estimator for parameter(s) in that model using data. 
+
+4. Explain the difference between a "frequentist approach" to statistics and a "Bayesian approach" to statistics.
+
+5. Derive and conduct hypothesis tests about parameters in a probability model using classical statistics tests and simulation-based permutation tests.
+
+6. Use statistical simulation to answer questions about how statistical methods work and how violations of assumptions of statistical methods impact results.
 
 ## Use of `R` and `RStudio`
 
 We will use `RStudio` throughout the semester as a tool to help us understand concepts in this course.
 
-* `R` and `RStudio` are both free to use.
-* Part of your first homework assignment will give some direction on how to install these on your own computer.
+* `R` and `R Studio` are both free to use.
+* You should already have both `R` and `R Studio` installed on your personal computer from MATH/STAT 325. 
 * The purpose of this class is not to learn `R` in detail. The concepts for the course receive a strong priority. 
 
 ***
 ***
 
-# How You Will Be Assessed
+# Assessment
 
 There are 1000 total points that can be earned in this course from components described below. An up-to-date list of all relevant due dates and exam dates will be found on Canvas.
 
 <br>
 
-CHANGE ALL OF THESE
+## Assessments 
 
-## Exams 
+There will be 5 100-point assessments throughout the semester, given on Wednesdays. For each assessment, you are allowed to bring a double-sided sheet of handwritten notes. More details about what you might expect on these assessments will be provided closer to the date of the first assessment.
 
-<!-- You are allowed to bring a calculator and a single-sided hand-written page of notes (standard 8.5 by 11 inches) for each of the midterms. -->
+Additionally, 100 points will be given to the average of your highest 4 assessments. Therefore, the total number of points from assessments will be 600 points.
 
-There will be __three__ midterm exams, each worth 150 points. The midterm exams will all take place in the evening at 6:30 pm. The tentative dates for the three midterms are: September 25 (Wednesday), October 23 (Wednesday), and December 4 (Wednesday). More information about the midterm exams will be given closer to the date of the first exam.
+## Mini-Projects
 
-<!-- For all exams, you are allowed a double-sided page (standard 8.5 by 11 inches) of handwritten notes.  -->
+On many of the Wednesdays on "off-weeks" (weeks where you do not have an assessment), you will complete five different mini-projects. The topics of these mini-projects vary widely from project to project, but, by the end of the semester, you can expect to have completed statistical simulation studies, a meaningful story, a Bayesian data analysis, and an analysis on the benefits and drawbacks of using p-values in statistics.
 
-## Quizzes
-
-For most weeks during the semester, we will have an in-person quiz that covers the material from the last few days of class, given on __Wednesdays__. The quiz will be similar to questions from that week's homework assignment or to questions on a recent handout. You may use a sheet that we will make together in class that contains useful `R` functions and some useful formalas (so please do not memorize any formulas, distributions, or `R` functions!!). 
-
-<!-- use your course notes, course handouts, and homework assignment on the quiz, but you may __not__ use a computer, the Internet, our textbook, or anyone else's course notes and course handouts (any notes used must be in your own handwriting). -->
-
-The first three quizzes are worth 15 points each. The remaining seven quizzes are 30 points each and, in addition to containing a question covering new material, they will also contain "cumulative questions." The general topic of these cumulative questions will be given in advance to help you prepare.
-
-You may skip one (but only one) quiz during the semester (two of the first three quizzes can count as a single "drop") so the total number of points for the quizzes is 225 points.
+Each mini-project will be worth 30 points, for a total of 150 points.
 
 <br>
 
 ## Homework Assignments
 
-Weekly homeworks are worth 10 points each and are due nearly every week on __Wednesdays__. The structure of the homework is:
+Weekly Homeworks are worth 10 points each and are due most weeks on __Mondays__. Homeworks will be graded for both correctness and completion, though you will be given "checkpoints" on each homework problem so that you can check your work as you go along. 
 
-* you should submit a signed statement to Canvas that you have attempted each part to each homework exercise. After you submit this signed statement, a file of partial solutions will be released that you can use to check your work. Make sure to submit this so that you have enough time to grade your homework and make any necessary corrections!
-* by __Wednesday__'s class time, you should submit a hard copy of your corrected homework with your quiz for that day. A couple of notes for this submission:
-    * you should __not__ erase your original work: it's helpful for me to see this work, and it's helpful for you to have it as well as you prepare for the exams.
-    * you must make your corrections in a different colour of ink. Again, the reason for this is that it helps me see your thought process and it helps you see what you had made errors on when you go to study for the exam.
-    * you will get full points for the homework if you had fully attempted each problem before checking with the solutions and that you corrected any problems for which there were mistakes. 
+One homework will be dropped from your grade so the total number of points from Homework Assignments will be 90 points.
 
+You may work with other students on the homeworks, but please make sure to read the [Rules for Collaboration](#rules-for-collaboration) section before doing so. If you need additional help outside of collaboration with classmate or office hours, the Peterson Quantitative Research Center (PQRC) in Valentine Hall is a great resource! 
 
 <!-- * you should submit to Canvas your completed homework assignment (you can either submit pictures or you can scan a PDF using one of the campus scanners: I'm not picky about format). You need to have attempted every part of every problem in this submission to receive full credit for this part of the homework. After you submit to Canvas, a file of solutions will be made available to you: you'll then use this file of solutions to "grade" your homework. Make sure to give yourself enough time to grade your homework and make any necessary corrections! -->
 <!-- * by __Wednesday__'s class time, you should submit a hard copy of a graded copy of your homework. Using the file of solutions, you should explicitly grade yourself using a different coloured pen and assign yourself points for each of the homework problems, giving yourself an overall grade out of 15. __This will not be your recorded grade for the homework assignment__. Instead, for each incorrect problem, you should write a corrected version in different coloured ink, writing a short explanation for any error made in the original submission. If your corrections are sufficient, you will receive the full 15 points for the homework.   -->
 
-You may work with other students on the homeworks, but please make sure to read the [Rules for Collaboration](#rules-for-collaboration) section before doing so. If you need additional help outside of collaboration with classmate or office hours, the Peterson Quantitative Research Center (PQRC) in Valentine Hall is a great resource! 
+<br>
 
-There will be 11 homeworks throughout the semester, and your lowest homework score will be dropped. So, the total number of points for homeworks is __100 points__.  
+## Recap Tasks
+
+In addition to homework assignments, you will also be assigned "recap tasks" to complete by the start of class every Monday. The purpose of these recap tasks is to give you additional practice on concepts discussed in class. Each recap task is worth 5 points. There will be 13 recap tasks throughout the semester, and one recap task will be dropped from your grade. Therefore, there are 60 points to be earned from these recap tasks.
+
+You may not use AI on recap tasks, unless otherwise stated.
 
 <br>
 
-## Prep Tasks
+## Final Portfolio
 
-In addition to homework exercises, you will also be assigned "prep tasks" to complete by the start of class every Monday. While the purpose of homework is generally to practice concepts that we have already discussed in class, the purpose of the prep tasks is generally to introduce you to a new topic and give a couple of easier practice problems with that topic so that we can spend more of class time completing more challenging problems. There will be 20 prep tasks throughout the semester, each at 5 points for a total of 100 points.
-
-Because these prep tasks are meant to be low-stakes introductions to new topics, you may use more than one attempt on __3__ different 5-point prep tasks throughout the semester. How you use these are entirely up to you, but the additional attempts on the prep tasks must be made prior to that task's deadline.
-
-<br>
-
-## Participation
-
-We will use small groups to complete handouts and practice problems in-class throughout the semester. The groups will only be used for in-class work, and we will reassign groups a few times during the semester. Your grade for participation will be based on an evaluation through a rubric that we will complete __three__ times throughout the semester. The rubric will be given to you on the first day of class so you know right away how you will be assessed for this portion of your grade. 
-
-Additionally, once during the semester, you will be tasked with coming up with a "warm-up" exercise for the class to complete at the start of class. More details about this will be given later.
-
-<br>
-
-## Final Project
-
-Instead of a cumulative final exam, we will be having cumulative quizzes throughout the latter two-thirds of the semester. However, we will still have a small final project. More details about the nature of this project will be provided at the end of the semester.
+A final portfolio will be assigned near the end of the semester. More details will be provided later, but the total number of points for this final portfolio is 100 points.
 
 ## Point Allocation
 
 The 1000 points possible for the class will be allocated in the following way:
 
-* Exams: __450 points__: 150 points for each of 3 midterm exams.
-* Quizzes: __225 points__: 7 30-point Quizzes and 3 15-point Quizzes (with one of the 30-point quizzes or the sum of two 15-point quizzes dropped). 
-* Homework Assignments: __100 points__: 11 Homeworks for 10 points each for a total of 100 points (with one of the 10-point homeworks dropped).
-* Prep Tasks: __100 points__: 20 prep tasks, each worth 5 points.
-* Participation: __60 points__: 3 participation rubric evaluations at 15 points each plus one warm-up exercise and solution worth 15 points.
-* Final Project: __65 points__: 1 final project.
+* Assessments: __600 points__: 100 points for each of 5 in-class assessments, plus 100 additional points for the average of your top 4 assessments.
+* Mini-Projects: __150 points__: 30 points for each of 5 mini-projects, none of which will be dropped from your grade.
+* Homework Assignments: __90 points__: 10 Homeworks for 10 points each for a total of 90 points (with one of the 10-point homeworks dropped).
+* Recap Tasks: __60 points__: 13 recap tasks, each worth 5 points, with one recap task dropped from your grade, for a total of 60 points.
+* Portfolio: __100 points__: 1 final portfolio. Details of what will go in your final portfolio will be described later.
 
 <br>
 
@@ -126,7 +113,7 @@ The 1000 points possible for the class will be allocated in the following way:
 
 | Grade | 4.0 | 3.75 | 3.5 | 3.25 | 3.0 | 2.75 | 2.5 | 2.25 | 2.0 | 1.75 | 1.5 | 1.25 | 1.0 | 0.0 |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
-| Points | 950-1000 | 920-949 | 890-919 | 860-889 | 830-859 | 810-829 | 770-809 | 750-769 | 720-749 | 700-719 | 670-699 | 640-669 | 600-639 | 0-599 |
+| Points | 950-1000 | 920-949 | 890-919 | 860-889 | 830-859 | 800-829 | 770-809 | 750-769 | 720-749 | 700-719 | 670-699 | 640-669 | 600-639 | 0-599 |
 
 ***
 ***
@@ -147,7 +134,7 @@ You __are__ allowed to collaborate with your classmates (or your classmates from
 
 ## AI Policy
 
-Throughout the semester, we will use generative AI (specifically, ChatGPT) to aid us in performing basic calculations and in evaluating integrals. For homework assignments, the policy on AI usage will be stated at the top of the assignment. Make sure that you follow this policy. While AI can be a tool to enhance your learning, becoming overly reliant on it prevents the growth of logical thinking skills.
+Throughout the semester, we will use generative AI (specifically, ChatGPT) to aid us in performing basic calculations and in evaluating integrals. For homework assignments and mini-projects, the policy on AI usage will be stated at the top of the assignment. For recap tasks, you may not use AI to assist in coming up with your answer. Make sure that you follow this policy. While AI can be a tool to enhance your learning, becoming overly reliant on it prevents the growth of logical thinking skills.
 
 ***
 ***
@@ -160,8 +147,6 @@ Diversity encompasses differences in age, colour, ethnicity, national origin, ge
 ***
  
 ## Accessibility Statement
-
-The message below is copied from the Student Accessibility Services Office:
 
 Your experience in this class is important to me.  It is the policy and practice of St. Lawrence University to create inclusive and accessible learning environments consistent with federal and state law.  If you have established accommodations with the Student Accessibility Services Office in the past, please activate your accommodations so we can discuss how they will be implemented in this course.
 
@@ -214,31 +199,23 @@ The Peterson Quantitative Resource Center (PQRC) offers free, no appointment nec
 
 The following gives a tentative schedule and tentative weeks for exams. Note that these may change.
 
-PROBABLY MOVE ONE OF THESE THINGS BACK ONE WEEK AFTER SEEING JESSICA'S SCHEDULE
-
-| Week | Date | Due | Handouts
-| ---- | ------ | ------------------------------- | --------------- |
-| 0 | 1/15 | NA | 1a, 1b |
-| 1 | 1/20 | NA | 1c, 1d |
-| 2 | 1/27 | Mini-Project 1 (Simulation)  | 2a  |
-| 3 | 2/3 | Assessment 1  | 2b |
-| 4 | 2/10\* | Mini-Project 2 (Meaningful Story) | 2c  |
-| 5 | 2/17 |  Assessment 2  |
-| 6 | 2/24 |  NA | 3b |
-| 7 | 3/3 |  Mini-Project 3 (Confidence Intervals)    | 3c |
-| 8 | 3/10 | Assessment 3 | 4a |
+| Week | Date | Due | Topic |
+| ---- | ------ | -------------------- | ------------------------------------- |
+| 0 | 1/15 | NA | Sampling Distributions and Simulation |
+| 1 | 1/20 | NA | Sampling Distributions, Simulation, and Order Statistics |
+| 2 | 1/27 | Mini-Project 1 (Simulation)  | MLEs and MOM Estimators  |
+| 3 | 2/3 | Assessment 1  | Properties of Estimators |
+| 4 | 2/10\* | NA | Properties of Estimators  |
+| 5 | 2/17 |  Mini-Project 2 (Meaningful Story)   | Pivot Method for Confidence Intervals |
+| 6 | 2/24 | Assessment 2 | STAT 113 Confidence Intervals |
+| 7 | 3/3 |  Mini-Project 3 (Confidence Intervals)    | Bootstrapping |
+| 8 | 3/10 | Assessment 3 | Bayesian Inference |
 | NA | 3/17 | Spring Break | NA |
-| 9 | 3/24 | NA | 4b, 4c |
-| 10 | 3/31 | Mini-Project 4 (Bayesian)     | 4c |
-| 11 | 4/7 |  Assessment 4  | 4d   |
-| 12 | 4/14 | Mini-Project 5 (p-values) | 5a, 5b, 5c  |
-| 13 | 4/21 | Assessment 5 | 5d  |
-| 14 | 4/28 | Portfolio Checkpoint | 6a |
+| 9 | 3/24 | NA | Bayesian Inference |
+| 10 | 3/31 | Mini-Project 4 (Bayesian)     | Likelihood Ratio Tests |
+| 11 | 4/7 |  Assessment 4  | Likelihood Ratio Tests   |
+| 12 | 4/14 | Mini-Project 5 (p-values) | STAT 113 Hypothesis Tests  |
+| 13 | 4/21 | Assessment 5 | Type I Errors, Type II Errors, Power  |
+| 14 | 4/28 | Portfolio Checkpoint | Power |
 
-## Tentative Calendar of Due Dates
-
-The Exam Dates are tentatively scheduled for:
-
-* Exam 1: Wednesday, September 25 at 6:30 pm.
-* Exam 2: Wednesday, October 23 at 6:30 pm or Wednesday, October 30 at 6:30 pm.
-* Exam 3: Wednesday, November 20 at 6:30 pm or Wednesday, December 4 at 6:30 pm.
+<br>

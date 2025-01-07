@@ -1,8 +1,16 @@
 # Confidence Intervals {#sec-conf-int}
 
-ADD GOALS
+**Goals**:
 
-## Lab 3.1: Introduction to Plotting and Data Summarisation
+1. Construct basic plots of data and basic summary statistics of data.
+
+2. Describe what "confidence" really means.
+
+3. Use bootstrapping to construct confidence intervals for particular parameters of interest.
+
+## Lab 3.1: A Tiny, Tiny, Tiny Glimpse into DATA/STAT 234
+
+This first subsection is a little disconnected from what we have discussing in class, but the purpose of having this section in this class is to give you some practice constructing basic graphs and obtaining basic summary statistics with DATA/STAT 234-style code. The reason we have this subsection here is so that you can make these graphs to investigate various assumptions of the confidence intervals and hypothesis tests we will discuss in the latter part of the semester.
 
 ```{r}
 #| warning: false
@@ -33,10 +41,10 @@ beerwings_df <- Beerwings |> as_tibble()
 beerwings_df
 ```
 
-Let's first consider the data as a single sample and explore the distributions of both `Beer` consumption and `Hotwing` consumption:
+Let's first consider the data as a single sample and explore the distributions of both `Beer` consumption and `Hotwing` consumption (only the beer consumption plots are printed below):
 
 ```{r}
-#| output: false
+#| output: true
 ggplot(data = beerwings_df, aes(x = Beer)) +
   geom_histogram(bins = 8, colour = "black", fill = "mediumseagreen") +
   theme_minimal()
@@ -66,7 +74,6 @@ ggplot(data = beerwings_df, aes(sample = Hotwings)) +
   stat_qq_line() +
   theme_minimal()
 ```
-
 
 Now, let's compare the distribution of hotwings for each sex in the data set with a set of side-by-side boxplots:
 
@@ -106,13 +113,20 @@ Finally, though this is not a data summary function, we can use `filter()` if we
 
 ```{r}
 #| output: false
-beerwings_onlybeer = beerwings_df |> filter(Beer > 0)
+beerwings_onlybeer <- beerwings_df |> filter(Beer > 0)
 ```
 
+__Exercise__. The `Girls2004` data is also in the `resample` `R` package, containing data on 80 newborn girls born in the state of Wyoming. Construct a set of side-by-side boxplots that explore the association between whether or not the mother was a Smoker (`Smoker`) with the `Weight` variable.
+
+```{r}
+girls2004_df <- Girls2004 |> as_tibble() 
+```
+
+__Exercise__. Again with the Wyoming girls data, obtain grouped summary statistics on Weight for girls in each `Smoker` group, including the mean weight, standard deviation of weight, and the number of girls in each `Smoker` group.
 
 ### Creating a Data Set with `tibble()`
 
-Suppose we need to enter your own data into R. As long as the sample size is relatively small (small enough that you can type things in manually without it being too much of a pain), we can create a data frame object using the `tibble()` function. For example, on the Stat 113 First Day survey, we ask students how long (in hours) it takes them to travel from home to SLU. Here are 6 responses: `6, 3.5, 0.4, 2.5, 12, 6`.
+Suppose we need to enter our own data into R. As long as the sample size is relatively small (small enough that you can type things in manually without it being too much of a pain), we can create a data frame object using the `tibble()` function. For example, on the Stat 113 First Day survey, we ask students how long (in hours) it takes them to travel from home to SLU. Here are 6 responses: `6, 3.5, 0.4, 2.5, 12, 6`.
 
 We can make a data frame with those values:
 
@@ -130,6 +144,8 @@ fakedata <- tibble(Normals = rnorm(n = 14, 15, 4))
 
 ggplot(data = fakedata, aes(x = Normals)) + 
   geom_boxplot(fill = "coral") +
+  scale_y_continuous(labels = NULL) +
+  theme(axis.ticks.y = element_blank()) +
   theme_minimal()
 
 ggplot(data = fakedata, aes(x = Normals)) + 
@@ -137,17 +153,55 @@ ggplot(data = fakedata, aes(x = Normals)) +
   theme_minimal()
 ```
 
-Rerun the code above a few times. What do you notice about the boxplots and histograms that you are generating?
+__Exercise__. Rerun the simulation code above a few times. What do you notice about the boxplots and histograms that you are generating?
+
+__Exercise__. Rerun the simulation code above a few times, but change the sample size ($n$) from `14` to `1000`. Now what do you notice about the boxplots and histograms that you are generating?
+
+<br>
 
 ## Lab 3.2: Conceptual Confidence Intervals
 
-The primary purpose of this lab is to explore what the concept of "confidence" really means. To do so, we will construct confidence intervals first for a population mean ($\mu$) using the "one-sample t" confidence interval formula .
+The primary purpose of this lab is to explore what the concept of "confidence" really means. To do so, we will construct confidence intervals first for a population proportion ($p$) and then for a mean ($\mu$) using the "one-sample t" confidence interval formula.
+
+```{r}
+#| warning: false
+#| output: false
+library(resample)
+library(tidyverse)
+```
+
+### One Sample Proportion (CI for $p$)
+
+Something that you likely did in STAT 113 is use an app to investigate the "meaning of confidence." We will revisit that idea here by exploring the sampling distribution of the sample proportion. Suppose that we have a sample size of $n = 50$ and our true population proportion is $p = 0.25$. Click on the "Confidence Interval" tab of the following app <https://stlawu.shinyapps.io/samp_dist_conf_int/> and change the population proportion to be 0.25 and the sample size to be 50.
+
+__Exercise__. What does each dot on the plot represent in this setting?
+
+__Exercise__. Drag the slider to be approximately equal to the value `1.96 * sqrt(0.25 * (1 - 0.25) / 50)` = 0.12). What proportion of the confidence intervals cover the true proportion of $p = 0.25$? Does that make sense?
+
+__Exercise__. Which of the $\hat{p}$'s seem to be "missing" the target of $p = 0.25$? Does that make sense?
+
+__Exercise__. If you were to take a sample and, by chance, end up with an $\hat{p}$ and resulting interval that "misses" the target of $p = 0.25$, why couldn't you just toss that sample out and take a different sample?
+
+__Exercise__. To generate a sample proportion from a population with a true proportion of success $p$ and a certain sample size $n$, we can use the following code. In the code what does `phat` represent on the app that you've been working with? How would you modify the code to create the entire graph shown in the app? (You do __not__ need to actually modify the code).
+
+```{r}
+#| output: false
+n <- 50   # sample size
+p <- 0.25  # population proportion
+  
+x <- rbinom(1, n, p) # randomly generate number of successes for the sample
+
+## number of successes divided by sample size
+phat <- x / n
+phat
+```
+
 
 ### One Sample t (CI for $\mu$)
 
 If we were to repeatedly generate random samples from a population and use those samples to construct (1 - $\alpha$)% confidence intervals, the _coverage rate_ is defined as the fraction of those intervals that actually contain (capture) the parameter.
 
-In the code below, we explore the average width and the coverage rate of confidence intervals for $\mu$ using the "standard" one-sample t formula.
+In the code below, we explore the average width and the coverage rate of confidence intervals for $\mu$ using the "standard" one-sample t formula. To start, let's generate a single sample of size $n = 5$ from a population that is normally distributed with mean $\mu = 10$ and standard deviation $\sigma = 5$ and then subsequently generate a single 95% confidence interval for the mean $\mu$ with that sample.
 
 ```{r}
 #| output: false
@@ -169,7 +223,7 @@ generate_onesamp_cis <- function(n, mu, sigma, alpha) {
 ```
 
 ```{r}
-#| output: false
+#| output: true
 ## define parameters to use in our function
 n <- 5   # sample size
 mu <- 10     # true mean
@@ -209,21 +263,52 @@ many_ci_df |> summarise(avg_width = mean(ci_width),
                         coverage_rate = mean(ci_cover_ind))
 ```
 
-__Exercise__.
+__Exercise__. Suppose that you increase the value of `sigma` in the code above and obtain new values for the `avg_width` and for `coverage_rate`. How do you expect each of these quantities to change with the new `sigma`?
 
-Note that if you wanted to compare the performance of the one-sample t formula using Normal data and non-Normal data, it is important that you generate data from those populations in such a way that the populations have the same means and standard deviations (otherwise the comparisons would not be fair - especially any comparisons of average width!). Here are some guidelines about how you might do that.
+__Exercise__. Suppose that you increase the value of `mu` in the code above and obtain new values for the `avg_width` and for `coverage_rate`. How do you expect each of these quantities to change with the new `mu`?
 
-An Exponential Population: We know for an Exponential random variable $Y$ that $E(Y) = 1 / \lambda$ and $Var(Y) = 1 / \lambda^2 = (1 / \lambda)^2$. We notice here, that for Exponential random variables, the variance is the mean squared (which implies that the standard deviation equals the mean). Thus, if you wanted to compare the performance of the one-sample t formula for Normal and Exponential data, you would need to focus exclusively
-on situations where $mu = sigma$ and you could identify which value of $lambda$ is necessary to achieve your desired mean.
+__Exercise__. Suppose that you increase the value of `n` in the code above and obtain new values for the `avg_width` and for `coverage_rate`. How do you expect each of these quantities to change with the new `n`?
 
-Chi-square would be another distribution where there is a pretty easy relationship between mean and standard deviation (and therefore choose the `df` for Chi-Square). Gamma is also reasonble, but does require a little bit of algebra to identify the $\alpha$ and $\lambda$ needed to get the desired mean and standard deviation.
+__Exercise__. Suppose that you increase the value `alpha` in the code above and obtain new values for the `avg_width` and for `coverage_rate`. How do you expect each of these quantities to change with the new `alpha`?
 
-### Two Sample t 
+<br>
 
-Next, we suppose that we have two populations and that we are interested in constructing a confidence interval for the difference in population means, $\mu_1 - mu_2$. To do so, we will not assume that the underyling variances of each population are equal and will instead use The Welch-Satterthwaite approximation to degrees of freedom for the $t^*$ value to create the confidence interval.
+As part of your mini-project for this section, you will explore what happens to "confidence" when assumptions are broken.
+
+<!-- Note that if you wanted to compare the performance of the one-sample t formula using Normal data and non-Normal data, it is important that you generate data from those populations in such a way that the populations have the same means and standard deviations (otherwise the comparisons would not be fair - especially any comparisons of average width!). Here are some guidelines about how you might do that. -->
+
+<!-- An Exponential Population: We know for an Exponential random variable $Y$ that $E(Y) = 1 / \lambda$ and $Var(Y) = 1 / \lambda^2 = (1 / \lambda)^2$. We notice here, that for Exponential random variables, the variance is the mean squared (which implies that the standard deviation equals the mean). Thus, if you wanted to compare the performance of the one-sample t formula for Normal and Exponential data, you would need to focus exclusively -->
+<!-- on situations where $mu = sigma$ and you could identify which value of $lambda$ is necessary to achieve your desired mean. -->
+
+<!-- Chi-square would be another distribution where there is a pretty easy relationship between mean and standard deviation (and therefore choose the `df` for Chi-Square). Gamma is also reasonable, but does require a little bit of algebra to identify the $\alpha$ and $\lambda$ needed to get the desired mean and standard deviation. -->
+
+### Two Sample Inference
+
+Recall from STAT 113 a couple of t procedures for generating confidence intervals: 
+
+* matched pairs (if the two populations were not independent)
+* "standard" two-sample t-test (assuming the populations are independent and have equal variances).
+
+And, a third one that you may or may not have seen in STAT 113 is the two-sample t-test that does not assume equal variances, called a "Welch's two sample t-test":
+
+* Welch's two sample t-test (assuming the populations are independent but relaxing the assumption that the populations have equal variances).
+
+__Exercise__. Which of the following study designs _should_ be analyzed as a matched-pairs design?
+
+- a sample of first-years and a sample of seniors are taken and we measure the number of alcoholic drinks each student had in the past month.
+- we take a random sample of students and measure how quickly they can complete a Sudoku puzzle without a dog in the room and then again with a dog in the room.
+- for 100 textbooks, we obtain the price of each book on Amazon and the price of each book at the bookstore.
+- we randomly select 100 textbooks and obtain their bookstore price and then we randomly select 100 textbooks and obtain their amazon price.
+
+__Exercise__. Consider the third and fourth study designs in the previous exercise on textbooks. Which study design do you think will yield a more narrow confidence interval for the difference in mean textbook price? 
+
+<br>
+
+Next, we suppose that we have two populations and that we are interested in constructing a confidence interval for the difference in population means, $\mu_1 - mu_2$. To do so, we will not assume that the underlying variances of each population are equal and will instead use The Welch-Satterthwaite approximation to degrees of freedom for the $t^*$ value to create the confidence interval.
 
 ```{r}
 #| output: false
+
 n1 <- 15         # size of first sample
 mu1 <- 20        # mean of first population
 sigma1 <- 5      # standard deviation of first population
@@ -248,25 +333,58 @@ welchdf <- numerator / denominator
 welchdf
 ```
 
-### Generating Sample Proportions
-
-Finally, if we are interested in constructing a confidence interval for a population proportion instead of a population mean (so, our variable of interest is categorical with two levels), then we can use the following code to generate a sample proportion from a population with a true proportion of success $p$ and a certain sample size $n$:
+__Exercise__. Use the Welch-Satterthwaite approximation to find a 90% confidence interval for the difference in average hotwings consumed by males and the average hotwings consumed by females using a two-sample t formula that does not assume equal variance in the two populations.
 
 ```{r}
+#| echo: false
 #| output: false
-n <- 10   # sample size
-p <- 0.5  # population proportion
-  
-x <- rbinom(1, n, p) # randomly generate number of successes for the sample
+#| warning: false
+beerwings_df |>
+  group_by(Gender) |>
+  summarise(xbar = mean(Hotwings),
+            sd = sd(Hotwings),
+            n = n())
 
-## number of successes divided by sample size
-phat <- x / n
-phat
+n1 <- 15         # size of first sample
+mu1 <- 20        # mean of first population
+sigma1 <- 5      # standard deviation of first population
+
+n2 <- 15         # size of second sample
+mu2 <- 15        # mean of second population
+sigma2 <- 5      # standard deviation of second population
+
+x <- rnorm(n1, mu1, sigma1)       # generate sample 1 from Population 1
+y <- rnorm(n2, mu2, sigma2)       # generate sample 2 from Population 2
+
+varest1 <- 3.56 ^ 2
+varest2 <- 4.5 ^ 2
+
+A <- varest1 / n1
+B <- varest2 / n2
+
+numerator <- (A + B) ^2
+denominator <- A^2 / (n1 - 1) + B^2 / (n2 - 1)
+
+welchdf <- numerator / denominator
+welchdf
+
+## 26.6 \> round down to 26
+(9.33 - 14.5) + c(-1, 1) * qt(0.95, 26) * sqrt(varest1 / n1 + varest2 / n2)
+## -7.70, -2.64
 ```
+
+<br>
 
 ## Lab 3.3: Bootstrap Confidence Intervals
 
 The purpose of this lab is to construct bootstrap confidence intervals for a population mean, a population proportion, and for a difference in population means. To start, we construct a bootstrap confidence interval for a population mean.
+
+```{r}
+#| warning: false
+#| output: false
+library(resample)
+library(tidyverse)
+```
 
 ### Bootstrap CI for a Population Mean
 
@@ -282,7 +400,7 @@ stat113_ex <- tibble(Exercise = c(12, 3, 4, 10, 8, 17, 15, 5, 8, 10, 8,
 #stat113_ex = tibble(Exercise = c(25, 1, 2, 4, 0, 3, 0))
 ```
 
-Before constructing any confidence interval, we shoud create a plot of the data and obtain the sample mean:
+Before constructing any confidence interval, we should create a plot of the data and obtain the sample mean:
 
 ```{r}
 ggplot(data = stat113_ex, aes(x = Exercise)) +
@@ -354,6 +472,12 @@ quantile(bootmean_vec, c(0.05, 0.95))
 quantile(bootmean_vec, c(0.025, 0.975))
 ```
 
+__Exercise__. Interpret the bootstrapped confidence interval for the mean $\mu$ in context of the problem.
+
+__Exercise__. Use the formula derived in class to compute a 95% confidence interval for the mean $\mu$. How closely does the result match with the bootstrap confidence interval?
+
+<br>
+
 ### Bootstrap CI for a Population Proportion
 
 In a random sample of 588 adults, 16.67% reported that key lime pie is their favorite kind of pie (only 16.67%....key lime is the GOAT of pies). Construct a 95% Bootstrap percentile confidence interval for the proportion of all adults that have key lime as their favorite pie.
@@ -405,12 +529,38 @@ __Exercise__. Construct a histogram of the bootstrap sample proportions, adding 
 
 __Exercise__. Compute quantities of interest to help construct a percentile confidence interval for the true proportion. You should compute: the center of the bootstrap distribution, the bootstrap standard error, the bootstrap estimate of bias, the percent of the boostrap variation that is due to bias, a 90% percentile-based confidence interval for the true proportion, and a 95% percentile-based confidence interval for the true proportion.
 
+```{r}
+#| output: false
+#| echo: false
+## mean of bootstrap distribution (should be close to our statistic)
+mean(bootprop_vec)
+
+## Bootstrap SE
+sd(bootprop_vec)
+
+# bootstrap estimate of bias
+bias <- mean(bootprop_vec) - mean(pie_df$key_lime_fav)
+bias
+
+# what percent of the BS variation is due to bias?
+abs(bias) / sd(bootprop_vec)
+
+## Percentile Bootstrap confidence intervals
+# 90% CI
+quantile(bootprop_vec, c(0.05, 0.95))
+# 95% CI
+quantile(bootprop_vec, c(0.025, 0.975))
+```
+
 __Exercise__. Interpret the 90% confidence interval in context of the problem.
 
+__Exercise__. Use the large-sample approximation formula based on the asymptotic distribution of the MLE that we derived in class to compute a 90% confidence interval for $p$. How does the interval compare to the 90% bootstrap confidence interval?
+
+<br>
 
 ### Bootstrap CI's with Two (Independent) Samples
 
-Finally, we construct a bootstrap confidence interval using two independent random samples. We are interested in two different quantities here: the difference in population means and the ratio of population means. To do so, we use the flight data, which has information on flight delays from a sample of United Airlines flights (UA) and a sample of Amaerican Airlines flights (AA). We are interested in if either of these airlines has a higher average delay than the other.
+Finally, we construct a bootstrap confidence interval using two independent random samples. We are interested in two different quantities here: the difference in population means and the ratio of population means. To do so, we use the flight data, which has information on flight delays from a sample of United Airlines flights (UA) and a sample of American Airlines flights (AA). We are interested in if either of these airlines has a higher average delay than the other.
 
 First, we obtain some summary statistics and make a plot of the data:
 
@@ -443,8 +593,8 @@ ratiomeans <- mean(delays_aa$Delay) / mean(delays_ua$Delay) # our sample statist
 The code below creates a function that generates either the boostrap difference in means or the bootstrap ratio of means from a single bootstrap sample:
 
 ```{r}
+#| echo: false
 #| output: false
-#| eval: false
 generate_one_boot <- function(statistic = "diff") {
   ## statistic can also be "ratio"
   
@@ -452,11 +602,49 @@ generate_one_boot <- function(statistic = "diff") {
   aa_vec <- delays_aa |> pull(Delay)
   ua_vec <- delays_ua |> pull(Delay)
   
-  ## sample the exercise data with replacement
-  boot_samp <- sample(pie_vec, size = length(pie_vec),
+  
+  ## FILL IN MISSING PIECES
+
+  ## fill in piece to obtain one bootstrap sample mean for aa flights
+
+  boot_samp_aa <- sample(aa_vec, size = length(aa_vec),
                       replace = TRUE)
   
-  boot_prop <- mean(boot_samp)
+  boot_mean_aa <- mean(boot_samp_aa)
+  
+  ## fill in piece to obtain one bootstrap sample mean for ua flights
+  boot_samp_ua <- sample(ua_vec, size = length(ua_vec),
+                      replace = TRUE)
+  
+  boot_mean_ua <- mean(boot_samp_ua)
+  
+  if (statistic == "diff") {
+    
+    ## fill in piece to compute the difference in sample means
+    boot_diff <- boot_mean_aa - boot_mean_ua
+    
+    return(boot_diff)
+    
+  } else if (statistic == "ratio") {
+    
+    ## fill in piece to compute the ratio of sample means
+    boot_ratio <- boot_mean_aa / boot_mean_ua
+    return(boot_ratio)
+  }
+  
+}
+```
+
+```{r}
+#| eval: false
+#| output: false
+generate_one_boot <- function(statistic = "diff") {
+  ## statistic can also be "ratio"
+  
+  ## put exercise variable into a vector
+  aa_vec <- delays_aa |> pull(Delay)
+  ua_vec <- delays_ua |> pull(Delay)
+  
   
   ## FILL IN MISSING PIECES
 
@@ -492,12 +680,29 @@ bootdiff_vec <- map_dbl(1:B, \(i) generate_one_boot(statistic = "diff"))
 bootdiff_df <- tibble(bootdiff_vec)
 ```
 
-__Exercise__. Compute relevant quantities of interest to help create a 90% percentile-based bootstrap confidence interval for the true mean difference in delay times and the true ratio of delay times.
+```{r}
+#| eval: false
+#| echo: false
+B <- 5000
+bootratio_vec <- map_dbl(1:B, \(i) generate_one_boot(statistic = "ratio"))
+
+bootratio_df <- tibble(bootratio_vec)
+
+quantile(bootdiff_vec, c(0.05, 0.95))
+quantile(bootratio_vec, c(0.05, 0.95))
+```
+
+__Exercise__. Compute relevant quantities of interest to help create a 90% percentile-based bootstrap confidence interval for the true mean difference in delay times and the true mean ratio of delay times.
 
 __Exercise__. Interpret your two bootstrap confidence intervals in context of the problem.
 
+__Exercise__. Use a Welch's t-test to compute a 90% confidence interval for the true mean difference in delay times. Why do you think this result does not match very closely with the bootstrap confidence interval for the mean difference?
+
+__Exercise__. Use a Welch's t-test to compute a 90% confidence interval for the true mean ratio of delay times. 
 
 ## Mini Project 3: Simulation to Investigate Confidence Intervals
+
+The confidence intervals we have discussed in class each have associated assumptions in order for us to use them correctly. But, what exactly happens if one of the assumptions is violated? Why is a violated assumption 'bad' anyway? In this mini-project, you will investigate what happens to interval width and coverage rate if an assumption is violated for the asymptotic confidence interval for a population proportion.
 
 ### Project Description
 
@@ -511,48 +716,93 @@ __Statement of Integrity__: At the top of your submission, copy and paste the fo
 
 <br>
 
-For this Mini-Project, you will design a simulation study to explore confidence. Some possible study design ideas appear below. I have also included a small "bad" example.
+__Step 1__. Decide on 3 different sample sizes ($n$: small, medium, large) and 2 different population proportions ($p$: close to 0.5 and far from 0.5). Thus, the number of settings you will investigate is 6. The confidence level you should use is 90% for this project. __Note__: the "large sample" assumption for the asymptotic confidence interval that we discussed in class must be violated in at least two of the six settings and must hold for at least two of the six settings.
 
-In your simulation study, you will need to choose one or more confidence interval formulas (e.g., a one-sample t test, or comparing the different versions of the two-sample t confidence interval formula). Then, you will need to decide the conditions under which you want to evaluate your methods (e.g., different samples sizes, or when conditions are met or not, and/or possibly exploring how severely the conditions are not met). In your design, you should consider at least six different cases/scenarios to explore (note in my "bad" example, I explored 9 cases – all of the possible combinations of $n$ and $\sigma$).
+__Step 2__. I recommend starting with one of the settings where the "large sample" assumption holds. For this setting, construct at least 5000 sample proportions and 5000 associated confidence intervals.
 
-__Possible Study Designs__
+__Step 3__. From your 5000 confidence intervals, calculate both (1) the average interval width and (2) the coverage rate.
 
-<!-- - One-Sample t with different sample sizes and data from different populations (Normal versus non-Normal) -->
-- Compare the different Two-Sample t formulas (including STAT 113 df versus Welch df, or Welch formula versus Pooled variance, or all three) under different conditions (sample sizes and population variances).
-- Compare the different one proportion formulas under different conditions (sample sizes and population proportions, and/or conditions met or not).
-- Compare the different two proportion formulas under different conditions (sample sizes and population proportions, and/or conditions met or not).
+__Step 4__. Repeat Steps 2 and 3 for the other 5 settings, recording the average interval width and the coverage rate for each of these other 5 settings.
 
-__What to Submit__: You should submit a typed write-up of your simulation results. There are a few possible formats you might use to submit this mini-project: 
 
-- a rendered .qmd file (either to .html, .pdf, or .docx) that includes your write-up, results, and code.
+__What to Submit__: You should submit a typed write-up of your simulation results as well as your code. There are a few possible formats you might use to submit this mini-project: 
+
+- a rendered .qmd file (either to .html, .pdf, or .docx) that includes your write-up, results, and code (so `echo: true` in the global YAML).
 - a Word file that contains your results and write-up and a separate .qmd file that has all of your code. Note that, for this option, your code should still be organized and easy to follow.
 
 In your submission, you should include:
 
-- a short summary of the methods you are comparing (including the assumptions necessary for those methods) and under what conditions.
-- a table that summarises the coverage rates and average widths for the cases you considered.
-- two paragraphs summarising your findings.
+- explicit calculations for whether or not the "large sample assumption" we discussed in class for the asymptotic confidence interval holds for each of the six settings.
+- a table that summarises the coverage rates and average widths for the cases you considered. Code for the table generated below is provided.
+- three paragraphs summarising your findings in your simulation. 
 
 
-### Small (Bad) Example
-
-Below I give a small "bad" example for a one-sample t confidence interval simulation (a setting that you cannot choose for this project anyway!).
-
-I plan to compare the performance of the one-sample t confidence interval for different sample sizes ($n = 5, 25, 100$) and different population standard deviations ($\sigma= 2, 10, 20$). Note that one-sample t methods assume that either data come from a Normal population or we have a large sample size. For this simulation, all data will be randomly generated from a Normal population with mean $\mu = 10$. And, for each setting, I simulated 5000 iterations to compute the coverage rate and average width. A summary of my simulated coverage rates for these combinations appears below.
-
-|  |         | $n = 5$ | $n = 25$ | $n = 100$ |
+|  |         | $n = $ | $n = $ | $n = $ |
 |:----:|:-----------------:|:-------------:|:------------:|:------------:|
-| $\sigma = 2$   | Coverage Rate       |     0.947   |     0.952  |    0.965          |
-| $\sigma = 2$    | Average Width        |    4.59   |     1.64  |     0.79         |
+| $p = xxx$   | Coverage Rate       |        |       |              |
+| $p = yyy$   | Coverage Rate       |        |       |              |
 |    |                     |               |              |              |
-| $\sigma = 10$   | Coverage Rate       |     0.949   |     0.935  |    0.95          |
-| $\sigma = 10$    | Average Width        |    23.26   |     8.19  |     3.93         |
-|    |                     |               |              |              |
-| $\sigma = 20$   | Coverage Rate       |     0.939   |     0.953  |    0.951          |
-| $\sigma = 20$    | Average Width        |    46.68   |     16.29  |     7.91         |
-
+| $p = xxx$    | Average Width        |       |       |              |
+| $p = yyy$    | Average Width        |       |       |              |
 : Table of Results {.striped .hover}
 
-I have learned that, for each combination of sample size and population standard deviation, the coverage rate is right around what was expected (95%). The average width is larger when either $n$ is small or the population variance is large. The average width decreases when either sample size increases or the population standard deviation decreases.
+<br>
 
-Note that the reason I’ve labeled this example as "bad" is that I haven’t done anything that could possibly affect the coverage rate; I only modified factors that would influence the width of the confidence intervals (specifically factors that would affect the standard error of the confidence interval and nothing else). More interesting simulation designs would explore what happens when you use a formula when you are not supposed to (e.g., conditions fail or you use a rule for degrees of freedom that I’ve said not to use or use a formula that I’ve said you should not use).
+```
+|  |         | $n = $ | $n = $ | $n = $ |
+|:----:|:-----------------:|:-------------:|:------------:|:------------:|
+| $p = xxx$   | Coverage Rate       |        |       |              |
+| $p = yyy$   | Coverage Rate       |        |       |              |
+|    |                     |               |              |              |
+| $p = xxx$    | Average Width        |       |       |              |
+| $p = yyy$    | Average Width        |       |       |              |
+
+
+: Table of Results {.striped .hover}
+```
+
+<!-- For this Mini-Project, you will design a simulation study to explore confidence. Some possible study design ideas appear below. I have also included a small "bad" example. -->
+
+<!-- In your simulation study, you will need to choose one or more confidence interval formulas (e.g., a one-sample t test, or comparing the different versions of the two-sample t confidence interval formula). Then, you will need to decide the conditions under which you want to evaluate your methods (e.g., different samples sizes, or when conditions are met or not, and/or possibly exploring how severely the conditions are not met). In your design, you should consider at least six different cases/scenarios to explore (note in my "bad" example, I explored 9 cases – all of the possible combinations of $n$ and $\sigma$). -->
+
+<!-- __Possible Study Designs__ -->
+
+<!-- <!-- - One-Sample t with different sample sizes and data from different populations (Normal versus non-Normal) -->
+<!-- - Compare the different Two-Sample t formulas (including STAT 113 df versus Welch df, or Welch formula versus Pooled variance, or all three) under different conditions (sample sizes and population variances). -->
+<!-- - Compare the different one proportion formulas under different conditions (sample sizes and population proportions, and/or conditions met or not). -->
+<!-- - Compare the different two proportion formulas under different conditions (sample sizes and population proportions, and/or conditions met or not). -->
+
+<!-- __What to Submit__: You should submit a typed write-up of your simulation results. There are a few possible formats you might use to submit this mini-project:  -->
+
+<!-- - a rendered .qmd file (either to .html, .pdf, or .docx) that includes your write-up, results, and code. -->
+<!-- - a Word file that contains your results and write-up and a separate .qmd file that has all of your code. Note that, for this option, your code should still be organized and easy to follow. -->
+
+<!-- In your submission, you should include: -->
+
+<!-- - a short summary of the methods you are comparing (including the assumptions necessary for those methods) and under what conditions. -->
+<!-- - a table that summarises the coverage rates and average widths for the cases you considered. -->
+<!-- - two paragraphs summarising your findings. -->
+
+
+<!-- ### Small (Bad) Example -->
+
+<!-- Below I give a small "bad" example for a one-sample t confidence interval simulation (a setting that you cannot choose for this project anyway!). -->
+
+<!-- I plan to compare the performance of the one-sample t confidence interval for different sample sizes ($n = 5, 25, 100$) and different population standard deviations ($\sigma= 2, 10, 20$). Note that one-sample t methods assume that either data come from a Normal population or we have a large sample size. For this simulation, all data will be randomly generated from a Normal population with mean $\mu = 10$. And, for each setting, I simulated 5000 iterations to compute the coverage rate and average width. A summary of my simulated coverage rates for these combinations appears below. -->
+
+<!-- |  |         | $n = 5$ | $n = 25$ | $n = 100$ | -->
+<!-- |:----:|:-----------------:|:-------------:|:------------:|:------------:| -->
+<!-- | $\sigma = 2$   | Coverage Rate       |     0.947   |     0.952  |    0.965          | -->
+<!-- | $\sigma = 2$    | Average Width        |    4.59   |     1.64  |     0.79         | -->
+<!-- |    |                     |               |              |              | -->
+<!-- | $\sigma = 10$   | Coverage Rate       |     0.949   |     0.935  |    0.95          | -->
+<!-- | $\sigma = 10$    | Average Width        |    23.26   |     8.19  |     3.93         | -->
+<!-- |    |                     |               |              |              | -->
+<!-- | $\sigma = 20$   | Coverage Rate       |     0.939   |     0.953  |    0.951          | -->
+<!-- | $\sigma = 20$    | Average Width        |    46.68   |     16.29  |     7.91         | -->
+
+<!-- : Table of Results {.striped .hover} -->
+
+<!-- I have learned that, for each combination of sample size and population standard deviation, the coverage rate is right around what was expected (95%). The average width is larger when either $n$ is small or the population variance is large. The average width decreases when either sample size increases or the population standard deviation decreases. -->
+
+<!-- Note that the reason I’ve labeled this example as "bad" is that I haven’t done anything that could possibly affect the coverage rate; I only modified factors that would influence the width of the confidence intervals (specifically factors that would affect the standard error of the confidence interval and nothing else). More interesting simulation designs would explore what happens when you use a formula when you are not supposed to (e.g., conditions fail or you use a rule for degrees of freedom that I’ve said not to use or use a formula that I’ve said you should not use). -->

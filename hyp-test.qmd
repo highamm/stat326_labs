@@ -1,5 +1,11 @@
 # Hypothesis Testing {#sec-hyptest}
 
+**Goals**:
+
+* 
+* 
+* 
+
 ## Lab 5.1: Permutation Tests
 
 ### Example 1: Flight Data

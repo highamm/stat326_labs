@@ -26,11 +26,13 @@ library(tidyverse)
 
 To begin a simulation for a sampling distribution of a sample statistic, we need to choose:
 
-a.  a population model for the simulation. Let's start with Normal($\mu$ = 10, $\sigma^2$ = 4).
+a.  a population model for the simulation. Let's think about $Y_i$ as a random variable for the amount of time Mipha spends at the office in a week (in hours) as our context. Then, let's start by assuming that each $Y_i$ follows the following model: Normal($\mu$ = 10, $\sigma^2$ = 4). Additionally, $Y_i$'s from different weeks are assumed to be independent.
 
-b.  a sample size for the simulation. Let's start with $n$ = 5.
+b.  a sample size for the simulation. Here, Mipha wants to consider the amount of time she spends at the office in 5 randomly selected weeks of the year. So, let's start with $n$ = 5.
 
-c.  a calculation for the sample statistic that we are constructing the sampling distribution of. Let's start with the sample mean, $\bar{y}$.
+c.  a calculation for the sample statistic that we are constructing the sampling distribution of. Here, Mipha wants to examine what the sample mean amount of time she spends at the office from 5 randomly selected weeks looks like. So, let's start by using the sample mean, $\bar{y}$.
+
+Before we simulate anything, let's use results from MATH/STAT 325 to report the theoretical distribution of the sample mean in the space below. Then, use this result to find the probability that the average amount of time Mipha spends at the office in 5 weeks is less than or equal to 9.5 hours per week and find the probability taht the average amount of time Mipha spends at the office in 5 weeks is more than 11 hours per week. 
 
 ### Generating a Single Sample Statistic
 
@@ -160,11 +162,11 @@ means_df |>
   summarise(prob_less_9.5 = mean(less_9.5))
 ```
 
-**Exercise 1**. Repeat the construction of the sampling distribution of the sample mean several times. How do the results change (or not)?
+**Exercise**. Repeat the construction of the sampling distribution of the sample mean several times. How do the results change (or not)?
 
-**Exercise 2**. Use the result from Stat 325 to report the theoretical distribution of the sample mean. Use this result to find $P(\bar{Y}\leq 9.5)$ and $P(\bar{Y}>11)$ analytically.
+**Exercise**. Use the result from STAT 325 to report the theoretical distribution of the sample mean. Use this result to find $P(\bar{Y}\leq 9.5)$ and $P(\bar{Y}>11)$ analytically.
 
-**Exercise 3**. What can we conclude about the sampling distribution of $\bar{y}$ when taking samples of $n = 5$ from *this* population? How do the simulation results compare to the result from Stat 325? Use the plot below in your answer to this question.
+**Exercise**. What can we conclude about the sampling distribution of $\bar{Y}$ when taking samples of $n = 5$ from *this* population? How do the simulation results compare to the result from STAT 325? Use the plot below in your answer to this question.
 
 ```{r}
 theoretical_df <- tibble(xvals = seq(mu - 4 * sigma / sqrt(n),
@@ -181,11 +183,13 @@ ggplot(data = means_df, aes(x = means)) +
   geom_line(data = theoretical_df, aes(x = xvals, y = xvals_density))
 ```
 
-**Exercise 4**. Increase the sample size to 50 and then reconstruct the sampling distribution of the sample mean for $n = 50$. How do the results (mean, standard deviation, and probabilities) change? Do the changes make sense and do they match the theoretical result from Stat 325?
+**Exercise**. Increase the sample size to 50 (so that Mipha is now considering the sampling distribution of the mean amount of time she spends at the office in 50 weeks) and then reconstruct the sampling distribution of the sample mean for $n = 50$. How do the results (mean, standard deviation, and probabilities) change? Do the changes make sense and do they match the theoretical result from Stat 325?
+
+**Exercise**. We mentioned that one assumption in our simulation is that each random variable is $iid$: so, we assume that the amount time Mipha spends at the office in one week is independent of the amount of time she spends at the office in other weeks. Come up with a context for which the independence assumption might be violated in this setting.
 
 ## Lab 1.2: Samp. Dist. with a Non-Normal Population
 
-Now consider an Exponential($\lambda$ = 0.5) population. Go back to a sample size of $n = 5$ and continue calculating the sample mean, $\bar{y}$. Before beginning, you should make sure to load in the `tidyverse` library again so that we can make some plots:
+Now suppose that we can model the amount of time that Mipha walks in a day as an $Y_i \sim$ Exponential($\lambda$ = 0.5) and that each $Y_i$ is independent of other $Y_i$. So, we have an Exponential($\lambda$ = 0.5) population. Using a sample size of $n = 5$ days, continue calculating the sample mean, $\bar{y}$. Before beginning, you should make sure to load in the `tidyverse` library again so that we can make some plots:
 
 ```{r}
 #| warning: false
@@ -263,13 +267,17 @@ ggplot(data = means_df, aes(x = means)) +
        title = paste("Sampling Distribution of the \nSample Mean when n =", n))
 ```
 
-**Exercise 1**. In the code that generated the graph for the population model of the exponential distribution, along with the single sample and its mean, I modified the code from the normal distribution population model to examine a single sample from the known population, but for the Exponential population. What are some changes I made and why?
+**Exercise**. In the code that generated the graph for the population model of the exponential distribution, along with the single sample and its mean, I modified the code from the normal distribution population model to examine a single sample from the known population, but for the Exponential population. What are some changes I made and why?
 
-**Exercise 2**. Now look at the sampling distribution of the sample mean when $n = 5$ for the exponential population model. Summarise what you notice about the sampling distribution of $\bar{y}$ when taking a sample of size $n = 5$ from an Exponential($\lambda$ = 0.5) population.
+**Exercise**. Now look at the sampling distribution of the sample mean when $n = 5$ for the exponential population model. Summarise what you notice about the sampling distribution of $\bar{Y}$ when taking a sample of size $n = 5$ from an Exponential($\lambda$ = 0.5) population.
 
-**Exercise 3**. Increase the sample size to $n = 50$. What do you notice about the sampling distribution of $\bar{y}$ now? Why has the shape of the sampling distribution changed?
+**Exercise**. You should find that $\text{E}(Y_i)$ and $\text{E}(\bar{Y})$ are equal to the same value. Using the context of this example (thinking about $Y_i$ as a random variable for Mipha's walking time in a day, in hours), explain what the difference between $\text{E}(Y_i)$ and $\text{E}(\bar{Y})$ is, conceptually.
 
-**Exercise 4**. In general, what are some other ways you could summarise a sample of data? (i.e., other calculations you could do?)
+**Exercise**. You should find that $\text{Var}(Y_i)$ and $\text{Var}(\bar{Y})$ are different. Using the context of this example (thinking about $Y_i$ as a random variable for Mipha's walking time in a day, in hours), explain why $\text{Var}(Y_i)$ is larger than $\text{Var}(\bar{Y})$, conceptually.
+
+**Exercise**. Increase the sample size to $n = 50$. What do you notice about the sampling distribution of $\bar{Y}$ now? Why has the shape of the sampling distribution changed?
+
+**Exercise**. In general, what are some other ways you could summarise a sample of data? (i.e., other calculations you could do?)
 
 ## Lab 1.3: Samp. Dist. of the Sample Minimum
 
@@ -280,7 +288,7 @@ Again, load in the `tidyverse` library so that we can make some plots!
 library(tidyverse)
 ```
 
-Let's return to our original Normal($\mu$ = 10, $\sigma^2$ = 4), but let's consider a different statistic: the sample minimum. Examine the code that you ran in an earlier lab below.
+Let's return to our original context, thinking about Mipha's weekly office time that can be modeled as: Normal($\mu$ = 10, $\sigma^2$ = 4). But, now the young Mipha is interested in a different statistic: the sample minimum time she is in the office in 5 weeks. Examine the code that you ran in an earlier lab below.
 
 ```{r}
 #| output: false
@@ -315,11 +323,11 @@ ggplot(data = plot_df, aes(x = xvals, y = xvals_density)) +
        title = "Normal with Mu = 10 and sigma = 2")
 ```
 
-**Exercise 1**. Modify the code so that, instead of calculating the sample mean as the sample statistic, you calculate the sample minimum as the sample statistic. Then, re-run the code so that you better understand what the sampling distribution of the sample minimum might look like.
+**Exercise**. Modify the code so that, instead of calculating the sample mean as the sample statistic, you calculate the sample minimum as the sample statistic. Then, re-run the code so that you better understand what the sampling distribution of the sample minimum might look like.
 
-**Exercise 2**. Predict what might happen next! That is, based on what you've seen by re-running the code above, where do you expect the center of the sampling distribution of the sample minimum to be relative to 10? Do you expect the sampling distribution of the sample minimum to overlap with the value 10 at all (if $n = 5$).
+**Exercise**. Predict what might happen next! That is, based on what you've seen by re-running the code above, where do you expect the center of the sampling distribution of the sample minimum to be relative to 10? Do you expect the sampling distribution of the sample minimum to overlap with the value 10 at all (if $n = 5$).
 
-**Exercise 3**. Modify the code below so that you generate the sampling distribution of the sample minimum instead of the sample mean.
+**Exercise**. Modify the code below so that you generate the sampling distribution of the sample minimum instead of the sample mean.
 
 ```{r}
 #| output: false
@@ -373,11 +381,14 @@ means_df |>
 
 ```
 
-**Exercise 4**. Summarise what you notice about the sampling distribution. How does it compare to the sampling distribution of the sample mean? Does that make sense? Why or why not?
+**Exercise**. Summarise what you notice about the sampling distribution. How does it compare to the sampling distribution of the sample mean? Does that make sense? Why or why not?
 
-**Exercise 5**. Report the probability that the sample minimum is less than or equal to 9.5. How does it compare to the probability that the sample mean is less than or equal to 9.5? Does that make sense? Why or why not?
+**Exercise**. Report the probability that the sample minimum is less than or equal to 9.5. How does it compare to the probability that the sample mean is less than or equal to 9.5? Does that make sense? Why or why not?
 
-**Exercise 6**. Increase the sample size to 50. Summarize how the sampling distribution of the sample minimum when $n = 50$ differs from when $n = 5$.
+**Exercise**. Increase the sample size to 50. Summarize how the sampling distribution of the sample minimum when $n = 50$ differs from when $n = 5$.
+
+**Exercise**. Note that the sampling distribution does not appear to be normally distributed. Do you think that if we upped the sample size to a larger value (say $n = 1000$), that the sampling distribution will be normally distributed? Why or why not?
+
 
 ## Mini Project 1: Sampling Distribution of the Sample Minimum and Maximum
 

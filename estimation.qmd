@@ -1,8 +1,10 @@
 # Estimation {#sec-estimation}
 
-ADD IN EXERCISES 
+**Goals**:
 
-ADD GOALS
+1. Explore how a likelihood function for a parameter changes for different data.
+
+2. Convince yourself that maximizing the likelihood and maximizing the log-likelihood will give you the same estimate of $\theta$.
 
 ## Lab 2.1: Maximum Likelihood Estimation
 
@@ -53,7 +55,52 @@ ggplot(data = lik_df, aes(x = p, y = binom_liks)) +
   theme_minimal()
 ```
 
-### MLE Example 
+Secondly, let's graph the likelihood and the log-likelihood to try and convince ourselves that maximizing the log-likelihood is an equivalent approach to maximizing the likelihood:
+
+```{r}
+get_binom_log_lik <- function(p, n, data_vec) {
+  
+  ## for each value of p, map through the dbinom function for
+  ## each data point (and multiply the results at the end to obtain
+  ## the likelihood)
+  binom_log_lik <- map_dbl(p,
+                       ~ dbinom(x = data_vec, size = n, prob = .x,
+                                log = TRUE) |>
+                         sum() ## like the summation in formula
+  )
+  
+  ## the function returns a vector of likelihoods for each
+  ## candidate p (and will be a vector of the same length as p)
+  return(binom_log_lik)
+}
+```
+
+```{r}
+#| output: false
+p <- seq(0.01, 0.5, by = 0.001)
+n <- 20
+dat <- c(5, 4, 2, 1, 0, 1, 2)
+
+binom_liks <- get_binom_lik(p = p, n = n, data_vec = dat)
+binom_log_liks <- get_binom_log_lik(p = p, n = n, data_vec = dat)
+
+lik_df <- tibble(p, binom_liks, binom_log_liks) |>
+  pivot_longer(2:3, names_to = "lik_type", values_to = "L")
+ggplot(data = lik_df, aes(x = p, y = L)) +
+  geom_line() +
+  facet_wrap(~ lik_type, scales = "free_y", nrow = 2) +
+  labs(y = "Likelihood") +
+  theme_minimal()
+```
+
+__Exercise__. Both the likelihood and the log likelihood plots given above are plots of the likelihood of $p$ given our observed data $5, 4, 2, 1, 0, 1, 2$. Suppose that, instead of the data given above, we actually observed the following data: $10, 9, 7, 6, 5, 6, 7$. How do you think the likelihood and log-likelihood plots would change given this new data? Draw a sketch of a possible likelihood and log-likelihood given this new observed data over the current plot.
+
+__Exercise__. Use your knowledge from calculus as well as the plots given to explain why we can find the MLE by taking the derivative of the likelihood and setting the resulting equation equal to 0.
+
+__Exercise__. We mentioned in class that instead of taking the derivative of the likelihood, it's easier to take the derivative of the log-likelihood. Explain why employing this strategy still yields the MLE using the plots above.
+
+
+### MLE Example: Rayleigh Distribution
 
 In class, we derived the MLE for the parameter $\theta$ in the probability model:
 
@@ -61,13 +108,13 @@ $$
 f(x \vert \theta) = \frac{2x}{\theta} e^{-\frac{x^2}{\theta}},
 $$
 
-Here, we graph that likelihood for a sample of $n = 4$ data points.
-
+Here, we graph that likelihood for a sample of $n = 10$ data points.
+ 
 ```{r}
 #| output: false
 
 thetas <- seq(0, 30, length.out = 1000)  ## may need to adjust these limits
-dat <- c(3, 1, 2, 4)
+dat <- c(0.9, 1.5, 2, 4.2, 1.2, 5.2, 6.7, 2.1, 1.5, 2.3)
 
 get_theta_lik <- function(theta, data_vec) {
   ## since there is no "dbinom" equivalent for the unnamed probability model
@@ -88,8 +135,6 @@ ggplot(data = lik_df, aes(x = thetas, y = theta_liks)) +
   labs(y = "Likelihood") +
   theme_minimal()
 ```
-
-
 
 ### MLE Example: Poisson
 
@@ -118,9 +163,88 @@ ggplot(data = lik_df, aes(x = lambdas, y = poisson_liks)) +
   theme_minimal()
 ```
 
+__Exercise__. Many of the most common likelihood functions are unimodal with a single peak (so, there is a single MLE). Draw a sketch of a likelihood function such that using our strategy of finding the MLE (taking the derivative and setting equal to 0) would __fail__.
+
+__Exercise__. Many of the most common likelihood functions are unimodal with a single peak (so, there is a single MLE). Draw another sketch of a likelihood function such that using our strategy of finding the MLE (taking the derivative and setting equal to 0) would __fail__.
+
+### MSE Graph
+
+Here, we again the example where $X_1, X_2, \ldots, X_n$ are independent and identically distributed random variables with a $\text{Unif}(0, \theta)$ distribution. We now have three estimators: $\hat{\theta}_{MOM}$, $\hat{\theta}_{MLE}$, and $\hat{\theta}^*$. We have already derived both the MLE, the MOM estimator, and adjusted the MLE to make a new, unbiased estimator based on the MLE. We also calculated the MSE of each of our three candidate estimators.
+
+Now, we make a plot of the MSE for $1 \leq n \leq 20$.
+
+<!-- theta star is  xmax (n + 1) / n  -->
+<!-- maybe move this plot to a lab-->
+
+```{r}
+#| warning: false
+#| echo: true
+#| output: true
+library(tidyverse)
+n <- 1:20
+theta <- 1
+mse_mom <- (1 / (3 * n)) * theta^2
+mse_mle <- (2 / ((n + 1) * (n + 2))) * theta^2
+mse_mle_unb <- (1 / ((n * (n + 2)))) * theta^2
+
+mse_plot <- tibble::tibble(n, mse_mom, mse_mle, mse_mle_unb) |>
+  pivot_longer(2:4, names_to = "estimator", values_to = "mse")
+ggplot(data = mse_plot, aes(x = n, y = mse)) +
+  geom_line(aes(colour = estimator)) +
+  theme_minimal() +
+  scale_colour_viridis_d()
+```
+
+__Exercise__. How do these results match your theoretical calculations? Which of the three estimators seems most preferable?
+
+__Exercise__. Consider two generic estimators for a parameter $\theta$, and denote these estimators $\hat{\theta}_1$ and $\hat{\theta}_2$. Draw a plot similar to the plot given above ($n$ on x-axis, MSE on y-axis) that shows that $\hat{\theta}_1$ is preferable at some sample sizes but $\hat{\theta}_2$ is preferable for other sample sizes.
+
 ## Lab 2.2: Consistency
 
 In this subsection, we illustrate a couple of consistent estimators.
+
+### Binomial Example
+
+```{r Binomial}
+#| warning: false
+library(tidyverse)
+p <- 1 / 4 ## specify probability of success for the simulation
+
+nsim <- 1000 ## specify range of possible ns (how long we will run the simulation)
+
+compute_binom_estimator <- function(p, nsim) {
+  
+  ## draw nsim different of 0's and 1's
+  bernoulli_draws <- rbinom(n = nsim, size = 1, prob = p)
+
+  ## compute the estimator of p
+  ## nsim different times (once using a sample of 1 bernoulli, then
+  ## using a sample of 2 bernoullis, ....,
+  ##  then using a sample of nsim bernoullis)
+  
+  binom_mle <- map_dbl(1:nsim, ~ sum(bernoulli_draws[1:.x]) / .x)
+
+
+  ## put all three results into a data frame, along with n
+  output_df <- tibble(n = 1:nsim, binom_mle)
+  
+  return(output_df)
+}
+
+plot_df <- compute_binom_estimator(p = p, nsim = nsim)
+
+ggplot(data = plot_df, aes(x = n,
+                             y = binom_mle)) +
+  geom_line() +
+  geom_hline(yintercept = p, linetype = 2) +
+  theme_minimal() +
+  labs(x = "n (Sample Size)",
+       caption = "Dotted Line Shows True Value of p")
+```
+
+__Exercise__. On the plot above, sketch in an estimator that does not exhibit evidence of consistency because the estimator does not seem to be asymptotically unbiased.
+
+__Exercise__. In the provided lab code, change `nsim` to be equal to `50`. Does the MLE look like it converges to the true value of $p$? Explain why the resulting plot is not enough to confirm whether or not the estimator is consistent for $p$.
 
 ### Uniform Example
 
@@ -177,42 +301,9 @@ ggplot(data = plot_long, aes(x = n,
        caption = "Dotted Line Shows True Value of Theta")
 ```
 
-### Binomial Example
+__Exercise__. On the plot above, sketch in an estimator that does not exhibit evidence of consistency because the estimator's asymptotic variance does not seem to go to 0. 
 
-```{r Binomial}
-p <- 1 / 4 ## specify probability of success for the simulation
-
-nsim <- 1000 ## specify range of possible ns (how long we will run the simulation)
-
-compute_binom_estimator <- function(p, nsim) {
-  
-  ## draw nsim different of 0's and 1's
-  bernoulli_draws <- rbinom(n = nsim, size = 1, prob = p)
-
-  ## compute the estimator of p
-  ## nsim different times (once using a sample of 1 bernoulli, then
-  ## using a sample of 2 bernoullis, ....,
-  ##  then using a sample of nsim bernoullis)
-  
-  binom_mle <- map_dbl(1:nsim, ~ sum(bernoulli_draws[1:.x]) / .x)
-
-
-  ## put all three results into a data frame, along with n
-  output_df <- tibble(n = 1:nsim, binom_mle)
-  
-  return(output_df)
-}
-
-plot_df <- compute_binom_estimator(p = p, nsim = nsim)
-
-ggplot(data = plot_df, aes(x = n,
-                             y = binom_mle)) +
-  geom_line() +
-  geom_hline(yintercept = p, linetype = 2) +
-  theme_minimal() +
-  labs(x = "n (Sample Size)",
-       caption = "Dotted Line Shows True Value of p")
-```
+<br>
 
 ## Mini Project 2: A Meaningful Story
 
