@@ -167,6 +167,10 @@ __Exercise__. Many of the most common likelihood functions are unimodal with a s
 
 __Exercise__. Many of the most common likelihood functions are unimodal with a single peak (so, there is a single MLE). Draw another sketch of a likelihood function such that using our strategy of finding the MLE (taking the derivative and setting equal to 0) would __fail__.
 
+## Lab 2.2: MSE Consistency
+
+In this subsection, we illustrate an example visualizing some of the mean square error results we derived in class as well as a couple of consistent estimators.
+
 ### MSE Graph
 
 Here, we again the example where $X_1, X_2, \ldots, X_n$ are independent and identically distributed random variables with a $\text{Unif}(0, \theta)$ distribution. We now have three estimators: $\hat{\theta}_{MOM}$, $\hat{\theta}_{MLE}$, and $\hat{\theta}^*$. We have already derived both the MLE, the MOM estimator, and adjusted the MLE to make a new, unbiased estimator based on the MLE. We also calculated the MSE of each of our three candidate estimators.
@@ -199,11 +203,9 @@ __Exercise__. How do these results match your theoretical calculations? Which of
 
 __Exercise__. Consider two generic estimators for a parameter $\theta$, and denote these estimators $\hat{\theta}_1$ and $\hat{\theta}_2$. Draw a plot similar to the plot given above ($n$ on x-axis, MSE on y-axis) that shows that $\hat{\theta}_1$ is preferable at some sample sizes but $\hat{\theta}_2$ is preferable for other sample sizes.
 
-## Lab 2.2: Consistency
+<br>
 
-In this subsection, we illustrate a couple of consistent estimators.
-
-### Binomial Example
+### Binomial Example Consistency
 
 ```{r Binomial}
 #| warning: false
@@ -246,7 +248,9 @@ __Exercise__. On the plot above, sketch in an estimator that does not exhibit ev
 
 __Exercise__. In the provided lab code, change `nsim` to be equal to `50`. Does the MLE look like it converges to the true value of $p$? Explain why the resulting plot is not enough to confirm whether or not the estimator is consistent for $p$.
 
-### Uniform Example
+<br>
+
+### Uniform Example Consistency
 
 ```{r Uniform}
 #| output: false

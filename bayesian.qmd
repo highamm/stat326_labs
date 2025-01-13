@@ -112,6 +112,20 @@ As discussed in class, the conjugate prior for Poisson data is the Gamma distrib
 
 __Exercise__. Using the coach's information, come up with an informative prior for $\lambda$ with the Gamma distribution. Note that we will have some decisions to make in how to use the coach's information to come up with an informative prior!
 
+```{r}
+#| echo: false
+#| output: false
+alphas <- seq(0.01, 100, length.out = 2000) 
+ks <- alphas / 3
+
+target_prob <- 0.02
+prob_less_2 <- pgamma(2, alphas, ks)
+
+tibble(alphas, ks, prob_less_2) |>
+mutate(close_to_target = abs(prob_less_2 - target_prob)) |>
+filter(close_to_target == min())
+```
+
 A relatively non-informative prior for $\lambda$ is a Gamma distribution with very small values for both $\alpha$ and $k$. Note that, for the gamma distribution, I am replacing $\lambda$ with $k$, so that we are not working with two different $\lambda$'s (since the Poisson also has a parameter called $\lambda$). Using $\alpha = 0.001$ and $k = 0.001$, construct a plot of a relatively non-informative prior for $\lambda$ using the code below.
 
 ```{r}
@@ -124,6 +138,20 @@ ggplot(data = gamma_plot, aes(x = lambda_grid, y = gamma_density)) +
   geom_line() +
   theme_minimal()
 ```
+
+```{r}
+#| echo: false
+#| output: false
+alpha <- 31
+k <- 10.3
+lambda_grid <- seq(0, 5, length.out = 1000)
+gamma_density <- dgamma(lambda_grid, shape = alpha, rate = k)
+gamma_plot <- tibble(lambda_grid, gamma_density)
+ggplot(data = gamma_plot, aes(x = lambda_grid, y = gamma_density)) +
+  geom_line() +
+  theme_minimal()
+```
+
 
 __Exercise__. Based on the plot of the non-informative prior, it's a little difficult to see _why_ this prior is non-informative. However, using what we derived as the posterior distribution for $\lambda$, construct an argument for why a prior of $\alpha = 0.001$ and $k = 0.001$ is a non-informative prior.
 
@@ -154,6 +182,25 @@ goals
 __Exercise__. Using this data and the posterior that we computed in class, figure out the posterior distribution for the goal rate with the non-informative prior and with the informative prior.
 
 __Exercise__. Construct a plot of each of the posterior distributions.
+
+```{r}
+#| echo: false
+#| output: false
+alpha <- 56.001
+k <- 22.001
+lambda_grid <- seq(0, 5, length.out = 1000)
+gamma_density <- dgamma(lambda_grid, shape = alpha, rate = k)
+
+alpha2 <- 87
+k2 <- 32.3
+gamma_density2 <- dgamma(lambda_grid, shape = alpha2, rate = k2)
+
+gamma_plot <- tibble(lambda_grid, gamma_density, gamma_density2)
+ggplot(data = gamma_plot, aes(x = lambda_grid, y = gamma_density)) +
+  geom_line() +
+  geom_line(aes(y = gamma_density2), colour = "darkred") +
+  theme_minimal()
+```
 
 __Exercise__. What are the mean of the prior distribution, the mean of the data, and the mean of the posterior distribution. Which of these numbers must be in between the other two? Conceptually, why does that make sense?
 

@@ -35,7 +35,7 @@ Welcome to STAT 326. The purpose of this course is to strengthen statistical rea
 
 3. Given a probability model, derive an interval estimator for parameter(s) in that model using data. 
 
-4. Explain the difference between a "frequentist approach" to statistics and a "Bayesian approach" to statistics.
+4. Explain the difference between a "frequentist approach" to statistics and a "Bayesian approach" to statistics. Apply a Bayesian approach to analysis to binomial data and to count data.
 
 5. Derive and conduct hypothesis tests about parameters in a probability model using classical statistics tests and simulation-based permutation tests.
 
@@ -60,7 +60,7 @@ There are 1000 total points that can be earned in this course from components de
 
 ## Assessments 
 
-There will be 5 100-point assessments throughout the semester, given on Wednesdays. For each assessment, you are allowed to bring a double-sided sheet of handwritten notes. More details about what you might expect on these assessments will be provided closer to the date of the first assessment.
+There will be 5 100-point assessments throughout the semester, given on Wednesdays. More details about what you might expect on these assessments will be provided closer to the date of the first assessment.
 
 Additionally, 100 points will be given to the average of your highest 4 assessments. Therefore, the total number of points from assessments will be 600 points.
 
@@ -95,7 +95,7 @@ You may not use AI on recap tasks, unless otherwise stated.
 
 ## Final Portfolio
 
-A final portfolio will be assigned near the end of the semester. More details will be provided later, but the total number of points for this final portfolio is 100 points.
+A final portfolio will be assigned near the end of the semester. A component of your final portfolio will be answering some questions about it in person so you should make sure that you are around for our final exam the morning of May 6. More details will be provided later, but the total number of points for this final portfolio is 100 points.
 
 ## Point Allocation
 

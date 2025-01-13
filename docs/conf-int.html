@@ -460,7 +460,7 @@ window.Quarto = {
 <pre><code># A tibble: 1 × 3
   point_est    lb    ub
       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1      10.0  7.58  12.5</code></pre>
+1      12.0  5.23  18.7</code></pre>
 </div>
 </div>
 <p>But, if we want to explore the coverage rate and average interval width, we need to simulate <strong>many</strong> confidence intervals. Below, we <code><a href="https://purrr.tidyverse.org/reference/map.html">map()</a></code> through our function <code>nsim</code> times and bind the results together into a data frame at the end:</p>
@@ -475,18 +475,18 @@ window.Quarto = {
 <span><span class="va">many_ci_df</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 1,000 × 3
-   point_est    lb    ub
-       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
- 1      7.23 -3.29  17.8
- 2     11.7   7.11  16.3
- 3     10.6   3.99  17.1
- 4     10.2   6.67  13.8
- 5      5.58  1.03  10.1
- 6     10.1   2.34  17.8
- 7      8.53  2.74  14.3
- 8      6.64  1.89  11.4
- 9     12.0   5.51  18.4
-10      9.07  3.57  14.6
+   point_est     lb    ub
+       &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
+ 1      9.01  3.62   14.4
+ 2      7.38  0.903  13.9
+ 3      9.30  2.27   16.3
+ 4      9.14  4.78   13.5
+ 5     12.3   1.01   23.6
+ 6     12.9  10.6    15.2
+ 7     12.3   8.55   16.0
+ 8      7.86 -2.37   18.1
+ 9     10.5   4.26   16.7
+10     10.3   4.09   16.6
 # ℹ 990 more rows</code></pre>
 </div>
 </div>
@@ -505,7 +505,7 @@ window.Quarto = {
 <pre><code># A tibble: 1 × 2
   avg_width coverage_rate
       &lt;dbl&gt;         &lt;dbl&gt;
-1      11.8         0.952</code></pre>
+1      11.6         0.946</code></pre>
 </div>
 </div>
 <p><strong>Exercise</strong>. Suppose that you increase the value of <code>sigma</code> in the code above and obtain new values for the <code>avg_width</code> and for <code>coverage_rate</code>. How do you expect each of these quantities to change with the new <code>sigma</code>?</p>
@@ -693,7 +693,7 @@ window.Quarto = {
 <span></span>
 <span><span class="fu">generate_one_bootprop</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1734694</code></pre>
+<pre><code>[1] 0.1615646</code></pre>
 </div>
 </div>
 <p>We can then map over the function to obtain <code>B</code> bootstrap proportions and put these bootstrap proportions into a data frame:</p>

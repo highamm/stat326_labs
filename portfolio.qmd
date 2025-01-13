@@ -2,10 +2,10 @@
 
 Information about the final portfolio will be added here.
 
-- homework "review": one problem from each section?
+<!-- - homework "review": one problem from each section? -->
 
-- reflective statement 
+<!-- - reflective statement  -->
 
-- remote presentation on articles?
+<!-- - remote presentation on articles? -->
 
-- in-class assessment of articles student has read
+<!-- - in-class assessment of articles student has read -->

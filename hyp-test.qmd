@@ -2,17 +2,18 @@
 
 **Goals**:
 
-* 
-* 
-* 
+* run a permutation test on a couple of different data sets to assess two competing hypotheses.
+* use empirical power to compute the approximate power of a test under a few different assumptions.
 
 ## Lab 5.1: Permutation Tests
+
+In this lab, we use permutation tests to assess whether there is evidence that the mean delay times of two different airlines are different and whether there is evidence that completing a difficult task with a dog in the room lowers stress level, on average.
 
 ### Example 1: Flight Data
 
 Consider again the flight delay data. Here, we will consider whether or not there is statistical evidence that the mean delay of United Airlines is different than the mean delay of American Airlines. 
 
-Recal that, for a permutation test, we do not need to assume that the underlying populations follow a normal distribution. However, if we are interested in testing a difference in means, we do need to assume that the populations have the same variance and the same shape (but perhaps may have a different center).
+Recall that, for a permutation test, we do not need to assume that the underlying populations follow a normal distribution. However, if we are interested in testing a difference in means, we do need to assume that the populations have the same variance and the same shape (but perhaps may have a different center). Note that, if we have a randomized experiment, then these assumptions can be relaxed.
 
 First, we obtain some summary statistics and make a plot of the data:
 
@@ -45,7 +46,7 @@ teststat <- delay_df |> group_by(Carrier) |>
 ## teststat is united delay mean minus american airlines mean
 ```
 
-Under the null hypothesis, the distribution of delays is identical for american and united airlines. To reshuffle that delay values randomly across both airlines we can use the code below:
+Under the null hypothesis, the distribution of delays is identical for american and united airlines. To reshuffle the delay values randomly across both airlines we can use the code below:
 
 ```{r}
 delay_df |>
@@ -87,18 +88,20 @@ diff_means <- map_dbl(1:n_perm, \(i) get_delay_perm_diff())
 null_df <- tibble(diff_means)
 
 ggplot(data = null_df, aes(x = diff_means)) +
-  geom_histogram(colour = "black", fill = "white", bins = 15) +
+  geom_histogram(colour = "orange4", fill = "orange2", bins = 15) +
   theme_minimal()
 ```
 
 __Exercise__. Write a 1-2 sentence interpretation of what this null distribution means in context of the problem.
 
+__Exercise__. Write a 1-2 sentence explanation on what the code above is doing.
+
 Now, let's add where our test statistic from our data is on the graph:
 
 ```{r}
 ggplot(data = null_df, aes(x = diff_means)) +
-  geom_histogram(colour = "black", fill = "white", bins = 15) +
-  geom_vline(xintercept = teststat, colour = "red") +
+  geom_histogram(colour = "orange4", fill = "orange2", bins = 15) +
+  geom_vline(xintercept = teststat, colour = "grey75") +
   theme_minimal()
 ```
 
@@ -118,83 +121,111 @@ __Exercise__. Why are there two different summations in the code above to get th
 
 __Exercise__. Write a conclusion in context of the problem for this hypothesis test.
 
-### Example 2: Spruce
-
-(might change this so that the resulting p-value is not so small).
-
-In the Black Spruce Case Study in Section 1.9, seedlings were planted in plots that were either subject to competition (from other plants) or not. Use the data set `Spruce` to conduct a test to see if there is evidence that the mean growth (`Ht.change`) differs for the two treatments (`C = Competition` or `NC = No Competition`).
+### Example 2: Stress Levels
 
 ```{r}
-## print as a tibble
-spruce_df <- Spruce |> as_tibble()
+#| echo: false
+#| warning: false
+#| output: false
+#| eval: false
+library(tidyverse)
+stress_df <- read_csv(here::here("data/stress.csv")) |> 
+  filter(group == "P" | group == "C")
+write_csv(stress_df, here::here("data/stress_dog.csv"))
+```
+
+Many of you took our probability exams with the adorable Mipha providing moral support throughout the exam. There has actually been formal research assessing whether being in the presence of a dog can have beneficial effects for people. In one such study, researchers recruited 30 women who were self-proclaimed dog lovers. They randomly assigned 15 women to a stressful task alone (control: `C`) and 15 women to do a stressful task with a pet dog present (pet: `P`). The response variable is heart rate during the task, with higher heart rates presumed to mean that the there was more stress during the task.
+
+Use the code below to read in the data and do some brief data exploration:
+
+```{r}
+library(tidyverse)
+stress_df <- read_csv("https://raw.githubusercontent.com/highamm/stat326_labs/master/data/stress_dog.csv")
 ```
 
 __Data Exploration__:
 
 ```{r}
-ggplot(data = spruce_df, aes(x = Competition, y = Ht.change, fill = Competition)) +
+ggplot(data = stress_df, aes(x = group, y = rate, fill = group)) +
   geom_boxplot(outlier.shape = 8) +
   theme_minimal() +
   scale_fill_viridis_d(begin = 0.4, end = 0.9) +
   guides(fill = "none")
 
-spruce_df |> group_by(Competition) |>
-  summarise(mean = mean(Ht.change),
+stress_df |> group_by(group) |>
+  summarise(mean = mean(rate),
             n = n())
 ```
+
+__Exercise__. What do you find from your data exploration plot? What are the observed sample mean heart rates for each group?
+
+<br>
 
 __Test Statistic__:
 
 ```{r}
 # From our summary statistics
-teststat <- spruce_df |> group_by(Competition) |>
-  summarise(mean = mean(Ht.change),
+teststat <- stress_df |> group_by(group) |>
+  summarise(mean = mean(rate),
             n = n()) |>
   pull(mean) |>
   diff()
-## NC minus C
+## Pet minus Control
 teststat
 ```
 
-__Create Null Distribution__:
+__Exercise__: Modify the following code to create the null distribution for a test that the mean heart rate is different in each of the two groups.
 
 ```{r}
-get_spruce_perm_diff <- function() {
-  spruce_df |>
-    mutate(height_perm = sample(Ht.change,
-                                size = nrow(spruce_df), replace = FALSE)) |>
-    relocate(height_perm) |>
-    group_by(Competition) |>
-    summarise(mean_height_perm = mean(height_perm)) |>
-    pull(mean_height_perm) |>
+#| eval: false
+get_stress_perm_diff <- function() {
+  stress_df |>
+    mutate(rate_perm = sample(____,
+                                size = nrow(____), replace = FALSE)) |>
+    relocate(rate_perm) |>
+    group_by(_______) |>
+    summarise(mean_rate_perm = mean(rate_perm)) |>
+    pull(mean_rate_perm) |>
     diff()
 }
-get_spruce_perm_diff()
+get_rate_perm_diff()
 
 n_perm <- 5000
-diff_means <- map_dbl(1:n_perm, \(i) get_spruce_perm_diff())
+diff_means <- map_dbl(1:n_perm, \(i) get_rate_perm_diff())
 null_df <- tibble(diff_means)
 
 ggplot(data = null_df, aes(x = diff_means)) +
-  geom_histogram(colour = "black", fill = "white", bins = 15) +
+  geom_histogram(colour = "skyblue4", fill = "skyblue1", bins = 15) +
   ## add test stat to null dist
-  geom_vline(xintercept = teststat, colour = "red") +
+  geom_vline(xintercept = teststat, colour = "purple") +
   theme_minimal()
 ```
 
-__Calculate a p-value__:
+__Exercise__. Calculate a p-value for the test.
 
 ```{r}
+#| echo: false
+#| output: false
 (sum(diff_means > abs(teststat)) + sum(diff_means < -abs(teststat)) + 1) / (n_perm + 1)
 ```
 
 __Exercise__. Write a conclusion in context of the problem for this hypothesis test.
 
+<br>
+
+## Lab 5.2 Empirical Power
+
+should have enough time for this
+
+a short simulation study on the effects of different alt. hypothesis parameter values and the effects of sample size on power.
+
+<br>
+
 ## Mini Project 5: Advantages and Drawbacks of Using p-values
 
 __AI Usage__: You may not use generative AI for this project in any way.
 
-__Collaboration__: For this project, you may not work with other students in the class.
+__Collaboration__: For this project, you may work with a self-contained group of 3. Keep in mind that you may not work with the same person on more than one mini-project (so, if you worked with a student on the first, third, or fourth mini-projects as a partner or in a small group, you may not work with that person on this project). Finally, if working with a partner or in a group of 3, your write-ups must be distinct and written individually (so you can chat with your group about what you might say, but you should never copy a group member's response).
 
 __Statement of Integrity__: At the top of your submission, copy and paste the following statement and type your name, certifying that you have followed all AI and collaboration rules for this mini-project.
 
