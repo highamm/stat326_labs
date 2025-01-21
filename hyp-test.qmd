@@ -213,11 +213,122 @@ __Exercise__. Write a conclusion in context of the problem for this hypothesis t
 
 <br>
 
-## Lab 5.2 Empirical Power
+## Lab 5.2: Empirical Power
 
-should have enough time for this
+We have seen some examples of how to compute power analytically, but, as the statistical test we use gets more complex, computing power becomes much more tedious (and sometimes is not even possible to compute exactly). In these scenarios, people often use __empirical power__ to approximate the power of a test for a few different sample sizes or for a few different values of the alternative hypothesis. 
 
-a short simulation study on the effects of different alt. hypothesis parameter values and the effects of sample size on power.
+In this lab, we will suppose that a researcher wants to assess whether there is evidence that a new drug helps to lower blood pressure. Note that "clinical trials" is a branch of statistics that deals with how to analyze medical data. Do note that clinical trials are more complex than what we are dealing with here, often with many different "phases" and specialized types of analysis.
+
+Recruiting subjects in clinical trials is quite expensive! So the researcher would like to limit costs as much as possible, while still recruiting enough subjects to be able to assess whether the drug is effective. 
+
+In particular, the researcher can apply for funding to either recruit 50 participants (25 for a group that receives the new drug and 25 for a group that receives a placebo), to recruit 200 participants (100 in each group), or to recruit 500 participants (250 in each group). 
+
+Finally, the researcher wants to be fairly certain that they do not falsely reject the null hypothesis so they will only reject the null hypothesis if they get a p-value that is less than or equal to $\alpha = 0.01$, and they would like to conduct a two-sided test that assumes the population variances are equal.
+
+__Exercise__. What else do we need to know from the researcher to conduct a power analysis? There are actually a couple of things that we need!
+
+__Exercise__. What are the null and alternative hypotheses for this test?
+
+<br>
+
+Once we have that information, use the following code to compute empirical power. 
+
+```{r}
+library(tidyverse)
+delta <- 5
+sigma <- 20
+n <- 10 ## sample size for one group 
+
+compute_twosamp_pval <- function(delta, sigma, n) {
+  samp1 <- rnorm(n, 0, sigma)
+  samp2 <- rnorm(n, 0 + delta, sigma)
+  
+  test_out <- t.test(samp1, samp2, var.equal = TRUE)
+  p_val <- test_out$p.value
+  
+  return(p_val)
+}
+
+compute_twosamp_pval(delta = delta,
+                   sigma = sigma,
+                   n = n)
+```
+
+__Exercise__. What does `delta` represent in the code above?
+
+__Exercise__. We do not know the true mean blood pressures $\mu_1$ and $\mu_2$ in the population. So why are we "allowed" to set one of the true means to be `0` in the code above?
+
+__Exercise__. If we were to repeatedly run the function many times and we were to set `delta` to be equal to 0, what proportion of p-values would you expect to be less than 0.01?
+
+Now, to calculate empirical power, we need to map through the function we wrote a large number of times, recording a p-value for the test each time we run the function.
+
+```{r}
+n_sim <- 10000
+p_vals <- map_dbl(1:n_sim, \(i) compute_twosamp_pval(delta = delta, sigma = sigma, n = n))
+```
+
+And, we will reject the null hypothesis if the p-value we observe from one of the simulations is less than `alpha`:
+
+```{r}
+emp_power_df <- tibble(p_vals) |>
+  mutate(reject = if_else(p_vals <= 0.01,
+                          true = 1, false = 0))
+emp_power_df
+```
+
+__Exercise__. How would you calculate empirical power from the previous data frame? (you do not have to answer this in terms of specific `R` code but should instead give the idea of how you would calculate empirical power here).
+
+__Exercise__ Before conducting the power analysis, what do you expect to happen to the power as we increase the sample size? What about as we increase the (absolute) value of `delta`? What about if we increase `alpha`?
+
+__Exercise__. Before conducting the analysis, it might also be nice to check and make sure that our function is working as we would expect. Run the code below. Is the empirical power what you expect? Why or why not?
+
+```{r}
+#| echo: true
+#| output: false
+p_vals_0_25 <- map_dbl(1:n_sim,
+                       \(i) compute_twosamp_pval(delta = 0,
+                                               sigma = sigma, n = 25))
+
+p_val_df <- tibble(p_vals_0_25) |>
+  mutate(across(everything(), ~ if_else(.x <= 0.01,
+                                        true = 1, false = 0)))
+p_val_df
+p_val_df |>
+  summarise(across(everything(), ~ mean(.x)))
+```
+
+__Exercise__. Modify the mapping code above to use the values that the researcher was most interested in. You should have __6__ different settings that you need to map through (3 sample sizes times 2 values of delta). Additionally, you can use the code immediately above this exercise (with `across()`) to calculate the empirical power for all 6 settings at once.
+
+```{r}
+#| echo: false
+#| output: false
+
+p_vals_5_25 <- map_dbl(1:n_sim,
+                  \(i) compute_twosamp_pval(delta = 5, sigma = sigma, n = 25))
+p_vals_5_100 <- map_dbl(1:n_sim,
+                  \(i) compute_twosamp_pval(delta = 5, sigma = sigma, n = 100))
+
+p_vals_5_250 <- map_dbl(1:n_sim,
+                  \(i) compute_twosamp_pval(delta = 5, sigma = sigma, n = 250))
+
+p_vals_10_25 <- map_dbl(1:n_sim,
+                  \(i) compute_twosamp_pval(delta = 10, sigma = sigma, n = 25))
+p_vals_10_100 <- map_dbl(1:n_sim,
+                  \(i) compute_twosamp_pval(delta = 10, sigma = sigma, n = 100))
+
+p_vals_10_250 <- map_dbl(1:n_sim,
+                  \(i) compute_twosamp_pval(delta = 10, sigma = sigma, n = 250))
+
+reject_or_not_df <- tibble(p_vals_5_25, p_vals_5_100, p_vals_5_250,
+                           p_vals_10_25, p_vals_10_100, p_vals_10_250) |>
+  mutate(across(everything(), ~ if_else(.x <= 0.01,
+                          true = 1, false = 0)))
+
+reject_or_not_df |>
+  summarise(across(everything(), ~ mean(.x)))
+```
+
+__Exercise__. Write a one paragraph summary of your results to the researcher. What should their sample size be? Does the choice of sample size that you recommend depend on the value of `delta`?
 
 <br>
 

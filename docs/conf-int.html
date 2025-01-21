@@ -460,7 +460,7 @@ window.Quarto = {
 <pre><code># A tibble: 1 × 3
   point_est    lb    ub
       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1      12.0  5.23  18.7</code></pre>
+1      12.1 0.972  23.1</code></pre>
 </div>
 </div>
 <p>But, if we want to explore the coverage rate and average interval width, we need to simulate <strong>many</strong> confidence intervals. Below, we <code><a href="https://purrr.tidyverse.org/reference/map.html">map()</a></code> through our function <code>nsim</code> times and bind the results together into a data frame at the end:</p>
@@ -477,16 +477,16 @@ window.Quarto = {
 <pre><code># A tibble: 1,000 × 3
    point_est     lb    ub
        &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
- 1      9.01  3.62   14.4
- 2      7.38  0.903  13.9
- 3      9.30  2.27   16.3
- 4      9.14  4.78   13.5
- 5     12.3   1.01   23.6
- 6     12.9  10.6    15.2
- 7     12.3   8.55   16.0
- 8      7.86 -2.37   18.1
- 9     10.5   4.26   16.7
-10     10.3   4.09   16.6
+ 1     10.6   5.11   16.1
+ 2     10.5  -0.616  21.6
+ 3      6.57 -0.334  13.5
+ 4      9.59  2.49   16.7
+ 5     10.6   2.55   18.7
+ 6     11.7   8.84   14.5
+ 7     11.0   7.44   14.5
+ 8     11.2   3.60   18.8
+ 9      9.78  5.70   13.9
+10     13.4   9.84   16.9
 # ℹ 990 more rows</code></pre>
 </div>
 </div>
@@ -505,7 +505,7 @@ window.Quarto = {
 <pre><code># A tibble: 1 × 2
   avg_width coverage_rate
       &lt;dbl&gt;         &lt;dbl&gt;
-1      11.6         0.946</code></pre>
+1      11.7         0.952</code></pre>
 </div>
 </div>
 <p><strong>Exercise</strong>. Suppose that you increase the value of <code>sigma</code> in the code above and obtain new values for the <code>avg_width</code> and for <code>coverage_rate</code>. How do you expect each of these quantities to change with the new <code>sigma</code>?</p>
@@ -693,7 +693,7 @@ window.Quarto = {
 <span></span>
 <span><span class="fu">generate_one_bootprop</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1615646</code></pre>
+<pre><code>[1] 0.1258503</code></pre>
 </div>
 </div>
 <p>We can then map over the function to obtain <code>B</code> bootstrap proportions and put these bootstrap proportions into a data frame:</p>

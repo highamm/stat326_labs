@@ -215,7 +215,7 @@ window.Quarto = {
   <li><a href="#example-2-stress-levels" id="toc-example-2-stress-levels" class="nav-link" data-scroll-target="#example-2-stress-levels">Example 2: Stress Levels</a></li>
   </ul>
 </li>
-  <li><a href="#lab-5.2-empirical-power" id="toc-lab-5.2-empirical-power" class="nav-link" data-scroll-target="#lab-5.2-empirical-power">Lab 5.2 Empirical Power</a></li>
+  <li><a href="#lab-5.2-empirical-power" id="toc-lab-5.2-empirical-power" class="nav-link" data-scroll-target="#lab-5.2-empirical-power">Lab 5.2: Empirical Power</a></li>
   <li><a href="#mini-project-5-advantages-and-drawbacks-of-using-p-values" id="toc-mini-project-5-advantages-and-drawbacks-of-using-p-values" class="nav-link" data-scroll-target="#mini-project-5-advantages-and-drawbacks-of-using-p-values">Mini Project 5: Advantages and Drawbacks of Using p-values</a></li>
   </ul></nav>
     </div>
@@ -292,16 +292,16 @@ window.Quarto = {
 <pre><code># A tibble: 4,029 × 11
    delay_perm Carrier Delay    ID FlightNo Destination DepartTime Day   Month
         &lt;int&gt; &lt;fct&gt;   &lt;int&gt; &lt;int&gt;    &lt;int&gt; &lt;fct&gt;       &lt;fct&gt;      &lt;fct&gt; &lt;fct&gt;
- 1          8 UA         -1     1      403 DEN         4-8am      Fri   May  
- 2         63 UA        102     2      405 DEN         8-Noon     Fri   May  
- 3        149 UA          4     3      409 DEN         4-8pm      Fri   May  
- 4         -6 UA         -2     4      511 ORD         8-Noon     Fri   May  
- 5          0 UA         -3     5      667 ORD         4-8am      Fri   May  
- 6        190 UA          0     6      669 ORD         4-8am      Fri   May  
+ 1         -5 UA         -1     1      403 DEN         4-8am      Fri   May  
+ 2         -4 UA        102     2      405 DEN         8-Noon     Fri   May  
+ 3          0 UA          4     3      409 DEN         4-8pm      Fri   May  
+ 4         -1 UA         -2     4      511 ORD         8-Noon     Fri   May  
+ 5         -2 UA         -3     5      667 ORD         4-8am      Fri   May  
+ 6        116 UA          0     6      669 ORD         4-8am      Fri   May  
  7         -7 UA         -5     7      673 ORD         8-Noon     Fri   May  
  8         -6 UA          0     8      677 ORD         8-Noon     Fri   May  
- 9         -1 UA         10     9      679 ORD         Noon-4pm   Fri   May  
-10         -5 UA         60    10      681 ORD         Noon-4pm   Fri   May  
+ 9         -7 UA         10     9      679 ORD         Noon-4pm   Fri   May  
+10          0 UA         60    10      681 ORD         Noon-4pm   Fri   May  
 # ℹ 4,019 more rows
 # ℹ 2 more variables: FlightLength &lt;int&gt;, Delayed30 &lt;fct&gt;</code></pre>
 </div>
@@ -317,7 +317,7 @@ window.Quarto = {
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">mean_delay_perm</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -1.231701</code></pre>
+<pre><code>[1] 2.86713</code></pre>
 </div>
 </div>
 <p>Rerun the code chunk above a few times to get a few different mean differences under different permutations. The big idea is that a large number of these mean differences will form the null distribution for the difference in sample means (if there really is no difference in the underlying population distributions).</p>
@@ -367,7 +367,7 @@ window.Quarto = {
 <div class="cell">
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">diff_means</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">teststat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">diff_means</span> <span class="op">&lt;</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">teststat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">n_perm</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.00039992</code></pre>
+<pre><code>[1] 0.00019996</code></pre>
 </div>
 </div>
 <p><strong>Exercise</strong>. What is the alternative hypothesis that the p-value is testing?</p>
@@ -458,9 +458,87 @@ dbl (1): rate
 <p><strong>Exercise</strong>. Calculate a p-value for the test.</p>
 <p><strong>Exercise</strong>. Write a conclusion in context of the problem for this hypothesis test.</p>
 <p><br></p>
-</section></section><section id="lab-5.2-empirical-power" class="level2"><h2 class="anchored" data-anchor-id="lab-5.2-empirical-power">Lab 5.2 Empirical Power</h2>
-<p>should have enough time for this</p>
-<p>a short simulation study on the effects of different alt. hypothesis parameter values and the effects of sample size on power.</p>
+</section></section><section id="lab-5.2-empirical-power" class="level2"><h2 class="anchored" data-anchor-id="lab-5.2-empirical-power">Lab 5.2: Empirical Power</h2>
+<p>We have seen some examples of how to compute power analytically, but, as the statistical test we use gets more complex, computing power becomes much more tedious (and sometimes is not even possible to compute exactly). In these scenarios, people often use <strong>empirical power</strong> to approximate the power of a test for a few different sample sizes or for a few different values of the alternative hypothesis.</p>
+<p>In this lab, we will suppose that a researcher wants to assess whether there is evidence that a new drug helps to lower blood pressure. Note that “clinical trials” is a branch of statistics that deals with how to analyze medical data. Do note that clinical trials are more complex than what we are dealing with here, often with many different “phases” and specialized types of analysis.</p>
+<p>Recruiting subjects in clinical trials is quite expensive! So the researcher would like to limit costs as much as possible, while still recruiting enough subjects to be able to assess whether the drug is effective.</p>
+<p>In particular, the researcher can apply for funding to either recruit 50 participants (25 for a group that receives the new drug and 25 for a group that receives a placebo), to recruit 200 participants (100 in each group), or to recruit 500 participants (250 in each group).</p>
+<p>Finally, the researcher wants to be fairly certain that they do not falsely reject the null hypothesis so they will only reject the null hypothesis if they get a p-value that is less than or equal to <span class="math inline">\(\alpha = 0.01\)</span>, and they would like to conduct a two-sided test that assumes the population variances are equal.</p>
+<p><strong>Exercise</strong>. What else do we need to know from the researcher to conduct a power analysis? There are actually a couple of things that we need!</p>
+<p><strong>Exercise</strong>. What are the null and alternative hypotheses for this test?</p>
+<p><br></p>
+<p>Once we have that information, use the following code to compute empirical power.</p>
+<div class="cell">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="va">delta</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
+<span><span class="va">sigma</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
+<span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span> <span class="co">## sample size for one group </span></span>
+<span></span>
+<span><span class="va">compute_twosamp_pval</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">delta</span>, <span class="va">sigma</span>, <span class="va">n</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">samp1</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">0</span>, <span class="va">sigma</span><span class="op">)</span></span>
+<span>  <span class="va">samp2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="va">n</span>, <span class="fl">0</span> <span class="op">+</span> <span class="va">delta</span>, <span class="va">sigma</span><span class="op">)</span></span>
+<span>  </span>
+<span>  <span class="va">test_out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html">t.test</a></span><span class="op">(</span><span class="va">samp1</span>, <span class="va">samp2</span>, var.equal <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span>  <span class="va">p_val</span> <span class="op">&lt;-</span> <span class="va">test_out</span><span class="op">$</span><span class="va">p.value</span></span>
+<span>  </span>
+<span>  <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">p_val</span><span class="op">)</span></span>
+<span><span class="op">}</span></span>
+<span></span>
+<span><span class="fu">compute_twosamp_pval</span><span class="op">(</span>delta <span class="op">=</span> <span class="va">delta</span>,</span>
+<span>                   sigma <span class="op">=</span> <span class="va">sigma</span>,</span>
+<span>                   n <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 0.6771448</code></pre>
+</div>
+</div>
+<p><strong>Exercise</strong>. What does <code>delta</code> represent in the code above?</p>
+<p><strong>Exercise</strong>. We do not know the true mean blood pressures <span class="math inline">\(\mu_1\)</span> and <span class="math inline">\(\mu_2\)</span> in the population. So why are we “allowed” to set one of the true means to be <code>0</code> in the code above?</p>
+<p><strong>Exercise</strong>. If we were to repeatedly run the function many times and we were to set <code>delta</code> to be equal to 0, what proportion of p-values would you expect to be less than 0.01?</p>
+<p>Now, to calculate empirical power, we need to map through the function we wrote a large number of times, recording a p-value for the test each time we run the function.</p>
+<div class="cell">
+<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n_sim</span> <span class="op">&lt;-</span> <span class="fl">10000</span></span>
+<span><span class="va">p_vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_sim</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu">compute_twosamp_pval</span><span class="op">(</span>delta <span class="op">=</span> <span class="va">delta</span>, sigma <span class="op">=</span> <span class="va">sigma</span>, n <span class="op">=</span> <span class="va">n</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>And, we will reject the null hypothesis if the p-value we observe from one of the simulations is less than <code>alpha</code>:</p>
+<div class="cell">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">emp_power_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">p_vals</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>reject <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">p_vals</span> <span class="op">&lt;=</span> <span class="fl">0.01</span>,</span>
+<span>                          true <span class="op">=</span> <span class="fl">1</span>, false <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">emp_power_df</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10,000 × 2
+    p_vals reject
+     &lt;dbl&gt;  &lt;dbl&gt;
+ 1 0.299        0
+ 2 0.120        0
+ 3 0.145        0
+ 4 0.0267       0
+ 5 0.277        0
+ 6 0.472        0
+ 7 0.279        0
+ 8 0.351        0
+ 9 0.00943      1
+10 0.361        0
+# ℹ 9,990 more rows</code></pre>
+</div>
+</div>
+<p><strong>Exercise</strong>. How would you calculate empirical power from the previous data frame? (you do not have to answer this in terms of specific <code>R</code> code but should instead give the idea of how you would calculate empirical power here).</p>
+<p><strong>Exercise</strong> Before conducting the power analysis, what do you expect to happen to the power as we increase the sample size? What about as we increase the (absolute) value of <code>delta</code>? What about if we increase <code>alpha</code>?</p>
+<p><strong>Exercise</strong>. Before conducting the analysis, it might also be nice to check and make sure that our function is working as we would expect. Run the code below. Is the empirical power what you expect? Why or why not?</p>
+<div class="cell">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p_vals_0_25</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_sim</span>,</span>
+<span>                       \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu">compute_twosamp_pval</span><span class="op">(</span>delta <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>                                               sigma <span class="op">=</span> <span class="va">sigma</span>, n <span class="op">=</span> <span class="fl">25</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p_val_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">p_vals_0_25</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span>, <span class="op">~</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">.x</span> <span class="op">&lt;=</span> <span class="fl">0.01</span>,</span>
+<span>                                        true <span class="op">=</span> <span class="fl">1</span>, false <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">p_val_df</span></span>
+<span><span class="va">p_val_df</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p><strong>Exercise</strong>. Modify the mapping code above to use the values that the researcher was most interested in. You should have <strong>6</strong> different settings that you need to map through (3 sample sizes times 2 values of delta). Additionally, you can use the code immediately above this exercise (with <code><a href="https://dplyr.tidyverse.org/reference/across.html">across()</a></code>) to calculate the empirical power for all 6 settings at once.</p>
+<p><strong>Exercise</strong>. Write a one paragraph summary of your results to the researcher. What should their sample size be? Does the choice of sample size that you recommend depend on the value of <code>delta</code>?</p>
 <p><br></p>
 </section><section id="mini-project-5-advantages-and-drawbacks-of-using-p-values" class="level2"><h2 class="anchored" data-anchor-id="mini-project-5-advantages-and-drawbacks-of-using-p-values">Mini Project 5: Advantages and Drawbacks of Using p-values</h2>
 <p><strong>AI Usage</strong>: You may not use generative AI for this project in any way.</p>

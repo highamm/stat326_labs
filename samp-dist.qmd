@@ -404,7 +404,7 @@ __Statement of Integrity__: At the top of your submission, copy and paste the fo
 
 On our second day of class, we conducted a simulation to investigate the sampling distribution of the sample minimum ($Y_{min}$) when taking samples of $n = 5$ observations from a Normal($\mu = 10, \sigma^2 = 4$) population. For your recap of that day, you investigated the sampling distribution of the sample maximum ($Y_{max}$) from the same population (using the same sample size).
 
-Many of you noticed that, in this situation, SE($Y_{min} \approx$ SE($Y_{max}$), and many of you provided great explanations of why you thought that was true. The purpose of this mini-project assignment is for you to investigate this phenomenon to see if it is a result that holds more generally.
+Many of you noticed that, in this situation, SE($Y_{min}$) $\approx$ SE($Y_{max}$), and many of you provided great explanations of why you thought that was true. The purpose of this mini-project assignment is for you to investigate this phenomenon to see if it is a result that holds more generally.
 
 __Instructions__: Use the class code as a guide to carry out simulations of the sampling distributions of the sample minimum ($Y_{min}$) and the sample maximum ($Y_{max}$) when taking samples of size $n = 5$ from different populations (specified below). Fill in the summary table in this document and use it answer the questions that follow.
 
@@ -414,7 +414,7 @@ Below are some things that you can use to help make your graphs and table in Qua
 
 ```{r}
 #| warning: false
-
+library(tidyverse)
 ## create population graphs
 
 norm_df <- tibble(x = seq(3, 17, length.out = 1000),
@@ -469,11 +469,9 @@ Below is the Quarto text used to generate the table above:
 
 Finally, in addition to your code, graphs, and table, you should answer the following questions:
 
-1. Briefly discuss/describe situations when each of the above population models (Normal, Uniform, Exponential, and Beta) should be used (that is, what type of data could they model). 
+1. Briefly summarise how $\text{SE}(Y_{min})$ and $\text{SE}(Y_{max})$ compare for each of the above population models. Can you propose a general rule or result for how $\text{SE}(Y_{min})$ and $\text{SE}(Y_{max})$ compare for a given population? 
 
-2. Briefly summarise how $\text{SE}(Y_{min})$ and $\text{SE}(Y_{max})$ compare for each of the above population models. Can you propose a general rule or result for how $\text{SE}(Y_{min})$ and $\text{SE}(Y_{max})$ compare for a given population? 
-
-3. Choose either the third (Exponential) or fourth (Beta) population model from the table above. For that population model, find the pdf of $Y_{min}$⁡  and $Y_{max}$, and, for each of those random variables, sketch the pdfs and find the expected value and standard error. What do you notice about how your answers compare to the simulated answers? Some code is given below to help you plot the pdfs in `R`:
+2. Choose either the third (Exponential) or fourth (Beta) population model from the table above. For that population model, find the pdf of $Y_{min}$⁡  and $Y_{max}$, and, for each of those random variables, sketch the pdfs and use integration to calculate the expected value and standard error. What do you notice about how your answers compare to the simulated answers? Some code is given below to help you plot the pdfs in `R`:
 
 ```{r}
 #| output: false
