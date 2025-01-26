@@ -138,7 +138,7 @@ ggplot(data = lik_df, aes(x = thetas, y = theta_liks)) +
 
 ### MLE Example: Poisson
 
-Finally, consider the likelihood of various values of $\lambda$, where the random sample of data is from a Poisson probability model.
+Consider the likelihood of various values of $\lambda$, where the random sample of data is from a Poisson probability model.
 
 ```{r}
 dat <- c(8, 0, 4, 9, 1)
@@ -167,7 +167,101 @@ __Exercise__. Many of the most common likelihood functions are unimodal with a s
 
 __Exercise__. Many of the most common likelihood functions are unimodal with a single peak (so, there is a single MLE). Draw another sketch of a likelihood function such that using our strategy of finding the MLE (taking the derivative and setting equal to 0) would __fail__.
 
-## Lab 2.2: MSE Consistency
+## Lab 2.2 MLEs in Practice
+
+Most of the estimators that you have seen in other STAT courses are MLEs, including the estimators for slope coefficients in linear regression models. While it is harder to derive these "by hand" due to the amount of algebra, let's look at some code that computes the likelihood of the simple linear regression model: $Y_i = \beta_0 + \beta_1x_i + \epsilon_i$, where $\epsilon_i \sim N(0, \sigma^2)$ and are each independent.
+
+__Exercise__. In simple linear regression, $\beta_0$, $\beta_1$ and $x_i$ are all considered to be "constants" while $Y_i$ and $\epsilon_i$ are considered to be random variables. Using rules of expectation and variance, find the expectation and variance of $Y_i$. Additionally, what is the distribution of $Y_i$ (we proved this back in Probability: see if you can remember!).
+
+__Exercise__. Write out the likelihood for $\beta_0$, $\beta_1$, and $\sigma$ given our observed data $y_i$ and $x_i$.
+
+__Exercise__. If we were to find our estimators by hand, how many derivatives of the likelihood would we need to take?
+
+Suppose that we want to fit a linear regression model using the number of graduating majors from our department as the response variable and year as the predictor variable from 2002 through 2022. The data has been put into a `tibble` and has been plotted below:
+
+```{r}
+year <- 2:22
+mcss_majors <- c(15, 27, 30, 29, 45, 38, 35, 39, 49, 25, 40, 38, 53, 38, 52, 62, 37, 72, 65, 50, 55)
+mcss_df <- tibble(year, mcss_majors)
+ggplot(data = mcss_df, aes(x = year, y = mcss_majors)) +
+  geom_point() +
+  theme_minimal()
+```
+
+The following is some code that I modified from ChatGPT to compute the likelihood for values of $\beta_0$, $\beta_1$, $\sigma^2$ and a given vector of a predictor variable `x` and a vector of a response variable `y`.
+
+```{r}
+# Function to compute the likelihood for simple linear regression
+compute_likelihood <- function(intercept, slope, sigma, x, y) {
+  # Number of observations
+  n <- length(y)
+  
+  # Compute predicted values
+  y_pred <- intercept + slope * x
+  
+  # Compute residuals
+  residuals <- y - y_pred
+  
+  # Compute the likelihood
+  likelihood <- (1 / (sqrt(2 * pi) * sigma)^n) * 
+                exp(-sum(residuals^2) / (2 * sigma^2))
+  
+  return(likelihood)
+}
+
+# Compute likelihood once
+compute_likelihood(intercept = 20, slope = 2, sigma = 7,
+                                 x = mcss_df |> pull(year),
+                                 y = mcss_df |> pull(mcss_majors))
+```
+
+And then this is my own code (ChatGPT failed or I misused it somehow) to loop through the `compute_likelihood()` function to compute the likelihood for a grid of possible values for $\beta_0$, $\beta_1$, and $\sigma$.
+
+```{r}
+## set up grid of possible values
+intercept <- seq(20, 23, length.out = 50)
+slope <- seq(1.6, 1.9, length.out = 50)
+sigma <- seq(8.5, 9.5, length.out = 50)
+
+grid <- expand_grid(intercept, slope, sigma)
+
+liks <- pmap_dbl(grid, ~ compute_likelihood(..1, ..2, ..3,
+                                            x = mcss_df |> pull(year),
+                                            y = mcss_df |> pull(mcss_majors)))
+
+likelihood_df <- grid |> mutate(likelihood = liks)
+likelihood_df
+```
+
+```{r}
+ggplot(data = likelihood_df, aes(x = intercept, y = slope)) +
+  geom_tile(aes(fill = likelihood)) +
+  scale_fill_viridis_c() +
+  theme_minimal()
+```
+
+__Exercise__. Write a short summary of what the above code is doing. What is represented in a single row of `likelihood_df`?
+
+__Exercise__. Based on the plot of the likelihood of the various slope and intercept combinations, what does it look like the approximate maximum likelihood estimates are?
+
+__Exercise__. Run the following code to find the row in the grid that has the maximum likelihood.
+
+```{r}
+likelihood_df |> filter(likelihood == max(likelihood))
+```
+
+Based on our grid search, what are the maximum likelihood estimates for $\beta_0$, $\beta_1$ and $\sigma$ in this example?
+
+__Exercise__. Now, fit the linear regression model using `lm()`:
+
+```{r}
+lm(mcss_majors ~ year, data = mcss_df) |>
+  summary()
+```
+
+Locate the estimates for $\beta_0$, $\beta_1$ and $\sigma$ in the output. Do all of these estimates match what we found with our grid search to find the estimates that give the maximum likelihood?
+
+## Lab 2.3: MSE Consistency
 
 In this subsection, we illustrate an example visualizing some of the mean square error results we derived in class as well as a couple of consistent estimators.
 

@@ -293,15 +293,15 @@ window.Quarto = {
    delay_perm Carrier Delay    ID FlightNo Destination DepartTime Day   Month
         &lt;int&gt; &lt;fct&gt;   &lt;int&gt; &lt;int&gt;    &lt;int&gt; &lt;fct&gt;       &lt;fct&gt;      &lt;fct&gt; &lt;fct&gt;
  1         -5 UA         -1     1      403 DEN         4-8am      Fri   May  
- 2         -4 UA        102     2      405 DEN         8-Noon     Fri   May  
- 3          0 UA          4     3      409 DEN         4-8pm      Fri   May  
- 4         -1 UA         -2     4      511 ORD         8-Noon     Fri   May  
- 5         -2 UA         -3     5      667 ORD         4-8am      Fri   May  
- 6        116 UA          0     6      669 ORD         4-8am      Fri   May  
- 7         -7 UA         -5     7      673 ORD         8-Noon     Fri   May  
- 8         -6 UA          0     8      677 ORD         8-Noon     Fri   May  
- 9         -7 UA         10     9      679 ORD         Noon-4pm   Fri   May  
-10          0 UA         60    10      681 ORD         Noon-4pm   Fri   May  
+ 2          2 UA        102     2      405 DEN         8-Noon     Fri   May  
+ 3         -5 UA          4     3      409 DEN         4-8pm      Fri   May  
+ 4         -2 UA         -2     4      511 ORD         8-Noon     Fri   May  
+ 5        131 UA         -3     5      667 ORD         4-8am      Fri   May  
+ 6         11 UA          0     6      669 ORD         4-8am      Fri   May  
+ 7         -5 UA         -5     7      673 ORD         8-Noon     Fri   May  
+ 8          0 UA          0     8      677 ORD         8-Noon     Fri   May  
+ 9         -4 UA         10     9      679 ORD         Noon-4pm   Fri   May  
+10        -10 UA         60    10      681 ORD         Noon-4pm   Fri   May  
 # ℹ 4,019 more rows
 # ℹ 2 more variables: FlightLength &lt;int&gt;, Delayed30 &lt;fct&gt;</code></pre>
 </div>
@@ -317,7 +317,7 @@ window.Quarto = {
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">mean_delay_perm</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 2.86713</code></pre>
+<pre><code>[1] -0.1119301</code></pre>
 </div>
 </div>
 <p>Rerun the code chunk above a few times to get a few different mean differences under different permutations. The big idea is that a large number of these mean differences will form the null distribution for the difference in sample means (if there really is no difference in the underlying population distributions).</p>
@@ -488,7 +488,7 @@ dbl (1): rate
 <span>                   sigma <span class="op">=</span> <span class="va">sigma</span>,</span>
 <span>                   n <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.6771448</code></pre>
+<pre><code>[1] 0.4173366</code></pre>
 </div>
 </div>
 <p><strong>Exercise</strong>. What does <code>delta</code> represent in the code above?</p>
@@ -507,18 +507,18 @@ dbl (1): rate
 <span><span class="va">emp_power_df</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10,000 × 2
-    p_vals reject
-     &lt;dbl&gt;  &lt;dbl&gt;
- 1 0.299        0
- 2 0.120        0
- 3 0.145        0
- 4 0.0267       0
- 5 0.277        0
- 6 0.472        0
- 7 0.279        0
- 8 0.351        0
- 9 0.00943      1
-10 0.361        0
+   p_vals reject
+    &lt;dbl&gt;  &lt;dbl&gt;
+ 1 0.157       0
+ 2 0.729       0
+ 3 0.264       0
+ 4 0.145       0
+ 5 0.248       0
+ 6 0.445       0
+ 7 0.227       0
+ 8 0.0816      0
+ 9 0.339       0
+10 0.102       0
 # ℹ 9,990 more rows</code></pre>
 </div>
 </div>
