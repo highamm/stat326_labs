@@ -173,13 +173,15 @@ Most of the estimators that you have seen in other STAT courses are MLEs, includ
 
 __Exercise__. In simple linear regression, $\beta_0$, $\beta_1$ and $x_i$ are all considered to be "constants" while $Y_i$ and $\epsilon_i$ are considered to be random variables. Using rules of expectation and variance, find the expectation and variance of $Y_i$. Additionally, what is the distribution of $Y_i$ (we proved this back in Probability: see if you can remember!).
 
-__Exercise__. Write out the likelihood for $\beta_0$, $\beta_1$, and $\sigma$ given our observed data $y_i$ and $x_i$.
+__Exercise__. Write out the likelihood for $\beta_0$, $\beta_1$, and $\sigma$ given our observed data $y_1, y_2, \ldots y_n$ and $x_1, x_2, \ldots, x_n$.
 
 __Exercise__. If we were to find our estimators by hand, how many derivatives of the likelihood would we need to take?
 
 Suppose that we want to fit a linear regression model using the number of graduating majors from our department as the response variable and year as the predictor variable from 2002 through 2022. The data has been put into a `tibble` and has been plotted below:
 
 ```{r}
+#| warning: false
+library(tidyverse)
 year <- 2:22
 mcss_majors <- c(15, 27, 30, 29, 45, 38, 35, 39, 49, 25, 40, 38, 53, 38, 52, 62, 37, 72, 65, 50, 55)
 mcss_df <- tibble(year, mcss_majors)
@@ -382,7 +384,7 @@ plot_df <- compute_unif_estimators(theta = theta, nsim = nsim)
 ```
 
 ```{r}
-#| output: false
+#| output: true
 ## do some DATA/STAT 234-type Work to make the plot
 
 plot_long <- plot_df |> pivot_longer(cols = starts_with("unif"),
