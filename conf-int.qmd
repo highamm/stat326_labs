@@ -648,7 +648,7 @@ generate_one_boot <- function(statistic = "diff") {
   
   ## FILL IN MISSING PIECES
 
-  ## fill in piece to obtain one bootstrap sample mean for aa flights
+  boot_samp_aa <- sample(aa_vec, size = length(aa_vec), replace = TRUE)
 
   ## fill in piece to obtain one bootstrap sample mean for ua flights
   
@@ -678,6 +678,12 @@ B <- 5000
 bootdiff_vec <- map_dbl(1:B, \(i) generate_one_boot(statistic = "diff"))
 
 bootdiff_df <- tibble(bootdiff_vec)
+
+ggplot(data = bootdiff_df, aes(x = bootdiff_vec)) +
+  geom_histogram(colour = "black", fill = "mediumseagreen", bins = 14) +
+  geom_vline(xintercept = diffmeans,
+             colour = "grey", linewidth = 2) +
+  theme_minimal()
 ```
 
 ```{r}
