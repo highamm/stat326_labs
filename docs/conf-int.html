@@ -460,7 +460,7 @@ window.Quarto = {
 <pre><code># A tibble: 1 × 3
   point_est    lb    ub
       &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-1      12.9  3.72  22.0</code></pre>
+1      11.9  6.51  17.4</code></pre>
 </div>
 </div>
 <p>But, if we want to explore the coverage rate and average interval width, we need to simulate <strong>many</strong> confidence intervals. Below, we <code><a href="https://purrr.tidyverse.org/reference/map.html">map()</a></code> through our function <code>nsim</code> times and bind the results together into a data frame at the end:</p>
@@ -477,16 +477,16 @@ window.Quarto = {
 <pre><code># A tibble: 1,000 × 3
    point_est     lb    ub
        &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
- 1      9.38  6.65  12.1 
- 2      4.14 -0.172  8.45
- 3      7.52  0.578 14.5 
- 4      7.00  4.54   9.47
- 5      9.81  2.06  17.6 
- 6     11.4   5.02  17.7 
- 7     11.1   7.01  15.3 
- 8      9.63  3.56  15.7 
- 9     10.7   4.48  17.0 
-10      9.59  4.56  14.6 
+ 1      8.09  2.16  14.0 
+ 2     14.9   7.91  21.8 
+ 3      9.81  2.44  17.2 
+ 4      9.04  3.09  15.0 
+ 5      9.24  6.01  12.5 
+ 6     13.7   8.29  19.0 
+ 7      8.89  4.64  13.1 
+ 8     10.6   5.66  15.5 
+ 9      4.48 -0.734  9.70
+10      6.04 -2.32  14.4 
 # ℹ 990 more rows</code></pre>
 </div>
 </div>
@@ -505,7 +505,7 @@ window.Quarto = {
 <pre><code># A tibble: 1 × 2
   avg_width coverage_rate
       &lt;dbl&gt;         &lt;dbl&gt;
-1      11.6         0.953</code></pre>
+1      11.7         0.957</code></pre>
 </div>
 </div>
 <p><strong>Exercise</strong>. Suppose that you increase the value of <code>sigma</code> in the code above and obtain new values for the <code>avg_width</code> and for <code>coverage_rate</code>. How do you expect each of these quantities to change with the new <code>sigma</code>?</p>
@@ -537,7 +537,7 @@ window.Quarto = {
 </ul>
 <p><strong>Exercise</strong>. Consider the third and fourth study designs in the previous exercise on textbooks. Which study design do you think will yield a more narrow confidence interval for the difference in mean textbook price?</p>
 <p><br></p>
-<p>Next, we suppose that we have two populations and that we are interested in constructing a confidence interval for the difference in population means, <span class="math inline">\(\mu_1 - mu_2\)</span>. To do so, we will not assume that the underlying variances of each population are equal and will instead use The Welch-Satterthwaite approximation to degrees of freedom for the <span class="math inline">\(t^*\)</span> value to create the confidence interval.</p>
+<p>Next, we suppose that we have two populations and that we are interested in constructing a confidence interval for the difference in population means, <span class="math inline">\(\mu_1 - \mu_2\)</span>. To do so, we will not assume that the underlying variances of each population are equal and will instead use The Welch-Satterthwaite approximation to degrees of freedom for the <span class="math inline">\(t^*\)</span> value to create the confidence interval.</p>
 <div class="cell">
 <div class="sourceCode" id="cb27"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n1</span> <span class="op">&lt;-</span> <span class="fl">15</span>         <span class="co"># size of first sample</span></span>
 <span><span class="va">mu1</span> <span class="op">&lt;-</span> <span class="fl">20</span>        <span class="co"># mean of first population</span></span>
@@ -693,7 +693,7 @@ window.Quarto = {
 <span></span>
 <span><span class="fu">generate_one_bootprop</span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.1445578</code></pre>
+<pre><code>[1] 0.1496599</code></pre>
 </div>
 </div>
 <p>We can then map over the function to obtain <code>B</code> bootstrap proportions and put these bootstrap proportions into a data frame:</p>
@@ -758,7 +758,7 @@ window.Quarto = {
 <span>  </span>
 <span>  <span class="co">## FILL IN MISSING PIECES</span></span>
 <span></span>
-<span>  <span class="co">## fill in piece to obtain one bootstrap sample mean for aa flights</span></span>
+<span>  <span class="va">boot_samp_aa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">aa_vec</span>, size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">aa_vec</span><span class="op">)</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span>  <span class="co">## fill in piece to obtain one bootstrap sample mean for ua flights</span></span>
 <span>  </span>
@@ -783,7 +783,13 @@ window.Quarto = {
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">B</span> <span class="op">&lt;-</span> <span class="fl">5000</span></span>
 <span><span class="va">bootdiff_vec</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">B</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu">generate_one_boot</span><span class="op">(</span>statistic <span class="op">=</span> <span class="st">"diff"</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
-<span><span class="va">bootdiff_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">bootdiff_vec</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span><span class="va">bootdiff_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">bootdiff_vec</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">bootdiff_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">bootdiff_vec</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="st">"black"</span>, fill <span class="op">=</span> <span class="st">"mediumseagreen"</span>, bins <span class="op">=</span> <span class="fl">14</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_vline</a></span><span class="op">(</span>xintercept <span class="op">=</span> <span class="va">diffmeans</span>,</span>
+<span>             colour <span class="op">=</span> <span class="st">"grey"</span>, linewidth <span class="op">=</span> <span class="fl">2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Exercise</strong>. Compute relevant quantities of interest to help create a 90% percentile-based bootstrap confidence interval for the true mean difference in delay times and the true mean ratio of delay times.</p>
 <p><strong>Exercise</strong>. Interpret your two bootstrap confidence intervals in context of the problem.</p>

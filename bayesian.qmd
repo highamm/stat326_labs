@@ -72,7 +72,7 @@ __Exercise__. Suppose that, instead of choosing an informative prior via the app
 
 target_mean <- ____
 
-alphas <-  seq(0.1, 60, length.out = 500)
+alphas <- seq(0.1, 60, length.out = 500)
 betas <- 
 
 param_df <- tibble(alphas, betas)

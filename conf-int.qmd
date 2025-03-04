@@ -304,7 +304,7 @@ __Exercise__. Consider the third and fourth study designs in the previous exerci
 
 <br>
 
-Next, we suppose that we have two populations and that we are interested in constructing a confidence interval for the difference in population means, $\mu_1 - mu_2$. To do so, we will not assume that the underlying variances of each population are equal and will instead use The Welch-Satterthwaite approximation to degrees of freedom for the $t^*$ value to create the confidence interval.
+Next, we suppose that we have two populations and that we are interested in constructing a confidence interval for the difference in population means, $\mu_1 - \mu_2$. To do so, we will not assume that the underlying variances of each population are equal and will instead use The Welch-Satterthwaite approximation to degrees of freedom for the $t^*$ value to create the confidence interval.
 
 ```{r}
 #| output: false
