@@ -48,11 +48,50 @@ ggplot(data = prior_plot, aes(x = ps, y = density, colour = prior_type)) +
   labs(x = "p")
 ```
 
-__Exercise__. With our informative prior and our non-informative prior, we will now collect some data to include in our Bayesian analysis. After you collect data, derive the posterior distribution of $p$ using both the non-informative prior and the informative prior. Then, adjust the code above to produce a plot of your two posterior distributions.
+__Exercise__. With our informative prior and our non-informative prior, we will now collect some data to include in our Bayesian analysis. After you collect data, derive the posterior distribution of $p$ using both the non-informative prior and the informative prior. Then, adjust the code below to produce a plot of your two posterior distributions.
 
 ```{r}
-## put code to make your posterior distribution plot here
+#| warning: false
+#| output: false
+library(tidyverse)
+ps <- seq(0, 1, length.out = 1000)
+
+informative_alpha <- 2 ## CHANGE THIS TO YOUR ALPHA
+informative_beta <- 4  ## CHANGE THIS TO YOUR BETA
+
+noninformative_alpha <- 1
+noninformative_beta <- 1
+
+informative_prior <- dbeta(ps, informative_alpha,
+                           informative_beta)
+noninformative_prior <- dbeta(ps,
+                              noninformative_alpha, noninformative_beta)
+
+## CHANGE THESE
+informative_alpha_post <- 4
+informative_beta_post <- 4
+informative_post <- dbeta(ps, informative_alpha_post,
+                          informative_beta_post)
+
+## CHANGE THESE
+noninformative_alpha_post <- 2
+noninformative_beta_post <- 2
+noninformative_post <- dbeta(ps, noninformative_alpha_post,
+                             noninformative_beta_post)
+
+plot_df <- tibble(ps, informative_prior, noninformative_prior,
+                     informative_post, noninformative_post) |>
+  pivot_longer(2:5, names_to = "distribution", values_to = "density") |>
+  separate(distribution, into = c("prior_type", "distribution"))
+
+ggplot(data = plot_df, aes(x = ps, y = density, colour = prior_type,
+                           linetype = distribution)) +
+  geom_line() +
+  scale_colour_viridis_d(end = 0.9) +
+  theme_minimal() +
+  labs(x = "p")
 ```
+
 
 __Exercise__. For each posterior, compute the posterior mean (the Bayes estimate).
 
@@ -147,6 +186,7 @@ k <- 10.3
 lambda_grid <- seq(0, 5, length.out = 1000)
 gamma_density <- dgamma(lambda_grid, shape = alpha, rate = k)
 gamma_plot <- tibble(lambda_grid, gamma_density)
+
 ggplot(data = gamma_plot, aes(x = lambda_grid, y = gamma_density)) +
   geom_line() +
   theme_minimal()
@@ -181,7 +221,33 @@ goals
 
 __Exercise__. Using this data and the posterior that we computed in class, figure out the posterior distribution for the goal rate with the non-informative prior and with the informative prior.
 
-__Exercise__. Construct a plot of each of the posterior distributions.
+__Exercise__. Use the code below to construct a plot of each of the posterior distributions.
+
+
+```{r}
+#| echo: true
+#| output: false
+
+## CHANGE THESE!!
+alpha <- 1
+k <- 1
+lambda_grid <- seq(0, 5, length.out = 1000)
+gamma_density_noninf <- dgamma(lambda_grid, shape = alpha, rate = k)
+
+## CHANGE THESE!!
+alpha2 <- 2
+k2 <- 2
+gamma_density_inf <- dgamma(lambda_grid, shape = alpha2, rate = k2)
+
+gamma_plot <- tibble(lambda_grid, gamma_density_noninf, gamma_density_inf) |>
+  pivot_longer(starts_with("gamma"), names_to = "distribution", values_to = "density")
+
+ggplot(data = gamma_plot, aes(x = lambda_grid, y = density)) +
+  geom_line(aes(colour = distribution)) +
+  scale_colour_viridis_d(end = 0.9) +
+  theme_minimal() +
+  labs(x = "lambda")
+```
 
 ```{r}
 #| echo: false

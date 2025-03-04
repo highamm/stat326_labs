@@ -284,9 +284,45 @@ window.Quarto = {
 </div>
 </div>
 </div>
-<p><strong>Exercise</strong>. With our informative prior and our non-informative prior, we will now collect some data to include in our Bayesian analysis. After you collect data, derive the posterior distribution of <span class="math inline">\(p\)</span> using both the non-informative prior and the informative prior. Then, adjust the code above to produce a plot of your two posterior distributions.</p>
+<p><strong>Exercise</strong>. With our informative prior and our non-informative prior, we will now collect some data to include in our Bayesian analysis. After you collect data, derive the posterior distribution of <span class="math inline">\(p\)</span> using both the non-informative prior and the informative prior. Then, adjust the code below to produce a plot of your two posterior distributions.</p>
 <div class="cell">
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## put code to make your posterior distribution plot here</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span><span class="va">ps</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, length.out <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">informative_alpha</span> <span class="op">&lt;-</span> <span class="fl">2</span> <span class="co">## CHANGE THIS TO YOUR ALPHA</span></span>
+<span><span class="va">informative_beta</span> <span class="op">&lt;-</span> <span class="fl">4</span>  <span class="co">## CHANGE THIS TO YOUR BETA</span></span>
+<span></span>
+<span><span class="va">noninformative_alpha</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span><span class="va">noninformative_beta</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span></span>
+<span><span class="va">informative_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Beta.html">dbeta</a></span><span class="op">(</span><span class="va">ps</span>, <span class="va">informative_alpha</span>,</span>
+<span>                           <span class="va">informative_beta</span><span class="op">)</span></span>
+<span><span class="va">noninformative_prior</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Beta.html">dbeta</a></span><span class="op">(</span><span class="va">ps</span>,</span>
+<span>                              <span class="va">noninformative_alpha</span>, <span class="va">noninformative_beta</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## CHANGE THESE</span></span>
+<span><span class="va">informative_alpha_post</span> <span class="op">&lt;-</span> <span class="fl">4</span></span>
+<span><span class="va">informative_beta_post</span> <span class="op">&lt;-</span> <span class="fl">4</span></span>
+<span><span class="va">informative_post</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Beta.html">dbeta</a></span><span class="op">(</span><span class="va">ps</span>, <span class="va">informative_alpha_post</span>,</span>
+<span>                          <span class="va">informative_beta_post</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## CHANGE THESE</span></span>
+<span><span class="va">noninformative_alpha_post</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
+<span><span class="va">noninformative_beta_post</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
+<span><span class="va">noninformative_post</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/Beta.html">dbeta</a></span><span class="op">(</span><span class="va">ps</span>, <span class="va">noninformative_alpha_post</span>,</span>
+<span>                             <span class="va">noninformative_beta_post</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">plot_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">ps</span>, <span class="va">informative_prior</span>, <span class="va">noninformative_prior</span>,</span>
+<span>                     <span class="va">informative_post</span>, <span class="va">noninformative_post</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="fl">2</span><span class="op">:</span><span class="fl">5</span>, names_to <span class="op">=</span> <span class="st">"distribution"</span>, values_to <span class="op">=</span> <span class="st">"density"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/separate.html">separate</a></span><span class="op">(</span><span class="va">distribution</span>, into <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"prior_type"</span>, <span class="st">"distribution"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">plot_df</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">ps</span>, y <span class="op">=</span> <span class="va">density</span>, colour <span class="op">=</span> <span class="va">prior_type</span>,</span>
+<span>                           linetype <span class="op">=</span> <span class="va">distribution</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_colour_viridis_d</a></span><span class="op">(</span>end <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"p"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Exercise</strong>. For each posterior, compute the posterior mean (the Bayes estimate).</p>
 <p><strong>Exercise</strong>. For each posterior, compute a 95% credible interval for <span class="math inline">\(p\)</span>.</p>
@@ -359,7 +395,28 @@ window.Quarto = {
 <span><span class="va">goals</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p><strong>Exercise</strong>. Using this data and the posterior that we computed in class, figure out the posterior distribution for the goal rate with the non-informative prior and with the informative prior.</p>
-<p><strong>Exercise</strong>. Construct a plot of each of the posterior distributions.</p>
+<p><strong>Exercise</strong>. Use the code below to construct a plot of each of the posterior distributions.</p>
+<div class="cell">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## CHANGE THESE!!</span></span>
+<span><span class="va">alpha</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span><span class="va">k</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span><span class="va">lambda_grid</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">5</span>, length.out <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span>
+<span><span class="va">gamma_density_noninf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html">dgamma</a></span><span class="op">(</span><span class="va">lambda_grid</span>, shape <span class="op">=</span> <span class="va">alpha</span>, rate <span class="op">=</span> <span class="va">k</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co">## CHANGE THESE!!</span></span>
+<span><span class="va">alpha2</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
+<span><span class="va">k2</span> <span class="op">&lt;-</span> <span class="fl">2</span></span>
+<span><span class="va">gamma_density_inf</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html">dgamma</a></span><span class="op">(</span><span class="va">lambda_grid</span>, shape <span class="op">=</span> <span class="va">alpha2</span>, rate <span class="op">=</span> <span class="va">k2</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">gamma_plot</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">lambda_grid</span>, <span class="va">gamma_density_noninf</span>, <span class="va">gamma_density_inf</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/starts_with.html">starts_with</a></span><span class="op">(</span><span class="st">"gamma"</span><span class="op">)</span>, names_to <span class="op">=</span> <span class="st">"distribution"</span>, values_to <span class="op">=</span> <span class="st">"density"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span>data <span class="op">=</span> <span class="va">gamma_plot</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>x <span class="op">=</span> <span class="va">lambda_grid</span>, y <span class="op">=</span> <span class="va">density</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_path.html">geom_line</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span>colour <span class="op">=</span> <span class="va">distribution</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_viridis.html">scale_colour_viridis_d</a></span><span class="op">(</span>end <span class="op">=</span> <span class="fl">0.9</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggtheme.html">theme_minimal</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"lambda"</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
 <p><strong>Exercise</strong>. What are the mean of the prior distribution, the mean of the data, and the mean of the posterior distribution. Which of these numbers must be in between the other two? Conceptually, why does that make sense?</p>
 <p><strong>Exercise</strong>. With each posterior, compute a 95% credible interval for <span class="math inline">\(\lambda\)</span>, the rate that the women’s hockey team scores goals.</p>
 <p><strong>Exercise</strong>. Interpret one of the credible intervals in context of the problem.</p>
