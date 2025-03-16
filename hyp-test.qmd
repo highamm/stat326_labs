@@ -213,7 +213,102 @@ __Exercise__. Write a conclusion in context of the problem for this hypothesis t
 
 <br>
 
-## Lab 5.2: Empirical Power
+## Lab 5.2: Asymptotic LRTs in Practice
+
+<!-- alternative example -->
+
+In this lab, we will see an example of how an asymptotic likelihood ratio test is used in practice. 
+
+### Logistic Regression Example
+
+If you took STAT 213, recall the logistic regression model that you used in that course:
+
+$Y_i \sim \text{Bernoulli}(p_i)$, where each $Y_i$ is independent of all other $Y_j$ but the $Y_i$ are not identically distributed. Instead, each $Y_i$ is allowed to have its own probability of success, $p_i$, which can be modeled as:
+
+$$
+\text{E}(Y_i) = p_i = \frac{\text{exp}(\beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_k x_{ki})}{1 + \text{exp}(\beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_k x_{ki})},
+$$
+
+where $x_{1i}, x_{2i}, \ldots, x_{ki}$ are possible predictor variables for the probability of success.
+
+__Recall__: For what type of response variable was logistic regression an appropriate model?
+
+__Recall__: What values is the quantity $\frac{\text{exp}(\beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_k x_{ki})}{1 + \text{exp}(\beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_k x_{ki})}$ bounded by?
+
+
+Consider the following data set on survival of passengers aboard the Titanic. 
+
+```{r}
+#| warning: false
+#| echo: true
+library(tidyverse)
+
+titanic_df <- read_csv("https://raw.githubusercontent.com/highamm/stat326_labs/master/data/titanic.csv",
+                       col_types = list(Pclass = col_factor())) |>
+  filter(!is.na(Age) & !is.na(Sex)) |>
+  mutate(Pclass = fct_recode(Pclass,
+                             "1st" = "1",
+                             "2nd" = "2",
+                             "3rd" = "3"))
+titanic_df |> slice(1:3) |>
+  dplyr::select(Survived, Pclass, Name, Sex, Age) |>
+  pander::pander()
+```
+
+__Exercise__. Suppose that we want to build a logistic regression model with `Survived` (a `1` is survived and `0` is died) as the response variable and `Age` and `Sex` as predictors. We want to test whether there is an association of `Age` and whether or not a passenger survived (after accounting for the effects of `Sex`.
+
+a. Write out the logistic regression model with Age and Sex as predictors.
+
+b. Write the null hypothesis for our hypothesis test.
+
+c. Write both the "null model" and the "alternative model."
+
+d. What is the value of maximum likelihood under the null model? We will start by writing the likelihood function, assuming that the null model is true.
+
+e. What is the maximum likelihood under the alternative model? We will start by writing the likelihood function, assuming that the alternative model is true.
+
+Now, we have reached a point where the calculations have become a bit too unweildy. So, we will let `R` calculate the maximum likelihoods of these two models. `R` only has functionality to return the __log likelihood__ using the `logLik()` function from a fitted model, so, we will backtransform the log likelihood using `exp()` to obtain the maximum likelihood for each family of models.
+
+First, for the "null model" that does not include `Age`:
+
+```{r}
+titanic_null <- glm(Survived ~ Sex,
+                    data = titanic_df, family = "binomial")
+logLik(titanic_null) |> exp() |> as.numeric()
+```
+
+Now, we obtain the value of the likelihood maximized under the alternative model (that does include `Age`):
+
+```{r}
+titanic_alt <- glm(Survived ~ Sex + Age,
+                    data = titanic_df, family = "binomial")
+logLik(titanic_alt) |> exp() |> as.numeric()
+```
+
+```{r}
+#| echo: false
+#| output: false
+
+lik_ratio <-  9.716759e-164 / 1.409022e-163
+lik_stat <- -2 * log(lik_ratio)
+1 - pchisq(lik_stat, 1)
+```
+
+f. Using these values for the maximum likelihoods of each model, calculate the test statistic for the asymptotic likelihood ratio test.
+
+g. Using the test statistic, calculate the p-value for the test.
+
+h. Examine the output from the alternative model below. Can you locate the p-value we just calculated?
+
+```{r}
+broom::tidy(titanic_alt)
+```
+
+```{r}
+summary(titanic_alt)
+```
+
+## Lab 5.3: Empirical Power
 
 We have seen some examples of how to compute power analytically, but, as the statistical test we use gets more complex, computing power becomes much more tedious (and sometimes is not even possible to compute exactly). In these scenarios, people often use __empirical power__ to approximate the power of a test for a few different sample sizes or for a few different values of the alternative hypothesis. 
 
@@ -346,7 +441,7 @@ __Statement of Integrity__: At the top of your submission, copy and paste the fo
 
 For this final mini-project, you will read an editorial published in _The American Statistician_ and respond to the questions below. You will find a pdf of the editorial on Canvas.
 
-First, read through the first six sections of the editorial titled _Moving to a World Beyond 'p<0.05'_ by Wasserstein, Schirm, and Lazar published in _The American Statistician_ in 2019 as the introduction to a special issue about p-values. I strongly encourage you to read the first six sections at least twice before you attempt to respond to the questions that appear below. This mini-project will be graded, primarily, on how thoughtfully you respond to these questions.
+First, read through the first six sections of the editorial titled _Moving to a World Beyond 'p < 0.05'_ by Wasserstein, Schirm, and Lazar published in _The American Statistician_ in 2019 as the introduction to a special issue about p-values. I strongly encourage you to read the first six sections at least twice before you attempt to respond to the questions that appear below. This mini-project will be graded, primarily, on how thoughtfully you respond to these questions.
 
 __Submission__: Upload your typed responses to these questions to the assignment in Canvas by the deadline. 
 

@@ -215,7 +215,13 @@ window.Quarto = {
   <li><a href="#example-2-stress-levels" id="toc-example-2-stress-levels" class="nav-link" data-scroll-target="#example-2-stress-levels">Example 2: Stress Levels</a></li>
   </ul>
 </li>
-  <li><a href="#lab-5.2-empirical-power" id="toc-lab-5.2-empirical-power" class="nav-link" data-scroll-target="#lab-5.2-empirical-power">Lab 5.2: Empirical Power</a></li>
+  <li>
+<a href="#lab-5.2-asymptotic-lrts-in-practice" id="toc-lab-5.2-asymptotic-lrts-in-practice" class="nav-link" data-scroll-target="#lab-5.2-asymptotic-lrts-in-practice">Lab 5.2: Asymptotic LRTs in Practice</a>
+  <ul class="collapse">
+<li><a href="#logistic-regression-example" id="toc-logistic-regression-example" class="nav-link" data-scroll-target="#logistic-regression-example">Logistic Regression Example</a></li>
+  </ul>
+</li>
+  <li><a href="#lab-5.3-empirical-power" id="toc-lab-5.3-empirical-power" class="nav-link" data-scroll-target="#lab-5.3-empirical-power">Lab 5.3: Empirical Power</a></li>
   <li><a href="#mini-project-5-advantages-and-drawbacks-of-using-p-values" id="toc-mini-project-5-advantages-and-drawbacks-of-using-p-values" class="nav-link" data-scroll-target="#mini-project-5-advantages-and-drawbacks-of-using-p-values">Mini Project 5: Advantages and Drawbacks of Using p-values</a></li>
   </ul></nav>
     </div>
@@ -292,16 +298,16 @@ window.Quarto = {
 <pre><code># A tibble: 4,029 × 11
    delay_perm Carrier Delay    ID FlightNo Destination DepartTime Day   Month
         &lt;int&gt; &lt;fct&gt;   &lt;int&gt; &lt;int&gt;    &lt;int&gt; &lt;fct&gt;       &lt;fct&gt;      &lt;fct&gt; &lt;fct&gt;
- 1         -8 UA         -1     1      403 DEN         4-8am      Fri   May  
- 2          0 UA        102     2      405 DEN         8-Noon     Fri   May  
- 3         -5 UA          4     3      409 DEN         4-8pm      Fri   May  
- 4         -9 UA         -2     4      511 ORD         8-Noon     Fri   May  
- 5          4 UA         -3     5      667 ORD         4-8am      Fri   May  
- 6         74 UA          0     6      669 ORD         4-8am      Fri   May  
- 7         -6 UA         -5     7      673 ORD         8-Noon     Fri   May  
- 8          4 UA          0     8      677 ORD         8-Noon     Fri   May  
- 9          7 UA         10     9      679 ORD         Noon-4pm   Fri   May  
-10         -2 UA         60    10      681 ORD         Noon-4pm   Fri   May  
+ 1         29 UA         -1     1      403 DEN         4-8am      Fri   May  
+ 2        182 UA        102     2      405 DEN         8-Noon     Fri   May  
+ 3         -7 UA          4     3      409 DEN         4-8pm      Fri   May  
+ 4         71 UA         -2     4      511 ORD         8-Noon     Fri   May  
+ 5         -7 UA         -3     5      667 ORD         4-8am      Fri   May  
+ 6         -6 UA          0     6      669 ORD         4-8am      Fri   May  
+ 7         -5 UA         -5     7      673 ORD         8-Noon     Fri   May  
+ 8          0 UA          0     8      677 ORD         8-Noon     Fri   May  
+ 9         -6 UA         10     9      679 ORD         Noon-4pm   Fri   May  
+10         11 UA         60    10      681 ORD         Noon-4pm   Fri   May  
 # ℹ 4,019 more rows
 # ℹ 2 more variables: FlightLength &lt;int&gt;, Delayed30 &lt;fct&gt;</code></pre>
 </div>
@@ -317,7 +323,7 @@ window.Quarto = {
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">mean_delay_perm</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] -1.044044</code></pre>
+<pre><code>[1] -1.609485</code></pre>
 </div>
 </div>
 <p>Rerun the code chunk above a few times to get a few different mean differences under different permutations. The big idea is that a large number of these mean differences will form the null distribution for the difference in sample means (if there really is no difference in the underlying population distributions).</p>
@@ -367,7 +373,7 @@ window.Quarto = {
 <div class="cell">
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">diff_means</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">teststat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">diff_means</span> <span class="op">&lt;</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">teststat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">n_perm</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.00039992</code></pre>
+<pre><code>[1] 0.00019996</code></pre>
 </div>
 </div>
 <p><strong>Exercise</strong>. What is the alternative hypothesis that the p-value is testing?</p>
@@ -458,7 +464,142 @@ dbl (1): rate
 <p><strong>Exercise</strong>. Calculate a p-value for the test.</p>
 <p><strong>Exercise</strong>. Write a conclusion in context of the problem for this hypothesis test.</p>
 <p><br></p>
-</section></section><section id="lab-5.2-empirical-power" class="level2"><h2 class="anchored" data-anchor-id="lab-5.2-empirical-power">Lab 5.2: Empirical Power</h2>
+</section></section><section id="lab-5.2-asymptotic-lrts-in-practice" class="level2"><h2 class="anchored" data-anchor-id="lab-5.2-asymptotic-lrts-in-practice">Lab 5.2: Asymptotic LRTs in Practice</h2>
+<!-- alternative example -->
+<p>In this lab, we will see an example of how an asymptotic likelihood ratio test is used in practice.</p>
+<section id="logistic-regression-example" class="level3"><h3 class="anchored" data-anchor-id="logistic-regression-example">Logistic Regression Example</h3>
+<p>If you took STAT 213, recall the logistic regression model that you used in that course:</p>
+<p><span class="math inline">\(Y_i \sim \text{Bernoulli}(p_i)\)</span>, where each <span class="math inline">\(Y_i\)</span> is independent of all other <span class="math inline">\(Y_j\)</span> but the <span class="math inline">\(Y_i\)</span> are not identically distributed. Instead, each <span class="math inline">\(Y_i\)</span> is allowed to have its own probability of success, <span class="math inline">\(p_i\)</span>, which can be modeled as:</p>
+<p><span class="math display">\[
+\text{E}(Y_i) = p_i = \frac{\text{exp}(\beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_k x_{ki})}{1 + \text{exp}(\beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_k x_{ki})},
+\]</span></p>
+<p>where <span class="math inline">\(x_{1i}, x_{2i}, \ldots, x_{ki}\)</span> are possible predictor variables for the probability of success.</p>
+<p><strong>Recall</strong>: For what type of response variable was logistic regression an appropriate model?</p>
+<p><strong>Recall</strong>: What values is the quantity <span class="math inline">\(\frac{\text{exp}(\beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_k x_{ki})}{1 + \text{exp}(\beta_0 + \beta_1 x_{1i} + \beta_2 x_{2i} + ... + \beta_k x_{ki})}\)</span> bounded by?</p>
+<p>Consider the following data set on survival of passengers aboard the Titanic.</p>
+<div class="cell">
+<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">titanic_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/read_delim.html">read_csv</a></span><span class="op">(</span><span class="st">"https://raw.githubusercontent.com/highamm/stat326_labs/master/data/titanic.csv"</span>,</span>
+<span>                       col_types <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>Pclass <span class="op">=</span> <span class="fu"><a href="https://readr.tidyverse.org/reference/parse_factor.html">col_factor</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Age</span><span class="op">)</span> <span class="op">&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NA.html">is.na</a></span><span class="op">(</span><span class="va">Sex</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>Pclass <span class="op">=</span> <span class="fu"><a href="https://forcats.tidyverse.org/reference/fct_recode.html">fct_recode</a></span><span class="op">(</span><span class="va">Pclass</span>,</span>
+<span>                             <span class="st">"1st"</span> <span class="op">=</span> <span class="st">"1"</span>,</span>
+<span>                             <span class="st">"2nd"</span> <span class="op">=</span> <span class="st">"2"</span>,</span>
+<span>                             <span class="st">"3rd"</span> <span class="op">=</span> <span class="st">"3"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">titanic_df</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/slice.html">slice</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">Survived</span>, <span class="va">Pclass</span>, <span class="va">Name</span>, <span class="va">Sex</span>, <span class="va">Age</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">pander</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/pander/man/pander.html">pander</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<colgroup>
+<col style="width: 15%">
+<col style="width: 12%">
+<col style="width: 40%">
+<col style="width: 12%">
+<col style="width: 8%">
+</colgroup>
+<thead><tr class="header">
+<th style="text-align: center;">Survived</th>
+<th style="text-align: center;">Pclass</th>
+<th style="text-align: center;">Name</th>
+<th style="text-align: center;">Sex</th>
+<th style="text-align: center;">Age</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">0</td>
+<td style="text-align: center;">3rd</td>
+<td style="text-align: center;">Braund, Mr.&nbsp;Owen Harris</td>
+<td style="text-align: center;">male</td>
+<td style="text-align: center;">22</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">1st</td>
+<td style="text-align: center;">Cumings, Mrs.&nbsp;John Bradley (Florence Briggs Thayer)</td>
+<td style="text-align: center;">female</td>
+<td style="text-align: center;">38</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">1</td>
+<td style="text-align: center;">3rd</td>
+<td style="text-align: center;">Heikkinen, Miss. Laina</td>
+<td style="text-align: center;">female</td>
+<td style="text-align: center;">26</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p><strong>Exercise</strong>. Suppose that we want to build a logistic regression model with <code>Survived</code> (a <code>1</code> is survived and <code>0</code> is died) as the response variable and <code>Age</code> and <code>Sex</code> as predictors. We want to test whether there is an association of <code>Age</code> and whether or not a passenger survived (after accounting for the effects of <code>Sex</code>.</p>
+<ol type="a">
+<li><p>Write out the logistic regression model with Age and Sex as predictors.</p></li>
+<li><p>Write the null hypothesis for our hypothesis test.</p></li>
+<li><p>Write both the “null model” and the “alternative model.”</p></li>
+<li><p>What is the value of maximum likelihood under the null model? We will start by writing the likelihood function, assuming that the null model is true.</p></li>
+<li><p>What is the maximum likelihood under the alternative model? We will start by writing the likelihood function, assuming that the alternative model is true.</p></li>
+</ol>
+<p>Now, we have reached a point where the calculations have become a bit too unweildy. So, we will let <code>R</code> calculate the maximum likelihoods of these two models. <code>R</code> only has functionality to return the <strong>log likelihood</strong> using the <code><a href="https://rdrr.io/r/stats/logLik.html">logLik()</a></code> function from a fitted model, so, we will backtransform the log likelihood using <code><a href="https://rdrr.io/r/base/Log.html">exp()</a></code> to obtain the maximum likelihood for each family of models.</p>
+<p>First, for the “null model” that does not include <code>Age</code>:</p>
+<div class="cell">
+<div class="sourceCode" id="cb22"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">titanic_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Survived</span> <span class="op">~</span> <span class="va">Sex</span>,</span>
+<span>                    data <span class="op">=</span> <span class="va">titanic_df</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/logLik.html">logLik</a></span><span class="op">(</span><span class="va">titanic_null</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 9.716759e-164</code></pre>
+</div>
+</div>
+<p>Now, we obtain the value of the likelihood maximized under the alternative model (that does include <code>Age</code>):</p>
+<div class="cell">
+<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">titanic_alt</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/glm.html">glm</a></span><span class="op">(</span><span class="va">Survived</span> <span class="op">~</span> <span class="va">Sex</span> <span class="op">+</span> <span class="va">Age</span>,</span>
+<span>                    data <span class="op">=</span> <span class="va">titanic_df</span>, family <span class="op">=</span> <span class="st">"binomial"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/logLik.html">logLik</a></span><span class="op">(</span><span class="va">titanic_alt</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">exp</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html">as.numeric</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1.409022e-163</code></pre>
+</div>
+</div>
+<ol start="6" type="a">
+<li><p>Using these values for the maximum likelihoods of each model, calculate the test statistic for the asymptotic likelihood ratio test.</p></li>
+<li><p>Using the test statistic, calculate the p-value for the test.</p></li>
+<li><p>Examine the output from the alternative model below. Can you locate the p-value we just calculated?</p></li>
+</ol>
+<div class="cell">
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu">broom</span><span class="fu">::</span><span class="fu"><a href="https://generics.r-lib.org/reference/tidy.html">tidy</a></span><span class="op">(</span><span class="va">titanic_alt</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 5
+  term        estimate std.error statistic  p.value
+  &lt;chr&gt;          &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;    &lt;dbl&gt;
+1 (Intercept)  1.28      0.230       5.55  2.87e- 8
+2 Sexmale     -2.47      0.185     -13.3   2.26e-40
+3 Age         -0.00543   0.00631    -0.860 3.90e- 1</code></pre>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/summary.html">summary</a></span><span class="op">(</span><span class="va">titanic_alt</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+Call:
+glm(formula = Survived ~ Sex + Age, family = "binomial", data = titanic_df)
+
+Coefficients:
+             Estimate Std. Error z value Pr(&gt;|z|)    
+(Intercept)  1.277273   0.230169   5.549 2.87e-08 ***
+Sexmale     -2.465920   0.185384 -13.302  &lt; 2e-16 ***
+Age         -0.005426   0.006310  -0.860     0.39    
+---
+Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+
+(Dispersion parameter for binomial family taken to be 1)
+
+    Null deviance: 964.52  on 713  degrees of freedom
+Residual deviance: 749.96  on 711  degrees of freedom
+AIC: 755.96
+
+Number of Fisher Scoring iterations: 4</code></pre>
+</div>
+</div>
+</section></section><section id="lab-5.3-empirical-power" class="level2"><h2 class="anchored" data-anchor-id="lab-5.3-empirical-power">Lab 5.3: Empirical Power</h2>
 <p>We have seen some examples of how to compute power analytically, but, as the statistical test we use gets more complex, computing power becomes much more tedious (and sometimes is not even possible to compute exactly). In these scenarios, people often use <strong>empirical power</strong> to approximate the power of a test for a few different sample sizes or for a few different values of the alternative hypothesis.</p>
 <p>In this lab, we will suppose that a researcher wants to assess whether there is evidence that a new drug helps to lower blood pressure. Note that “clinical trials” is a branch of statistics that deals with how to analyze medical data. Do note that clinical trials are more complex than what we are dealing with here, often with many different “phases” and specialized types of analysis.</p>
 <p>Recruiting subjects in clinical trials is quite expensive! So the researcher would like to limit costs as much as possible, while still recruiting enough subjects to be able to assess whether the drug is effective.</p>
@@ -469,7 +610,7 @@ dbl (1): rate
 <p><br></p>
 <p>Once we have that information, use the following code to compute empirical power.</p>
 <div class="cell">
-<div class="sourceCode" id="cb21"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
+<div class="sourceCode" id="cb30"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://tidyverse.tidyverse.org">tidyverse</a></span><span class="op">)</span></span>
 <span><span class="va">delta</span> <span class="op">&lt;-</span> <span class="fl">5</span></span>
 <span><span class="va">sigma</span> <span class="op">&lt;-</span> <span class="fl">20</span></span>
 <span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fl">10</span> <span class="co">## sample size for one group </span></span>
@@ -488,7 +629,7 @@ dbl (1): rate
 <span>                   sigma <span class="op">=</span> <span class="va">sigma</span>,</span>
 <span>                   n <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.4929137</code></pre>
+<pre><code>[1] 0.3183286</code></pre>
 </div>
 </div>
 <p><strong>Exercise</strong>. What does <code>delta</code> represent in the code above?</p>
@@ -496,29 +637,29 @@ dbl (1): rate
 <p><strong>Exercise</strong>. If we were to repeatedly run the function many times and we were to set <code>delta</code> to be equal to 0, what proportion of p-values would you expect to be less than 0.01?</p>
 <p>Now, to calculate empirical power, we need to map through the function we wrote a large number of times, recording a p-value for the test each time we run the function.</p>
 <div class="cell">
-<div class="sourceCode" id="cb23"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n_sim</span> <span class="op">&lt;-</span> <span class="fl">10000</span></span>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n_sim</span> <span class="op">&lt;-</span> <span class="fl">10000</span></span>
 <span><span class="va">p_vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_sim</span>, \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu">compute_twosamp_pval</span><span class="op">(</span>delta <span class="op">=</span> <span class="va">delta</span>, sigma <span class="op">=</span> <span class="va">sigma</span>, n <span class="op">=</span> <span class="va">n</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <p>And, we will reject the null hypothesis if the p-value we observe from one of the simulations is less than <code>alpha</code>:</p>
 <div class="cell">
-<div class="sourceCode" id="cb24"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">emp_power_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">p_vals</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<div class="sourceCode" id="cb33"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">emp_power_df</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">p_vals</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>reject <span class="op">=</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/if_else.html">if_else</a></span><span class="op">(</span><span class="va">p_vals</span> <span class="op">&lt;=</span> <span class="fl">0.01</span>,</span>
 <span>                          true <span class="op">=</span> <span class="fl">1</span>, false <span class="op">=</span> <span class="fl">0</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">emp_power_df</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 10,000 × 2
-     p_vals reject
-      &lt;dbl&gt;  &lt;dbl&gt;
- 1 0.0677        0
- 2 0.673         0
- 3 0.787         0
- 4 0.848         0
- 5 0.413         0
- 6 0.127         0
- 7 0.000187      1
- 8 0.480         0
- 9 0.854         0
-10 0.703         0
+   p_vals reject
+    &lt;dbl&gt;  &lt;dbl&gt;
+ 1 0.166       0
+ 2 0.512       0
+ 3 0.0789      0
+ 4 0.0246      0
+ 5 0.531       0
+ 6 0.767       0
+ 7 0.588       0
+ 8 0.748       0
+ 9 0.483       0
+10 0.471       0
 # ℹ 9,990 more rows</code></pre>
 </div>
 </div>
@@ -526,7 +667,7 @@ dbl (1): rate
 <p><strong>Exercise</strong> Before conducting the power analysis, what do you expect to happen to the power as we increase the sample size? What about as we increase the (absolute) value of <code>delta</code>? What about if we increase <code>alpha</code>?</p>
 <p><strong>Exercise</strong>. Before conducting the analysis, it might also be nice to check and make sure that our function is working as we would expect. Run the code below. Is the empirical power what you expect? Why or why not?</p>
 <div class="cell">
-<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p_vals_0_25</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_sim</span>,</span>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">p_vals_0_25</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://purrr.tidyverse.org/reference/map.html">map_dbl</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="va">n_sim</span>,</span>
 <span>                       \<span class="op">(</span><span class="va">i</span><span class="op">)</span> <span class="fu">compute_twosamp_pval</span><span class="op">(</span>delta <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>                                               sigma <span class="op">=</span> <span class="va">sigma</span>, n <span class="op">=</span> <span class="fl">25</span><span class="op">)</span><span class="op">)</span></span>
 <span></span>
@@ -547,7 +688,7 @@ dbl (1): rate
 <p>“All work presented is my own, and I have followed all rules for collaboration. I have not used generative AI on this project.”</p>
 <p><br></p>
 <p>For this final mini-project, you will read an editorial published in <em>The American Statistician</em> and respond to the questions below. You will find a pdf of the editorial on Canvas.</p>
-<p>First, read through the first six sections of the editorial titled <em>Moving to a World Beyond ‘p&lt;0.05’</em> by Wasserstein, Schirm, and Lazar published in <em>The American Statistician</em> in 2019 as the introduction to a special issue about p-values. I strongly encourage you to read the first six sections at least twice before you attempt to respond to the questions that appear below. This mini-project will be graded, primarily, on how thoughtfully you respond to these questions.</p>
+<p>First, read through the first six sections of the editorial titled <em>Moving to a World Beyond ‘p &lt; 0.05’</em> by Wasserstein, Schirm, and Lazar published in <em>The American Statistician</em> in 2019 as the introduction to a special issue about p-values. I strongly encourage you to read the first six sections at least twice before you attempt to respond to the questions that appear below. This mini-project will be graded, primarily, on how thoughtfully you respond to these questions.</p>
 <p><strong>Submission</strong>: Upload your typed responses to these questions to the assignment in Canvas by the deadline.</p>
 <p><strong>Questions</strong>:</p>
 <ol type="1">
