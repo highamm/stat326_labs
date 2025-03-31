@@ -333,6 +333,22 @@ Before we look at some data, we will consider a few possible prior distributions
 - an informative prior based on a clay-court match the two played in the previous year. In that match, Nadal won 46 out of 66 points on his own serve. The standard error of this estimate is 0.05657. 
 - an informative prior based on a sports announcer, who claims that they think Nadal wins about 75% of the points on his serve against Djokovic. They are also "almost sure" that Nadal wins no less than 70% of his points on serve against Djokovic.
 
+Here is some code that we briefly did in class for the Gamma-Poisson hockey scoring example that might help generate one of the priors described here:
+
+```{r}
+## trying to get a mean of 3 and a probability
+## that lambda is less than 2 equal to 0.02
+alphas <- seq(0.01, 100, length.out = 2000) 
+ks <- alphas / 3
+
+target_prob <- 0.02
+prob_less_2 <- pgamma(2, alphas, ks)
+
+tibble(alphas, ks, prob_less_2) |>
+  mutate(close_to_target = abs(prob_less_2 - target_prob)) |>
+  filter(close_to_target == min(close_to_target))
+```
+
 Construct a single graph that shows all three of these priors. Note that, for both of the informative priors, there is some subjectivity with how you are going to use the information given to construct an appropriate prior for $p$, the probability that Nadal wins a point on serve against Djokovic. In other words, for the two informative priors, there is not necessarily a "correct" answer for how to approach creating them. Instead, you will be assessed on your logic and reason in coming up with the two informative priors.
 
 ### Data

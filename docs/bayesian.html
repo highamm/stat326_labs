@@ -438,6 +438,26 @@ window.Quarto = {
 <li>an informative prior based on a clay-court match the two played in the previous year. In that match, Nadal won 46 out of 66 points on his own serve. The standard error of this estimate is 0.05657.</li>
 <li>an informative prior based on a sports announcer, who claims that they think Nadal wins about 75% of the points on his serve against Djokovic. They are also “almost sure” that Nadal wins no less than 70% of his points on serve against Djokovic.</li>
 </ul>
+<p>Here is some code that we briefly did in class for the Gamma-Poisson hockey scoring example that might help generate one of the priors described here:</p>
+<div class="cell">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="co">## trying to get a mean of 3 and a probability</span></span>
+<span><span class="co">## that lambda is less than 2 equal to 0.02</span></span>
+<span><span class="va">alphas</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">0.01</span>, <span class="fl">100</span>, length.out <span class="op">=</span> <span class="fl">2000</span><span class="op">)</span> </span>
+<span><span class="va">ks</span> <span class="op">&lt;-</span> <span class="va">alphas</span> <span class="op">/</span> <span class="fl">3</span></span>
+<span></span>
+<span><span class="va">target_prob</span> <span class="op">&lt;-</span> <span class="fl">0.02</span></span>
+<span><span class="va">prob_less_2</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/GammaDist.html">pgamma</a></span><span class="op">(</span><span class="fl">2</span>, <span class="va">alphas</span>, <span class="va">ks</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://tibble.tidyverse.org/reference/tibble.html">tibble</a></span><span class="op">(</span><span class="va">alphas</span>, <span class="va">ks</span>, <span class="va">prob_less_2</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>close_to_target <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">prob_less_2</span> <span class="op">-</span> <span class="va">target_prob</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">close_to_target</span> <span class="op">==</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html">min</a></span><span class="op">(</span><span class="va">close_to_target</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 4
+  alphas    ks prob_less_2 close_to_target
+   &lt;dbl&gt; &lt;dbl&gt;       &lt;dbl&gt;           &lt;dbl&gt;
+1   31.0  10.3      0.0200     0.000000718</code></pre>
+</div>
+</div>
 <p>Construct a single graph that shows all three of these priors. Note that, for both of the informative priors, there is some subjectivity with how you are going to use the information given to construct an appropriate prior for <span class="math inline">\(p\)</span>, the probability that Nadal wins a point on serve against Djokovic. In other words, for the two informative priors, there is not necessarily a “correct” answer for how to approach creating them. Instead, you will be assessed on your logic and reason in coming up with the two informative priors.</p>
 </section><section id="data" class="level3"><h3 class="anchored" data-anchor-id="data">Data</h3>
 <p>Now, we want to use the 2020 French Open data to update our prior for the probability that Nadal wins a point on serve. In that tournament, the two players played in the final. In that final, Nadal served 84 points and won 56 of those points.</p>
