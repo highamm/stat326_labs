@@ -441,7 +441,7 @@ __Statement of Integrity__: At the top of your submission, copy and paste the fo
 
 For this final mini-project, you will read an editorial published in _The American Statistician_ and respond to the questions below. You will find a pdf of the editorial on Canvas.
 
-First, read through the first six sections of the editorial titled _Moving to a World Beyond 'p < 0.05'_ by Wasserstein, Schirm, and Lazar published in _The American Statistician_ in 2019 as the introduction to a special issue about p-values. I strongly encourage you to read the first six sections at least twice before you attempt to respond to the questions that appear below. This mini-project will be graded, primarily, on how thoughtfully you respond to these questions.
+First, read through the first __six__ sections (stopping at the middle of __page 10__) of the editorial titled _Moving to a World Beyond 'p < 0.05'_ by Wasserstein, Schirm, and Lazar published in _The American Statistician_ in 2019 as the introduction to a special issue about p-values. I strongly encourage you to read the first six sections at least twice before you attempt to respond to the questions that appear below. This mini-project will be graded, primarily, on how thoughtfully you respond to these questions.
 
 __Submission__: Upload your typed responses to these questions to the assignment in Canvas by the deadline. 
 

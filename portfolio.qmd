@@ -1,11 +1,48 @@
 # Portfolio {#sec-portfolio}
 
-Information about the final portfolio will be added here.
+WORK IN PROGRESS
 
-<!-- - homework "review": one problem from each section? -->
+Instead of a traditional final exam, you are tasked with writing a short portfolio on concepts we have discussed throughout the semester and then subsequently taking an in-class assessment on certain components of the portfolio during our final exam time.
 
-<!-- - reflective statement  -->
+The final portfolio should consist of the following pieces.
 
-<!-- - remote presentation on articles? -->
+### Conceptual Understanding of Topics (30 points)
 
-<!-- - in-class assessment of articles student has read -->
+__AI Usage__: You may use generative AI if you would like, but you __must__ clearly state any and all prompts given to AI as well as what you ended up using from AI's response into your own. Failure to do so will result in a 0 on the entire portfolio.
+
+Our course was broken up into 5 sections: Sampling Distributions, Estimation, Confidence Intervals, Bayesian Statistics, and Hypothesis Testing. Write a single paragraph for each of the following five prompts, which ask you to think about the overall purpose of each section.
+
+Each question is worth 6 points.
+
+a. __Section 1__ (Sampling Distributions). Throughout most of the section on sampling distributions, we supposed that we knew a probability model that could generate data and that we knew the values of the parameters in that probability model (e.g., $\mu = 10$, $\sigma = 2$ in a normal probability model). Given that in practice, we rarely know the true values of the parameters in a model, what do you think the overall purpose of this section was? In other words, why complete this section if we rarely actually know the values of parameters?
+
+b. __Section 2__ (Estimation). In the section on estimation, we used a few different methods (method of moments, maximum likelihood estimation) to derive estimators for parameters in probability models using data. Something that we emphasized is the idea of a "bias variance trade-off." Explain what the bias variance trade-off is. In your explanation, you should address what bias is and what variance is by explaining what would happen if you applied an estimator with high bias to repeated (thousands of) samples of data and what would happen if you applied an estimator with high variance to repeated (thousands of) samples of data.
+
+c. __Section 3__ (Confidence Intervals). We spent some time in class discussing what is meant by "95% confidence." Now, consider the simple linear regression model $Y_i = \beta_0 + \beta_1 x_i + \epsilon_i$, where $\epsilon_i$ are iid $\text{N}(0, \sigma^2)$ random variables. Suppose that you use obtain a 95% confidence interval for $\beta_1$, the slope parameter in the model using `R`, `Python`, or other statistical software. Explain what is meant by "95% confidence" in this setting (perhaps reviewing Lab 3.2). 
+
+d. __Section 4__ (Bayesian). What are the primary differences (conceptually) between working in a "frequentist" framework (all stats you would have likely seen up to this section) and a "Bayesian" framework?
+
+e. __Section 5__. Consider again the simple linear regression model $Y_i = \beta_0 + \beta_1 x_i + \epsilon_i$, where $\epsilon_i$ are iid $\text{N}(0, \sigma^2)$ random variables, and suppose that your friend collects some data to conduct a hypothesis test $H_0: \beta_1 = 0$ vs. $H_a: \beta_1 \neq 0$. They correctly obtain a p-value of 0.994 from the test and conclude: "My p-value is very large and quite close to 1, so the null hypothesis is extremely likely to be true." Explain what is wrong with your friend's conclusion. 
+
+### Reflection (20 points)
+
+__AI Usage__: You may not use generative AI for this reflection at all. I want to know what __your__ thoughts are here! Use of AI will result in a 0 on the entire portfolio.
+
+Each prompt is worth 5 points. For each, 4 points will be awarded for a complete answer while 5 points will be awarded for a thoughtful and sophisticated answer.
+
+a. Reflect on your overall experience in this class by describing an interesting idea that you learned, why it was interesting to you, and what it tells you about practicing statistics.
+
+b. Which assessment (homework assignment, recap task, mini-project, or in-class assessment) do you feel you learned the most from? Explain what you learned from this assessment and/or why the assessment was valuable to you.
+
+c. What was a concept you learned in this course that you hope you remember 5 years from now? Why is it important that you remember this concept?
+
+d. What statistical ideas are you curious to know more about as a result of taking this class? Try to give two examples and explain why you would like to know more about them.
+
+### In-Class Assessment (50 points)
+
+In class during our final exam time, you will be prompted with 5 short "essay"-style questions that are based off of the prompts given in the "conceptual understanding" section of the portfolio. Note that the questions posed will not be exact verbatim matches to the five questions above, but they will be __extremely__ similar.
+
+For the in-class assessment, you may not use a cheat sheet (there will not be any formula or calculation style questions). You should be adequately prepared for this assessment if you understand each of the prompts given in the "Conceptual Understanding of Topics" section of the portfolio!
+
+You will have the full 3 hours to complete the assessment, but I would expect the average time to complete it to be about 45 minutes.
+
