@@ -298,16 +298,16 @@ window.Quarto = {
 <pre><code># A tibble: 4,029 × 11
    delay_perm Carrier Delay    ID FlightNo Destination DepartTime Day   Month
         &lt;int&gt; &lt;fct&gt;   &lt;int&gt; &lt;int&gt;    &lt;int&gt; &lt;fct&gt;       &lt;fct&gt;      &lt;fct&gt; &lt;fct&gt;
- 1         -6 UA         -1     1      403 DEN         4-8am      Fri   May  
- 2        -10 UA        102     2      405 DEN         8-Noon     Fri   May  
- 3         -6 UA          4     3      409 DEN         4-8pm      Fri   May  
- 4         -4 UA         -2     4      511 ORD         8-Noon     Fri   May  
- 5         -7 UA         -3     5      667 ORD         4-8am      Fri   May  
- 6         -8 UA          0     6      669 ORD         4-8am      Fri   May  
- 7         -1 UA         -5     7      673 ORD         8-Noon     Fri   May  
- 8          0 UA          0     8      677 ORD         8-Noon     Fri   May  
- 9          0 UA         10     9      679 ORD         Noon-4pm   Fri   May  
-10         -3 UA         60    10      681 ORD         Noon-4pm   Fri   May  
+ 1         -5 UA         -1     1      403 DEN         4-8am      Fri   May  
+ 2         13 UA        102     2      405 DEN         8-Noon     Fri   May  
+ 3         -8 UA          4     3      409 DEN         4-8pm      Fri   May  
+ 4         57 UA         -2     4      511 ORD         8-Noon     Fri   May  
+ 5        104 UA         -3     5      667 ORD         4-8am      Fri   May  
+ 6         -7 UA          0     6      669 ORD         4-8am      Fri   May  
+ 7         -6 UA         -5     7      673 ORD         8-Noon     Fri   May  
+ 8         60 UA          0     8      677 ORD         8-Noon     Fri   May  
+ 9         -6 UA         10     9      679 ORD         Noon-4pm   Fri   May  
+10         -6 UA         60    10      681 ORD         Noon-4pm   Fri   May  
 # ℹ 4,019 more rows
 # ℹ 2 more variables: FlightLength &lt;int&gt;, Delayed30 &lt;fct&gt;</code></pre>
 </div>
@@ -323,7 +323,7 @@ window.Quarto = {
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">mean_delay_perm</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/diff.html">diff</a></span><span class="op">(</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.2041243</code></pre>
+<pre><code>[1] -0.4020582</code></pre>
 </div>
 </div>
 <p>Rerun the code chunk above a few times to get a few different mean differences under different permutations. The big idea is that a large number of these mean differences will form the null distribution for the difference in sample means (if there really is no difference in the underlying population distributions).</p>
@@ -373,7 +373,7 @@ window.Quarto = {
 <div class="cell">
 <div class="sourceCode" id="cb11"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">diff_means</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">teststat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html">sum</a></span><span class="op">(</span><span class="va">diff_means</span> <span class="op">&lt;</span> <span class="op">-</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">teststat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span> <span class="op">/</span> <span class="op">(</span><span class="va">n_perm</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.00019996</code></pre>
+<pre><code>[1] 0.00039992</code></pre>
 </div>
 </div>
 <p><strong>Exercise</strong>. What is the alternative hypothesis that the p-value is testing?</p>
@@ -603,7 +603,7 @@ Number of Fisher Scoring iterations: 4</code></pre>
 <p>We have seen some examples of how to compute power analytically, but, as the statistical test we use gets more complex, computing power becomes much more tedious (and sometimes is not even possible to compute exactly). In these scenarios, people often use <strong>empirical power</strong> to approximate the power of a test for a few different sample sizes or for a few different values of the alternative hypothesis.</p>
 <p>In this lab, we will suppose that a researcher wants to assess whether there is evidence that a new drug helps to lower blood pressure. Note that “clinical trials” is a branch of statistics that deals with how to analyze medical data. Do note that clinical trials are more complex than what we are dealing with here, often with many different “phases” and specialized types of analysis.</p>
 <p>Recruiting subjects in clinical trials is quite expensive! So the researcher would like to limit costs as much as possible, while still recruiting enough subjects to be able to assess whether the drug is effective.</p>
-<p>In particular, the researcher can apply for funding to either recruit 50 participants (25 for a group that receives the new drug and 25 for a group that receives a placebo), to recruit 200 participants (100 in each group), or to recruit 500 participants (250 in each group).</p>
+<p>In particular, the researcher can apply for funding to either recruit 50 participants (25 for a group that receives the new drug and 25 for a group that receives a placebo), or to recruit 200 participants (100 in each group).</p>
 <p>Finally, the researcher wants to be fairly certain that they do not falsely reject the null hypothesis so they will only reject the null hypothesis if they get a p-value that is less than or equal to <span class="math inline">\(\alpha = 0.01\)</span>, and they would like to conduct a two-sided test that assumes the population variances are equal.</p>
 <p><strong>Exercise</strong>. What else do we need to know from the researcher to conduct a power analysis? There are actually a couple of things that we need!</p>
 <p><strong>Exercise</strong>. What are the null and alternative hypotheses for this test?</p>
@@ -629,7 +629,7 @@ Number of Fisher Scoring iterations: 4</code></pre>
 <span>                   sigma <span class="op">=</span> <span class="va">sigma</span>,</span>
 <span>                   n <span class="op">=</span> <span class="va">n</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[1] 0.5726399</code></pre>
+<pre><code>[1] 0.8640129</code></pre>
 </div>
 </div>
 <p><strong>Exercise</strong>. What does <code>delta</code> represent in the code above?</p>
@@ -650,16 +650,16 @@ Number of Fisher Scoring iterations: 4</code></pre>
 <pre><code># A tibble: 10,000 × 2
    p_vals reject
     &lt;dbl&gt;  &lt;dbl&gt;
- 1 0.854       0
- 2 0.788       0
- 3 0.421       0
- 4 0.370       0
- 5 0.215       0
- 6 0.403       0
- 7 0.582       0
- 8 0.0795      0
- 9 0.0616      0
-10 0.0837      0
+ 1  0.909      0
+ 2  0.339      0
+ 3  0.171      0
+ 4  0.137      0
+ 5  0.158      0
+ 6  0.374      0
+ 7  0.143      0
+ 8  0.146      0
+ 9  0.683      0
+10  0.143      0
 # ℹ 9,990 more rows</code></pre>
 </div>
 </div>
@@ -678,8 +678,9 @@ Number of Fisher Scoring iterations: 4</code></pre>
 <span><span class="va">p_val_df</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/summarise.html">summarise</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/across.html">across</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/everything.html">everything</a></span><span class="op">(</span><span class="op">)</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="va">.x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p><strong>Exercise</strong>. Modify the mapping code above to use the values that the researcher was most interested in. You should have <strong>6</strong> different settings that you need to map through (3 sample sizes times 2 values of delta). Additionally, you can use the code immediately above this exercise (with <code><a href="https://dplyr.tidyverse.org/reference/across.html">across()</a></code>) to calculate the empirical power for all 6 settings at once.</p>
-<p><strong>Exercise</strong>. Write a one paragraph summary of your results to the researcher. What should their sample size be? Does the choice of sample size that you recommend depend on the value of <code>delta</code>?</p>
+<p><strong>Exercise</strong>. As a class, we will modify the mapping code above to create two different power curves as functions of delta. First, we will create a power curve for the smaller sample size (<span class="math inline">\(n = 25\)</span> for each group).</p>
+<p><strong>Exercise</strong>. Next, we will obtain a power curve for the larger sample size (<span class="math inline">\(n = 100\)</span> for each group).</p>
+<p><strong>Exercise</strong>. What do you suppose would happen to the power if we fixed the sample size, but increased the population standard deviation? Come up with a hypothesis and we will subsequently test your hypothesis.</p>
 <p><br></p>
 </section><section id="mini-project-5-advantages-and-drawbacks-of-using-p-values" class="level2"><h2 class="anchored" data-anchor-id="mini-project-5-advantages-and-drawbacks-of-using-p-values">Mini Project 5: Advantages and Drawbacks of Using p-values</h2>
 <p><strong>AI Usage</strong>: You may not use generative AI for this project in any way.</p>

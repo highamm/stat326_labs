@@ -316,7 +316,7 @@ In this lab, we will suppose that a researcher wants to assess whether there is 
 
 Recruiting subjects in clinical trials is quite expensive! So the researcher would like to limit costs as much as possible, while still recruiting enough subjects to be able to assess whether the drug is effective. 
 
-In particular, the researcher can apply for funding to either recruit 50 participants (25 for a group that receives the new drug and 25 for a group that receives a placebo), to recruit 200 participants (100 in each group), or to recruit 500 participants (250 in each group). 
+In particular, the researcher can apply for funding to either recruit 50 participants (25 for a group that receives the new drug and 25 for a group that receives a placebo), or to recruit 200 participants (100 in each group). 
 
 Finally, the researcher wants to be fairly certain that they do not falsely reject the null hypothesis so they will only reject the null hypothesis if they get a p-value that is less than or equal to $\alpha = 0.01$, and they would like to conduct a two-sided test that assumes the population variances are equal.
 
@@ -392,7 +392,9 @@ p_val_df |>
   summarise(across(everything(), ~ mean(.x)))
 ```
 
-__Exercise__. Modify the mapping code above to use the values that the researcher was most interested in. You should have __6__ different settings that you need to map through (3 sample sizes times 2 values of delta). Additionally, you can use the code immediately above this exercise (with `across()`) to calculate the empirical power for all 6 settings at once.
+__Exercise__. As a class, we will modify the mapping code above to create two different power curves as functions of delta. First, we will create a power curve for the smaller sample size ($n = 25$ for each group).
+
+__Exercise__. Next, we will obtain a power curve for the larger sample size ($n = 100$ for each group).
 
 ```{r}
 #| echo: false
@@ -423,7 +425,7 @@ reject_or_not_df |>
   summarise(across(everything(), ~ mean(.x)))
 ```
 
-__Exercise__. Write a one paragraph summary of your results to the researcher. What should their sample size be? Does the choice of sample size that you recommend depend on the value of `delta`?
+__Exercise__. What do you suppose would happen to the power if we fixed the sample size, but increased the population standard deviation? Come up with a hypothesis and we will subsequently test your hypothesis.
 
 <br>
 
