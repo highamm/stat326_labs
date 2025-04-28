@@ -1,34 +1,61 @@
 # Portfolio {#sec-portfolio}
 
-WORK IN PROGRESS
+Instead of a traditional final exam, you are tasked with writing a short portfolio on concepts we have discussed throughout the semester and then subsequently writing responses to three pre-determined prompts during our final exam time.
 
-Instead of a traditional final exam, you are tasked with writing a short portfolio on concepts we have discussed throughout the semester and then subsequently taking an in-class assessment on certain components of the portfolio during our final exam time.
+The final portfolio consists of the following pieces.
 
-The final portfolio should consist of the following pieces.
+## Mini-Project Summary OR Homework Summary (35 points)
 
-### Conceptual Understanding of Topics (30 points)
+For this part of the portfolio, complete __one__ of the following two options (either __Option 1__ OR __Option 2__).
 
-__AI Usage__: You may use generative AI if you would like, but you __must__ clearly state any and all prompts given to AI as well as what you ended up using from AI's response into your own. Failure to do so will result in a 0 on the entire portfolio.
+### Option 1: Mini-Projects
 
-Our course was broken up into 5 sections: Sampling Distributions, Estimation, Confidence Intervals, Bayesian Statistics, and Hypothesis Testing. Write a single paragraph for each of the following five prompts, which ask you to think about the overall purpose of each section.
+__Collaboration and AI__: If you have questions or issues with the coding or Quarto part of this, you __may__ ask other students, the PQRC, or myself and you __may__ use AI. However, you __may not__ collaborate or use AI at all to assist in writing your reflection.
 
-Each question is worth 6 points.
+For this option, you will create a Quarto Blog/Website containing your 5 mini-projects, and write a reflection that ties the mini-projects together and gives biggest take-aways from each project. 
 
-a. __Section 1__ (Sampling Distributions). Throughout most of the section on sampling distributions, we supposed that we knew a probability model that could generate data and that we knew the values of the parameters in that probability model (e.g., $\mu = 10$, $\sigma = 2$ in a normal probability model). Given that in practice, we rarely know the true values of the parameters in a model, what do you think the overall purpose of this section was? In other words, why complete this section if we rarely actually know the values of parameters?
+Your reflection should either go in the `about.qmd` file that appears at the root directory of the `R Project`, the `index.qmd` file that also appears at the root directory of the `R Project`, or in a separate blog post. The rendered `.html` file from `about.qmd` essentially serves as the home page for the blog. The reflection should be about 5 paragraphs or so and should address:
 
-b. __Section 2__ (Estimation). In the section on estimation, we used a few different methods (method of moments, maximum likelihood estimation) to derive estimators for parameters in probability models using data. Something that we emphasized is the idea of a "bias variance trade-off." Explain what the bias variance trade-off is. In your explanation, you should address what bias is and what variance is by explaining what would happen if you applied an estimator with high bias to repeated (thousands of) samples of data and what would happen if you applied an estimator with high variance to repeated (thousands of) samples of data.
+1. how each mini-project ties in to other content in the course.
 
-c. __Section 3__ (Confidence Intervals). We spent some time in class discussing what is meant by "95% confidence." Now, consider the simple linear regression model $Y_i = \beta_0 + \beta_1 x_i + \epsilon_i$, where $\epsilon_i$ are iid $\text{N}(0, \sigma^2)$ random variables. Suppose that you use obtain a 95% confidence interval for $\beta_1$, the slope parameter in the model using `R`, `Python`, or other statistical software. Explain what is meant by "95% confidence" in this setting (perhaps reviewing Lab 3.2). 
+2. how each mini-project ties in with some other mini-projects (note that some mini-projects are more connected than others: you do not need to "connect" every single mini-project with every other mini-project).
 
-d. __Section 4__ (Bayesian). What are the primary differences (conceptually) between working in a "frequentist" framework (all stats you would have likely seen up to this section) and a "Bayesian" framework?
+3. your biggest take-aways from these mini-projects (these should not be copy-pasted from the "take-away" section of any of your original mini-projects: the expectation is that, now that we have gone through the entire course, your take-aways may be more sophisticated now).
 
-e. __Section 5__. Consider again the simple linear regression model $Y_i = \beta_0 + \beta_1 x_i + \epsilon_i$, where $\epsilon_i$ are iid $\text{N}(0, \sigma^2)$ random variables, and suppose that your friend collects some data to conduct a hypothesis test $H_0: \beta_1 = 0$ vs. $H_a: \beta_1 \neq 0$. They correctly obtain a p-value of 0.994 from the test and conclude: "My p-value is very large and quite close to 1, so the null hypothesis is extremely likely to be true." Explain what is wrong with your friend's conclusion. 
+Some extra notes:
 
-### Reflection (20 points)
+* mini-project 1 is the only mini-project that had substantial handwritten work. You do __not__ need to include the handwritten derivations in the blog.
+* if, for other mini-projects, you have things that you submitted that you wrote by hand, you can embed these as images in quarto using `knitr::include_graphics("path_to_image.jpg")`.
+* as you are creating your five posts for the five mini-projects, note that the `.qmd` file __must__ be named `index.qmd` within each folder and that the folder itself cannot have any spaces or special characters in its name.
+
+__What to Submit__: For this part, you should submit either a url link to the blog (if you have published it through GitHub pages) OR a link to the GitHub repository with the blog (either a public repository, or, if private, add me as a collaborator `@highamm`).
+
+__Where to Start__: If you already have `R Studio` connected to GitHub, start creating the blog following the directions at <https://highamm.github.io/dataviz334/02-software.html#creating-a-quarto-blogwebsite>. If you do not have `R Studio` connected to GitHub, then start by following directions at <https://highamm.github.io/dataviz334/02-software.html#installing-git-and-using-github-class-prep>.
+
+### Option 2: Homework
+
+__Collaboration and AI__: You __may not__ collaborate or use AI at all to assist in this part of the portfolio.
+
+For this option, you will choose __one__ homework problem from each of the five sections of the course (Sampling Distributions, Estimation, Confidence Intervals, Bayesian, and Hypothesis Testing). __Three__ of the problems should be problems that you have already completed (and were assigned as homework already) while __two__ of the problems should be problems that you have not yet completed (that were not assigned on any homework). You should submit both a formal write-up on each problem as well as a more elaborate description of the problem itself, how it connects to other topics within that particular section, and why you chose that problem in the first place.
+
+A few notes on the problems themselves:
+
+* it is up to you whether you want to type up your solutions, or, if you want to write them neatly on a sheet of paper.
+* if you choose an "easy" problem (e.g., there was a one-line homework problem in the estimation section showing that the standard estimator for $p$ in a binomial setting is unbiased), then the expectation is that your written description is much more lengthy. For a more challenging homework problem, the written description might be one long paragraph or two short paragraphs per problem. For an "easier" homework problem, the written description should be closer to 4-5 paragraphs in order to demonstrate breadth of understanding.
+
+A few notes on the descriptions:
+
+* for each homework problem description, you should (1) explicitly say why you selected that particular problem, (2) how the problem directly connects to topics within that particular section, and (3) how the problem connects to other topics in the course and to statistics as a whole. Use this description to convince me both that you understand the problem itself and to explain how that particular problem has aided your understanding of statistics.
+
+__What to Submit__: For this part, you should submit a hard copy of each of the homework problems along with typed descriptions of each problem.
+
+<br>
+
+## Reflection (20 points)
 
 __AI Usage__: You may not use generative AI for this reflection at all. I want to know what __your__ thoughts are here! Use of AI will result in a 0 on the entire portfolio.
 
-Each prompt is worth 5 points. For each, 4 points will be awarded for a complete answer while 5 points will be awarded for a thoughtful and sophisticated answer.
+Each prompt is worth 5 points. For each, 3 points will be awarded for a complete answer while 5 points will be awarded for a thoughtful and sophisticated answer.
 
 a. Reflect on your overall experience in this class by describing an interesting idea that you learned, why it was interesting to you, and what it tells you about practicing statistics.
 
@@ -38,11 +65,30 @@ c. What was a concept you learned in this course that you hope you remember 5 ye
 
 d. What statistical ideas are you curious to know more about as a result of taking this class? Try to give two examples and explain why you would like to know more about them.
 
-### In-Class Assessment (50 points)
+__What to Submit__: For this part, you should typed responses to each of the 4 prompts.
 
-In class during our final exam time, you will be prompted with 5 short "essay"-style questions that are based off of the prompts given in the "conceptual understanding" section of the portfolio. Note that the questions posed will not be exact verbatim matches to the five questions above, but they will be __extremely__ similar.
+<br>
 
-For the in-class assessment, you may not use a cheat sheet (there will not be any formula or calculation style questions). You should be adequately prepared for this assessment if you understand each of the prompts given in the "Conceptual Understanding of Topics" section of the portfolio!
+## In-Class Assessment (45 points)
+
+In class during our final exam time, you will be prompted with 3 short "essay"-style questions that are based off of the following prompts. Note that the questions posed will not be exact verbatim matches to the five conceptual questions above, but they will be __extremely__ similar.
+
+__Collaboration and AI__: To prepare, you __may__ work with any others in the class and you __may__ use AI as a tool to help you prepare. However, I want to assess what __you__ have learned, not what you might copy down from an AI response: therefore, you may not use a cheatsheet for the in-class component.
+
+Our course was broken up into 5 sections: Sampling Distributions, Estimation, Confidence Intervals, Bayesian Statistics, and Hypothesis Testing. Below are some questions that are inspired by each of the sections. In class, you will be prompted to write a written response (about two short paragraphs) on __three__ (not-so-randomly-selected) prompts that will be very similar to three of the prompts below.
+
+
+a. __Section 1__ (Sampling Distributions). Throughout most of the section on sampling distributions, we supposed that we knew a probability model that could generate data and that we knew the values of the parameters in that probability model (e.g., $\mu = 10$, $\sigma = 2$ in a normal probability model). Given that in practice, we rarely know the true values of the parameters in a model, what do you think the overall purpose of this section was? In other words, why complete this section if we rarely actually know the values of parameters?
+
+b. __Section 2__ (Estimation). In the section on estimation, we used a few different methods (method of moments, maximum likelihood estimation) to derive estimators for parameters in probability models using data. Something that we emphasized is the idea of a "bias variance trade-off." Explain what the bias variance trade-off is. In your explanation, you should address what bias is and what variance is by explaining what would happen if you applied an estimator with high bias to repeated (thousands of) samples of data and what would happen if you applied an estimator with high variance to repeated (thousands of) samples of data.
+
+c. __Section 3__ (Confidence Intervals). We spent some time in class discussing what is meant by "95% confidence." Now, consider the simple linear regression model $Y_i = \beta_0 + \beta_1 x_i + \epsilon_i$, where $\epsilon_i$ are iid $\text{N}(0, \sigma^2)$ random variables. Suppose that you use obtain a 95% confidence interval for $\beta_1$, the slope parameter in the model using `R`, `Python`, or other statistical software. Explain what is meant by "95% confidence" in this setting (perhaps reviewing Lab 3.2). 
+
+d. __Section 4__ (Bayesian). What are the primary differences (conceptually) between working in a "frequentist" framework (all statistics you would have likely seen up to this section) and a "Bayesian" framework?
+
+e. __Section 5__. Consider again the simple linear regression model $Y_i = \beta_0 + \beta_1 x_i + \epsilon_i$, where $\epsilon_i$ are iid $\text{N}(0, \sigma^2)$ random variables, and suppose that your friend collects some data to conduct a hypothesis test $H_0: \beta_1 = 0$ vs. $H_a: \beta_1 \neq 0$. They correctly obtain a p-value of 0.994 from the test and conclude: "My p-value is very large and quite close to 1, so the null hypothesis is extremely likely to be true." Explain what is wrong with your friend's conclusion. 
 
 You will have the full 3 hours to complete the assessment, but I would expect the average time to complete it to be about 45 minutes.
+
+__What to Submit__: Nothing before the assessment! You'll submit your written responses to three of these prompts during our final exam time.
 

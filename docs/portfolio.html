@@ -68,6 +68,35 @@ ul.task-list li input[type="checkbox"] {
   }
 }</script>
 
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
 
 </head>
 
@@ -160,7 +189,19 @@ ul.task-list li input[type="checkbox"] {
 <div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
 <!-- margin-sidebar -->
     <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#mini-project-summary-or-homework-summary-35-points" id="toc-mini-project-summary-or-homework-summary-35-points" class="nav-link active" data-scroll-target="#mini-project-summary-or-homework-summary-35-points">Mini-Project Summary OR Homework Summary (35 points)</a>
+  <ul class="collapse">
+  <li><a href="#option-1-mini-projects" id="toc-option-1-mini-projects" class="nav-link" data-scroll-target="#option-1-mini-projects">Option 1: Mini-Projects</a></li>
+  <li><a href="#option-2-homework" id="toc-option-2-homework" class="nav-link" data-scroll-target="#option-2-homework">Option 2: Homework</a></li>
+  </ul></li>
+  <li><a href="#reflection-20-points" id="toc-reflection-20-points" class="nav-link" data-scroll-target="#reflection-20-points">Reflection (20 points)</a></li>
+  <li><a href="#in-class-assessment-45-points" id="toc-in-class-assessment-45-points" class="nav-link" data-scroll-target="#in-class-assessment-45-points">In-Class Assessment (45 points)</a></li>
+  </ul>
+</nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content">
@@ -184,13 +225,77 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<p>Information about the final portfolio will be added here.</p>
-<!-- - homework "review": one problem from each section? -->
-<!-- - reflective statement  -->
-<!-- - remote presentation on articles? -->
-<!-- - in-class assessment of articles student has read -->
+<p>Instead of a traditional final exam, you are tasked with writing a short portfolio on concepts we have discussed throughout the semester and then subsequently writing responses to three pre-determined prompts during our final exam time.</p>
+<p>The final portfolio consists of the following pieces.</p>
+<section id="mini-project-summary-or-homework-summary-35-points" class="level2">
+<h2 class="anchored" data-anchor-id="mini-project-summary-or-homework-summary-35-points">Mini-Project Summary OR Homework Summary (35 points)</h2>
+<p>For this part of the portfolio, complete <strong>one</strong> of the following two options (either <strong>Option 1</strong> OR <strong>Option 2</strong>).</p>
+<section id="option-1-mini-projects" class="level3">
+<h3 class="anchored" data-anchor-id="option-1-mini-projects">Option 1: Mini-Projects</h3>
+<p><strong>Collaboration and AI</strong>: If you have questions or issues with the coding or Quarto part of this, you <strong>may</strong> ask other students, the PQRC, or myself and you <strong>may</strong> use AI. However, you <strong>may not</strong> collaborate or use AI at all to assist in writing your reflection.</p>
+<p>For this option, you will create a Quarto Blog/Website containing your 5 mini-projects, and write a reflection that ties the mini-projects together and gives biggest take-aways from each project.</p>
+<p>Your reflection should either go in the <code>about.qmd</code> file that appears at the root directory of the <code>R Project</code>, the <code>index.qmd</code> file that also appears at the root directory of the <code>R Project</code>, or in a separate blog post. The rendered <code>.html</code> file from <code>about.qmd</code> essentially serves as the home page for the blog. The reflection should be about 5 paragraphs or so and should address:</p>
+<ol type="1">
+<li><p>how each mini-project ties in to other content in the course.</p></li>
+<li><p>how each mini-project ties in with some other mini-projects (note that some mini-projects are more connected than others: you do not need to “connect” every single mini-project with every other mini-project).</p></li>
+<li><p>your biggest take-aways from these mini-projects (these should not be copy-pasted from the “take-away” section of any of your original mini-projects: the expectation is that, now that we have gone through the entire course, your take-aways may be more sophisticated now).</p></li>
+</ol>
+<p>Some extra notes:</p>
+<ul>
+<li>mini-project 1 is the only mini-project that had substantial handwritten work. You do <strong>not</strong> need to include the handwritten derivations in the blog.</li>
+<li>if, for other mini-projects, you have things that you submitted that you wrote by hand, you can embed these as images in quarto using <code>knitr::include_graphics("path_to_image.jpg")</code>.</li>
+<li>as you are creating your five posts for the five mini-projects, note that the <code>.qmd</code> file <strong>must</strong> be named <code>index.qmd</code> within each folder and that the folder itself cannot have any spaces or special characters in its name.</li>
+</ul>
+<p><strong>What to Submit</strong>: For this part, you should submit either a url link to the blog (if you have published it through GitHub pages) OR a link to the GitHub repository with the blog (either a public repository, or, if private, add me as a collaborator <code>@highamm</code>).</p>
+<p><strong>Where to Start</strong>: If you already have <code>R Studio</code> connected to GitHub, start creating the blog following the directions at <a href="https://highamm.github.io/dataviz334/02-software.html#creating-a-quarto-blogwebsite" class="uri">https://highamm.github.io/dataviz334/02-software.html#creating-a-quarto-blogwebsite</a>. If you do not have <code>R Studio</code> connected to GitHub, then start by following directions at <a href="https://highamm.github.io/dataviz334/02-software.html#installing-git-and-using-github-class-prep" class="uri">https://highamm.github.io/dataviz334/02-software.html#installing-git-and-using-github-class-prep</a>.</p>
+</section>
+<section id="option-2-homework" class="level3">
+<h3 class="anchored" data-anchor-id="option-2-homework">Option 2: Homework</h3>
+<p><strong>Collaboration and AI</strong>: You <strong>may not</strong> collaborate or use AI at all to assist in this part of the portfolio.</p>
+<p>For this option, you will choose <strong>one</strong> homework problem from each of the five sections of the course (Sampling Distributions, Estimation, Confidence Intervals, Bayesian, and Hypothesis Testing). <strong>Three</strong> of the problems should be problems that you have already completed (and were assigned as homework already) while <strong>two</strong> of the problems should be problems that you have not yet completed (that were not assigned on any homework). You should submit both a formal write-up on each problem as well as a more elaborate description of the problem itself, how it connects to other topics within that particular section, and why you chose that problem in the first place.</p>
+<p>A few notes on the problems themselves:</p>
+<ul>
+<li>it is up to you whether you want to type up your solutions, or, if you want to write them neatly on a sheet of paper.</li>
+<li>if you choose an “easy” problem (e.g., there was a one-line homework problem in the estimation section showing that the standard estimator for <span class="math inline">\(p\)</span> in a binomial setting is unbiased), then the expectation is that your written description is much more lengthy. For a more challenging homework problem, the written description might be one long paragraph or two short paragraphs per problem. For an “easier” homework problem, the written description should be closer to 4-5 paragraphs in order to demonstrate breadth of understanding.</li>
+</ul>
+<p>A few notes on the descriptions:</p>
+<ul>
+<li>for each homework problem description, you should (1) explicitly say why you selected that particular problem, (2) how the problem directly connects to topics within that particular section, and (3) how the problem connects to other topics in the course and to statistics as a whole. Use this description to convince me both that you understand the problem itself and to explain how that particular problem has aided your understanding of statistics.</li>
+</ul>
+<p><strong>What to Submit</strong>: For this part, you should submit a hard copy of each of the homework problems along with typed descriptions of each problem.</p>
+<p><br></p>
+</section>
+</section>
+<section id="reflection-20-points" class="level2">
+<h2 class="anchored" data-anchor-id="reflection-20-points">Reflection (20 points)</h2>
+<p><strong>AI Usage</strong>: You may not use generative AI for this reflection at all. I want to know what <strong>your</strong> thoughts are here! Use of AI will result in a 0 on the entire portfolio.</p>
+<p>Each prompt is worth 5 points. For each, 3 points will be awarded for a complete answer while 5 points will be awarded for a thoughtful and sophisticated answer.</p>
+<ol type="a">
+<li><p>Reflect on your overall experience in this class by describing an interesting idea that you learned, why it was interesting to you, and what it tells you about practicing statistics.</p></li>
+<li><p>Which assessment (homework assignment, recap task, mini-project, or in-class assessment) do you feel you learned the most from? Explain what you learned from this assessment and/or why the assessment was valuable to you.</p></li>
+<li><p>What was a concept you learned in this course that you hope you remember 5 years from now? Why is it important that you remember this concept?</p></li>
+<li><p>What statistical ideas are you curious to know more about as a result of taking this class? Try to give two examples and explain why you would like to know more about them.</p></li>
+</ol>
+<p><strong>What to Submit</strong>: For this part, you should typed responses to each of the 4 prompts.</p>
+<p><br></p>
+</section>
+<section id="in-class-assessment-45-points" class="level2">
+<h2 class="anchored" data-anchor-id="in-class-assessment-45-points">In-Class Assessment (45 points)</h2>
+<p>In class during our final exam time, you will be prompted with 3 short “essay”-style questions that are based off of the following prompts. Note that the questions posed will not be exact verbatim matches to the five conceptual questions above, but they will be <strong>extremely</strong> similar.</p>
+<p><strong>Collaboration and AI</strong>: To prepare, you <strong>may</strong> work with any others in the class and you <strong>may</strong> use AI as a tool to help you prepare. However, I want to assess what <strong>you</strong> have learned, not what you might copy down from an AI response: therefore, you may not use a cheatsheet for the in-class component.</p>
+<p>Our course was broken up into 5 sections: Sampling Distributions, Estimation, Confidence Intervals, Bayesian Statistics, and Hypothesis Testing. Below are some questions that are inspired by each of the sections. In class, you will be prompted to write a written response (about two short paragraphs) on <strong>three</strong> (not-so-randomly-selected) prompts that will be very similar to three of the prompts below.</p>
+<ol type="a">
+<li><p><strong>Section 1</strong> (Sampling Distributions). Throughout most of the section on sampling distributions, we supposed that we knew a probability model that could generate data and that we knew the values of the parameters in that probability model (e.g., <span class="math inline">\(\mu = 10\)</span>, <span class="math inline">\(\sigma = 2\)</span> in a normal probability model). Given that in practice, we rarely know the true values of the parameters in a model, what do you think the overall purpose of this section was? In other words, why complete this section if we rarely actually know the values of parameters?</p></li>
+<li><p><strong>Section 2</strong> (Estimation). In the section on estimation, we used a few different methods (method of moments, maximum likelihood estimation) to derive estimators for parameters in probability models using data. Something that we emphasized is the idea of a “bias variance trade-off.” Explain what the bias variance trade-off is. In your explanation, you should address what bias is and what variance is by explaining what would happen if you applied an estimator with high bias to repeated (thousands of) samples of data and what would happen if you applied an estimator with high variance to repeated (thousands of) samples of data.</p></li>
+<li><p><strong>Section 3</strong> (Confidence Intervals). We spent some time in class discussing what is meant by “95% confidence.” Now, consider the simple linear regression model <span class="math inline">\(Y_i = \beta_0 + \beta_1 x_i + \epsilon_i\)</span>, where <span class="math inline">\(\epsilon_i\)</span> are iid <span class="math inline">\(\text{N}(0, \sigma^2)\)</span> random variables. Suppose that you use obtain a 95% confidence interval for <span class="math inline">\(\beta_1\)</span>, the slope parameter in the model using <code>R</code>, <code>Python</code>, or other statistical software. Explain what is meant by “95% confidence” in this setting (perhaps reviewing Lab 3.2).</p></li>
+<li><p><strong>Section 4</strong> (Bayesian). What are the primary differences (conceptually) between working in a “frequentist” framework (all statistics you would have likely seen up to this section) and a “Bayesian” framework?</p></li>
+<li><p><strong>Section 5</strong>. Consider again the simple linear regression model <span class="math inline">\(Y_i = \beta_0 + \beta_1 x_i + \epsilon_i\)</span>, where <span class="math inline">\(\epsilon_i\)</span> are iid <span class="math inline">\(\text{N}(0, \sigma^2)\)</span> random variables, and suppose that your friend collects some data to conduct a hypothesis test <span class="math inline">\(H_0: \beta_1 = 0\)</span> vs.&nbsp;<span class="math inline">\(H_a: \beta_1 \neq 0\)</span>. They correctly obtain a p-value of 0.994 from the test and conclude: “My p-value is very large and quite close to 1, so the null hypothesis is extremely likely to be true.” Explain what is wrong with your friend’s conclusion.</p></li>
+</ol>
+<p>You will have the full 3 hours to complete the assessment, but I would expect the average time to complete it to be about 45 minutes.</p>
+<p><strong>What to Submit</strong>: Nothing before the assessment! You’ll submit your written responses to three of these prompts during our final exam time.</p>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
